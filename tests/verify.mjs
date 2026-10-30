@@ -30,7 +30,7 @@ const imageAudit = (page) => page.evaluate(async () => {
       r.std = Math.sqrt(s2 / n - (s / n) ** 2); r.mean = s / n; }
     out.push(r);
   } return out; });
-for (const [name, url] of [['home', BASE], ['history', BASE + 'history/']]) {
+for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['mandi', BASE + 'history/mandi/'], ['millie', BASE + 'history/millie/']]) {
   for (const [w, h, label] of sizes) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: w < 800 }); const page = await ctx.newPage();
     const errs = [], failed = [], bad = [];
@@ -44,13 +44,32 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/']]) {
     ok(`${tag} no console errors / failed / 4xx requests`, !errs.length && !failed.length && !bad.length, [...errs, ...failed, ...bad].join(' | '));
     ok(`${tag} no duplicate ids`, await page.evaluate(() => { const s = new Set(); for (const e of document.querySelectorAll('[id]')) { if (s.has(e.id)) return false; s.add(e.id); } return true; }));
     if (name === 'home' && w === 1440) {
-      ok('home: 13 story sections + sequel', await page.locator('article section').count() === 13 && await page.locator('#next h2').innerText() === 'The Dorian Grays of Limelight');
-      const hrefs = await page.$$eval('.toc a', a => a.map(x => x.getAttribute('href'))); let all = true; for (const hf of hrefs) all = all && await page.locator(hf).count() === 1; ok('home: every chapter nav link resolves', all && hrefs.length === 13);
-      ok('home: hero image has real content & not lazy', imgs[0].std > 25 && await page.$eval('.cover', e => e.loading !== 'lazy'), 'std=' + imgs[0].std.toFixed(1));
-      await page.click('.nav a[href="history/"]'); await page.waitForURL('**/history/'); ok('home→history nav works', page.url().endsWith('/history/'));
-      await page.click('.back'); await page.waitForURL(u => u.pathname.endsWith('/myblog/')); ok('history→story return nav works', true);
+      await page.waitForSelector('.rail button');
+      ok('home: rail lists 13 chapters + 4 interludes', await page.locator('.rail button').count() === 17);
+      ok('home: hero image has real content & not lazy', imgs[0].std > 20 && await page.$eval('.cover', e => e.loading !== 'lazy'), 'std=' + imgs[0].std.toFixed(1));
+      await page.click('#next'); ok('home: Next opens chapter 1', (await page.locator('.card2 h2').innerText()) === 'A Need Arises');
+      await page.click('[data-view="all"]'); await page.waitForSelector('.all article');
+      ok('home: whole outline has 17 entries', await page.locator('.all article').count() === 17);
+      const wc = await page.$$eval('.all article .mono', els => els.map(e => (e.textContent.match(/^(\d+) words$/) || [])[1]).filter(Boolean).map(Number));
+      ok('home: 13 chapter blurbs of 250-350 words', wc.length === 13 && wc.every(n => n >= 250 && n <= 350), wc.join(','));
+      await page.click('[data-view="one"]'); await page.click('.rail button:nth-of-type(3)'); ok('home: rail selects a chapter', /act 1/i.test(await page.locator('.card2 .mono').first().innerText()));
+      ok('home: previous stories cards link into history', await page.locator('#previous a.card[href="history/mandi/"]').count() === 1 && await page.locator('#previous a.card[href="history/millie/"]').count() === 1);
+      await page.click('.nav a[href="history/"]'); await page.waitForURL('**/myblog/history/'); ok('home→history hub nav works', page.url().endsWith('/myblog/history/'));
     }
-    if (name === 'history') {
+    if (name === 'history' && w === 1440) {
+      ok('hub: pinned latest + 2 archive cards', await page.locator('a.card').count() === 3);
+      ok('hub: card links', await page.locator('a.card[href="../"]').count() === 1 && await page.locator('a.card[href="mandi/"]').count() === 1 && await page.locator('a.card[href="millie/"]').count() === 1);
+    }
+    if (name === 'mandi' && w === 1440) {
+      ok('mandi: 13 story sections + sequel', await page.locator('article section').count() === 13 && await page.locator('#next h2').innerText() === 'The Dorian Grays of Limelight');
+      const hrefs = await page.$$eval('.toc a', a => a.map(x => x.getAttribute('href'))); let all = true; for (const hf of hrefs) all = all && await page.locator(hf).count() === 1; ok('mandi: every chapter nav link resolves', all && hrefs.length === 13);
+      ok('mandi: hero image has real content & not lazy', imgs[0].std > 25 && await page.$eval('.cover', e => e.loading !== 'lazy'), 'std=' + imgs[0].std.toFixed(1));
+      ok('mandi: archived pin bar links to the latest story', await page.locator('a[href="../../"]').count() >= 1);
+      await page.click('.nav a[href="../../history/"]'); await page.waitForURL('**/myblog/history/'); ok('mandi→history hub nav works', page.url().endsWith('/myblog/history/'));
+      await page.click('a.card[href="millie/"]'); await page.waitForURL('**/history/millie/'); ok('hub→millie card works', page.url().endsWith('/history/millie/'));
+      await page.click('.back'); await page.waitForURL(u => u.pathname.endsWith('/myblog/')); ok('millie→latest story nav works', true);
+    }
+    if (name === 'millie') {
       const srcs = imgs.filter(i => i.src.includes('assets/history/') && /\/\d\d-/.test(i.src)).map(i => i.src);
       ok(`${tag} 18 distinct frame files`, new Set(srcs).size === 18 && await page.locator('figure.frame img').count() === 18);
       if (w === 1440 || w === 390) {

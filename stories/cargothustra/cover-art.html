@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Cargothustra cover art</title>
+<style>html,body{margin:0;background:#0E1A2B}#c{width:1536px;height:1024px;position:relative;overflow:hidden;background:#0E1A2B}svg{position:absolute;inset:0}</style></head>
+<body><div id="c"><svg id="art" width="1536" height="1024" viewBox="0 0 1536 1024"></svg></div>
+<script>
+// Cover art for "Thus Spake Cargothustra": one cargo's random walk narrowing toward a star beside a crescent moon.
+// Rendered once to assets/story/cargothustra-cover.jpg (see tools/render_cover.mjs).
+const NS='http://www.w3.org/2000/svg', svg=document.getElementById('art');
+const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+for(let x=0;x<=1536;x+=48) el('line',{x1:x,y1:0,x2:x,y2:1024,stroke:'#16283F','stroke-width':1});
+for(let y=0;y<=1024;y+=48) el('line',{x1:0,y1:y,x2:1536,y2:y,stroke:'#16283F','stroke-width':1});
+let s=20750;const rnd=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296};
+const gauss=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+const sx=210, sy=800, ex=1180, ey=250, N=64;
+const walk=(spread,off)=>{const p=[];for(let i=0;i<=N;i++){const t=i/N,bx=sx+(ex-sx)*t+off*18,by=sy+(ey-sy)*Math.pow(t,1.4)+off*12,sig=spread*Math.pow(1-t,1.5);p.push([bx+gauss()*sig*0.7,by+gauss()*sig])}return p};
+for(let g=-2;g<=2;g++){const p=walk(150,g);el('polyline',{points:p.map(q=>q.join(',')).join(' '),fill:'none',stroke:'#2E4260','stroke-width':2,'stroke-linejoin':'round'})}
+const pts=walk(125,0);pts[0]=[sx,sy];pts[N]=[ex,ey];
+el('polyline',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:'#E8A93B','stroke-width':5,'stroke-linejoin':'round','stroke-linecap':'round'});
+pts.forEach((p,i)=>{if(i%4===0)el('circle',{cx:p[0],cy:p[1],r:5,fill:'#E8A93B'})});
+// the cargo
+const g=el('g',{transform:`translate(${sx-90},${sy-40})`});
+el('rect',{x:0,y:0,width:180,height:80,fill:'#C8553D',stroke:'#F0E6D2','stroke-width':3,rx:4},g);
+for(let i=1;i<8;i++)el('line',{x1:i*22.5,y1:6,x2:i*22.5,y2:74,stroke:'#8E3A29','stroke-width':3},g);
+el('circle',{cx:62,cy:30,r:9,fill:'#F0E6D2'},g);el('circle',{cx:118,cy:30,r:9,fill:'#F0E6D2'},g);
+el('circle',{cx:64,cy:32,r:4,fill:'#0E1A2B'},g);el('circle',{cx:120,cy:32,r:4,fill:'#0E1A2B'},g);
+el('path',{d:'M66 52 Q90 70 114 52',fill:'none',stroke:'#F0E6D2','stroke-width':4,'stroke-linecap':'round'},g);
+// crescent moon and star
+const mx=1290,my=190;
+el('circle',{cx:mx,cy:my,r:92,fill:'#F0E6D2'});
+el('circle',{cx:mx+42,cy:my-22,r:84,fill:'#0E1A2B'});
+const star=(cx,cy,r)=>{let d='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*0.42:r;d+=(i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(1)+' '+(cy+rr*Math.sin(a)).toFixed(1)}return d+'Z'};
+el('path',{d:star(ex,ey,40),fill:'#E8A93B'});
+// ship and sea
+const seaY=900;
+el('path',{d:`M960 ${seaY} Q1080 ${seaY+22} 1200 ${seaY} L1180 ${seaY-30} L980 ${seaY-30}Z`,fill:'#2E4260'});
+el('rect',{x:1070,y:seaY-70,width:60,height:40,fill:'#2E4260'});
+el('path',{d:`M1030 ${seaY-30} L1030 ${seaY-120} L1110 ${seaY-30}Z`,fill:'#F0E6D2',opacity:.85});
+for(let i=0;i<9;i++)el('path',{d:`M${760+i*110} ${seaY+44} q27 -16 55 0 t55 0`,fill:'none',stroke:'#2E4260','stroke-width':3});
+</script></body></html>

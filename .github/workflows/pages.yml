@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Rebuild pages from stories/ (newest story is main, the rest are history)
+        run: python3 tools/build_site.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site

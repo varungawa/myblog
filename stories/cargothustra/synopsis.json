@@ -1,0 +1,215 @@
+{
+  "title": "Thus Spake Cargothustra",
+  "subtitle": "The Rise of Nanda",
+  "tagline": "An interactive novel in prose and code. India, 2075.",
+  "premise": "Nanda is the cargo. Every need that arises, and every delivery that answers it, is a step in a random walk through a forest, and iteration slowly makes the walk less random. Each transaction is a bond, each bond a bailment: goods held in trust, handed on, accepted or rejected. When East India Gora, whose state-backed pirates call themselves a navy, blockades the trade routes, Vivekananda answers with a swarm of small vessels and a lie. The book walks the thirteen Cs of the cargo model in order, from Commerce to Corruption, and ends where Shiva takes the poison of the whole trade and Shakti is created from the blessing.",
+  "sigmaMax": 8,
+  "acts": [
+    {
+      "id": 1,
+      "name": "The Forest",
+      "role": "Setup",
+      "summary": "The rules of the walk, the first bonds, the Gwadar cargo, and the blockade that cuts them all.",
+      "chapters": [
+        {
+          "n": 1,
+          "c": "C1 Commerce",
+          "title": "A Need Arises",
+          "clock": "A payment tenor of three days",
+          "upaya": "none",
+          "sigma": 4.0,
+          "place": "A forest at night; a quay at Mundra",
+          "cast": ["Nanda", "Vee", "Vivekananda"],
+          "hook": "The buyer on the purchase order is a name nobody in the room knows.",
+          "blurb": "The book opens in a forest at night, in the middle of someone else's step. Vee, a poet who has not finished a line in years, is walking drunk between the trees toward a dock he cannot see, and every step he takes is a coin tossed by the dark. He is following Nanda, though they have never been introduced. She is the cargo. In 2075, when data has swallowed most of the world's guesses, her needs still arise like a random walk in a forest and are met the same way: a want in Rajkot, a shortage in Pune, a delivery that lands a day too soon or a week too late. Nanda narrates in a log she keeps for a listener she calls only 'you', and she gives the rule of the book. Every transaction is a bond. Every bond is a bailment, goods handed over in trust. The first bond is played at a quay in Mundra, six cards on a trestle table: the contract, the commodity, a consignor, a consignee, the route, the hull. Vivekananda, who built the table and its rules, plays the hand. The clock is the payment tenor. In three days the money is due whether or not the goods have moved, and in this trade a late day is a lost customer. Everything is on schedule, and the bond is accepted, which should end the first scene. It does not. The purchase order names a buyer that no one in the room has heard of, and Vivekananda, who is always ready with a sentence, says nothing. His silence is the first thing Nanda notices that she cannot model. The chapter sets out the rules of the walk, shows the spread meter at its widest, and ends on the name at the foot of the order: a company registered in a port Nanda has never carried to. She reads it aloud. Outside, Vee hears it too, and writes it on his wrist."
+        },
+        {
+          "n": 2,
+          "c": "C2 Commodity",
+          "title": "What Is in the Box",
+          "clock": "The customs window at Mundra, open until the tide turns",
+          "upaya": "saam",
+          "sigma": 3.6,
+          "place": "The Mundra gate and the tea stall outside it",
+          "cast": ["Nanda", "Vee", "The Katta gang", "A customs officer"],
+          "hook": "The aid label is read aloud, slowly, and a stranger at the next table writes it down.",
+          "blurb": "A cargo is what is in the box, and the box is going through a gate. The customs window at Mundra closes with the tide, and the crate marked as humanitarian supply must pass it: Persian Gulf product, under an embargo, papered as aid. Nanda has been told she is cargo. Now she learns what kind. The chapter splits between the gate and the tea stall outside it, where the Katta gang gathers for the first time on the page. Twenty-seven school friends from every corner of the country are in Mundra for twenty-seven different reasons, as brokers, surveyors, stevedores, a ship's cook, a pilot, and they sit in nine groups of three on benches that were never meant for so many. Vee turns up drunk, and they pull him onto the bench without remark. As the crate passes, the nine groups meet the label in their own ways. The tender ones read it and go quiet. The wits make a joke and watch it fail. The angry ones bristle at the embargo as an idea. The ones who hate rot smell the lie before they can name it. The frightened ones look for the exits. The calm ones counsel patience, the romantics watch Vee's eyes on the crate, and the three from the far northeast, who are the only ones whose names do not begin with C, ask the one question no one else has asked: where is it going? Vivekananda plays saam, courtesy as a tool, with the officer at the window, and the crate clears. The cost of the courtesy is time, and it is spent at once. The officer reads the label aloud a second time, slowly, for the record. Someone at the tea stall repeats a word of it by reflex. At the next table, a stranger who has not touched his tea writes the word down."
+        },
+        {
+          "n": 3,
+          "c": "C3 Consignor",
+          "title": "The House at Gwadar",
+          "clock": "The seller's ledger closes at dawn",
+          "upaya": "saam",
+          "sigma": 3.2,
+          "place": "A trading house at Gwadar",
+          "cast": ["Nanda", "Vivekananda", "Vee"],
+          "hook": "An extra line in the ledger: Gora has a man inside.",
+          "blurb": "Every bond has a hand that gives, and this chapter is about the hand. The consignor is a trading house at Gwadar, a Pakistani seller of goods that began their journey in Iran and Afghanistan and reach the world only by being papered as someone else's. The house's ledger closes at dawn, and until it closes the cargo cannot be released. Nanda sits in the counting room with Vivekananda and learns what a consignor is made of: a tax number, a credit history, a record of how often its paper has held. These are the third C's risk signals, and they are also a portrait of the man across the table, who is courteous, tired and afraid. Vivekananda plays saam again. He does not bargain. He asks about the man's daughters and drinks his tea, and the chapter shows that courtesy, in this trade, is a weapon you can only use if you mean it. Vee has followed Nanda here. He waits in the lane, writing on his wrist, and the seller's clerk, who has never read a ghazal in his life, brings him water and stays to listen. It is the first moment the book slows down. Then the ledger is signed, and Nanda, reading it upside down as she has learned to, sees a line that does not belong. An entry in a hand that is neither the seller's nor the clerk's, for a sum small enough to ignore. She has seen that hand before, on the order at Mundra. The man across the table follows her eyes to the page, and his face closes. Someone in this house is paid by East India Gora, and the cargo is already on its way."
+        },
+        {
+          "n": 4,
+          "c": "C4 Consignee",
+          "title": "The Buyer at Dammam",
+          "clock": "The buyer's patience: one last cargo",
+          "upaya": "daam",
+          "sigma": 2.9,
+          "place": "Dammam, then Kandla and the open sea",
+          "cast": ["Nanda", "Vivekananda", "East India Gora"],
+          "hook": "Every route goes dark. End of Act I.",
+          "blurb": "The fourth C is the one who receives. The buyer at Dammam is the other half of the spoof: a Saudi consignee on paper, who takes delivery of what a Pakistani seller sends and passes it on, re-papered at Kandla and Mundra, to the rest of the world. The chapter takes Nanda to him and finds a patient man whose patience is almost gone. He has been paid late twice, has been asked questions once by people whose cards he did not like, and has told Vivekananda that this is the last cargo. Vivekananda plays daam. He pays, and pays more than the bond requires, and the chapter shows what it costs: money, and a paper trail of money that anyone with the right authority can follow back. Nanda sees the buyer's face change when the figure is named, and learns what the fourth C means in practice. A consignee is a country, a credit history, a dispute record, and a man who will remember who paid him when the questions come. The re-papering at Kandla goes smoothly, so smoothly that Nanda writes in her log that it frightens her. The cargo clears. The hulls load. The first leg out of Kandla is the easy one. Then the clock the whole book has been running toward arrives. East India Gora, whose state-backed pirates call themselves a navy, closes the routes. It is not an attack. It is a quiet order, issued by a power with a flag, and the routes go dark one by one on the map: Mundra, then Kandla, then every lane in the Gulf of Kutch. Nanda is at sea, in a hull that has no port to go to. Vee, on the shore, feels his steps stop being random. They have become afraid."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The Swarm",
+      "role": "Confrontation",
+      "summary": "A cave, forty jars, four ports in rhythm, a clause at sea, a storm, and a loss that changes the meaning of everything before it.",
+      "chapters": [
+        {
+          "n": 5,
+          "c": "C5 Carriage",
+          "title": "Legs, and the Cave",
+          "clock": "A perishable load at a transshipment node; the thieves return at dusk",
+          "upaya": "bhed",
+          "sigma": 2.5,
+          "place": "A floating bonded warehouse beyond the coast",
+          "cast": ["Nanda", "Vivekananda", "East India Gora", "Cassim"],
+          "hook": "Nanda speaks the word and the cave opens; the one leg left runs through Gora's water.",
+          "blurb": "Carriage is the route in pieces: the pre-carriage, the main leg, the post-carriage, and the handoffs between them. With Gora's blockade in place, the only handoff still unwatched is one that belongs to the thieves. They are the forty, the state-backed crews who call themselves a navy, and their cave is a floating bonded warehouse beyond the coast, where seized embargo cargo is held until it is sold on. Some of it is Nanda's. The chapter is the story of Ali Baba, turned inside out. Nanda, hidden on a supply boat, watches the crews return at dusk and hears the word that opens the door: one word, spoken once, that releases a seal. Whoever speaks the word controls the door, and the word changes. Vivekananda plays bhed, the art of division. He cannot fight forty, so he divides them. He leaves a single lamp lit where the guard on the watch will see it, and the guard goes to put it out. Cassim, the partner who always wants more than he came for, goes in after the cargo and then after the cargo's neighbour, and is shut in when the seal closes behind him. The chapter's tension is physical and close: a hold, a seal, a tide, a clock. Nanda gets her cargo and leaves Cassim's greed behind. The word is a one-time card, spent when played. The cost of bhed is a betrayal that someone remembers, and Nanda remembers this one. Out on the water, in the grey before the stars, she finds that the only leg still open to the swarm runs straight through the thieves' own water. The last scene is a map with one line left on it, and the line is thin."
+        },
+        {
+          "n": 6,
+          "c": "C6 Carrier",
+          "title": "Forty Jars",
+          "clock": "First swarm run, 17 knots at 75% load",
+          "upaya": "dand",
+          "sigma": 2.2,
+          "place": "A shipyard at Jaigad; open water off Dighi",
+          "cast": ["Vivekananda", "Nanda", "Morgiana", "East India Gora"],
+          "hook": "The boarding party opens the jars and finds oil; then the oil is lit.",
+          "blurb": "The Carrier is the vessel, and the vessel is the book's answer. Vivekananda's swarm is a fleet of hulls of five hundred tonnes each, small enough to hide and fast enough to matter, powered by Persian Gulf fuel with biodiesel and ethanol, and under sails that open on their own. The sails know two thousand years of trade winds. At three quarters load, with the wind right, they make seventeen knots. The chapter is the first run. Forty of the hulls leave the yard dressed as oil carriers, as the forty thieves once hid in oil jars, and Vivekananda's plan is the old story reversed. Gora's boarding parties come over the rail. They open the jars. They find oil. This is the first chapter in which the swarm acts, and it acts with Morgiana beside it: the quick-witted port clerk who chalks every door the same, so that the scouts cannot tell one port from another. At the decisive moment she pours the oil. There is a pause before the match is struck, a heartbeat longer than the plan. Nobody notices it, and the reader is asked to remember it. Then the oil burns. Vivekananda plays dand, force with a cost, and the cost is a boarded hull and a crew in Gora's hands. The chapter is a chase, a fire and a seizure in fifty minutes of story time, with the spread meter narrowing as the swarm learns its own speed. It ends on the deck of a boarded hull, where a Gora officer, soaked and singed, looks at the sails turning on their own and says that this is not a fleet. It is a swarm, and he does not yet know how to count it."
+        },
+        {
+          "n": 7,
+          "c": "C7 Cities and Corridors",
+          "title": "Four Ports",
+          "clock": "The just-in-time rhythm of Kandla, Mundra, Dighi and Jaigad",
+          "upaya": "saam",
+          "sigma": 1.8,
+          "place": "Kandla, Mundra, Dighi, Jaigad",
+          "cast": ["Vivekananda", "Nanda", "Morgiana", "The Katta gang", "Vee"],
+          "hook": "The swarm's best week; then Jaigad's customs change hands. Midpoint.",
+          "blurb": "The seventh C is the corridor, the string of places a cargo passes through. In this chapter it is four ports, worked in a rhythm the old Japanese yards would have recognised: Kandla, Mundra, Dighi, Jaigad, each fed by hulls that arrive when the cranes are ready for them. Just in time. The swarm has found its beat, the spread is at its lowest yet, and the chapter is, deliberately, a pleasure to read. It is the swarm's best week. Morgiana marks every door with the same chalk, so that Gora's scouts cannot tell which port holds the cargo. The Katta gang, now fully part of the work, is everywhere at once, the wits keeping the dockers laughing, the angry ones loading fastest, the frightened ones checking every exit twice. Vee, sober for days at a stretch, sits on a bollard with them at dusk and almost writes a line. Nanda notices that she is happy, and writes in her log that happiness is the thing she cannot model. Then the week turns. Jaigad's customs change hands overnight. A new officer arrives with orders no one can read, and Morgiana's chalk mark at the port is found to differ from the other three by a single stroke. She is told, that same night, that her brother has been detained, and that his release can be bought with small pieces of information. Vivekananda is calm, too calm, at the news. The reader should not notice it yet. The chapter ends at its midpoint on a perfect map and a single new shadow on it, and the book's first mythic interlude of desire and war follows."
+        },
+        {
+          "n": 8,
+          "c": "C8 Conditions, Clauses, Causes",
+          "title": "Fine Print",
+          "clock": "The sale at sea off Kutch must close before the tide",
+          "upaya": "bhed",
+          "sigma": 1.5,
+          "place": "The sea off Kutch; an insurer's office in Mumbai",
+          "cast": ["Vivekananda", "Nanda", "East India Gora", "Morgiana"],
+          "hook": "Gora quotes a clause that only the inner circle had seen.",
+          "blurb": "The eighth C is the paper: the conditions, the clauses and the causes of loss. Here the swarm learns that a cargo is not only goods but a pile of promises, and that the promises can be turned. Vivekananda borrows a trick from a British trading house of the 1830s, Jardine Matheson, which sold its cargo from receiving ships anchored beyond the port's jurisdiction, so that no customs officer could touch a sale made on open water. The swarm will do the same off Kutch. Tokens for the cargo will be sold on the high seas, in the dark, hull to hull, and by the time they reach a port they will be someone else's property. The chapter is a duel of clauses. There are the insurance conditions, the warranties, the deviation clause, the delay clause, the salvage clause; there is an insurer's office in Mumbai where a bored underwriter reads a policy aloud and does not understand that he is describing a battle plan. Vivekananda plays bhed a second time, dividing Gora from the prize by moving the sale to where Gora's writ does not run. The tide is the clock: the sale must close before it turns, or the hulls will ground. The scene at sea is the book's most beautiful, lanterns on black water and a ledger signed on a rolling deck. Then Gora appears at the edge of the light and does something he should not be able to do. He quotes, word for word, a clause of the plan that only the inner circle has ever seen. The reader is shown, in passing, that Morgiana had the file, and that Vivekananda left it where she could reach it."
+        },
+        {
+          "n": 9,
+          "c": "C9 Climate and Physical Exposure",
+          "title": "Weather",
+          "clock": "A storm front and a drone wave",
+          "upaya": "none, variance returns",
+          "sigma": 3.0,
+          "place": "The open sea off Gujarat, in a storm",
+          "cast": ["Vivekananda", "Nanda", "The Katta gang", "East India Gora"],
+          "hook": "The drones are already waiting at the storm's quiet corridor, and the hull goes down.",
+          "blurb": "The ninth C is the weather, and the chapter is the one in which the book's central idea turns against the reader. All the way through, iteration has made the walk less random. The spread meter has fallen from its widest to its narrowest. Then a storm front comes in from the west, and in a storm every hull is a stranger again. The sails, which know two thousand years of winds, have never seen this one. The hulls scatter. Vivekananda needs a hull to cross the quiet corridor, the one band of calm in the storm, where the swarm can regroup, and he needs it to carry volunteers who will not be told the whole plan. The Katta gang steps forward. All twenty-seven of them, in nine groups of three, the wits cracking their last jokes, the frightened ones going first. Nanda watches them board and cannot say why her throat is tight. Morgiana's face-down card, which the player could have audited many chapters ago, flips over now. The chapter's central sequence is the passage through the quiet corridor, which is long, very quiet and very dangerous, and which is watched from above. A drone wave, shaped like a flock of birds, is already waiting there. It has been waiting for hours. It knew the corridor, and so did only three people. The attack is over almost before it is understood. A hull goes down, and with it twenty-seven names, in the dark, in the weather. Nanda sees it from the deck of a different ship, and the sea does not tell her whose hull it was. Vee is on shore, drunk, singing, sixty miles away."
+        },
+        {
+          "n": 10,
+          "c": "C10 Claims",
+          "title": "The Loss",
+          "clock": "The inquiry and the accusations",
+          "upaya": "none",
+          "sigma": 6.0,
+          "place": "An inquiry room at Mundra; the forest again",
+          "cast": ["Nanda", "Vee", "Morgiana", "Vivekananda"],
+          "hook": "Twenty-seven aboard, all Vee's friends; he walks back into the forest, more lost than before. End of Act II.",
+          "blurb": "The tenth C is the claim, the account of what went wrong and who is to blame. In an inquiry room at Mundra a surveyor reads the findings in a flat voice: weather, route, drones, a manifest with a chalk stroke on it that does not match the other three. The trust score drops. The room turns on Morgiana, who does not deny it. Nanda confronts her in a corridor and expects to find anger. She finds a woman who has been emptied. Then the brother is found, alive and unhurt, in his own kitchen in his own town, and the pieces fall into place in the worst order. He was never detained. The detention was a story, and Vivekananda made it, to give Gora an informant he could trust and steer. The sacrificed hull was a deliberate loss, to make the drone carrier reveal itself. Vivekananda says so, in the inquiry room, in front of everyone, because he will not lie to the person who has the right to know. He did not know who was on the hull. He chose it because it carried volunteers. Then the surveyor reads the crew list, and the book stops. Vee is in the room. He listens, name by name, as the surveyor reads out his school friends, each one a person the reader has met alive at the tea stall, and with each name Vee takes a step toward the door. By the last name he is out of the room and out of the building and walking, drunk, back into the forest, and the spread meter, which has been falling for nine chapters, jumps. His steps are wilder than they were on the first page. This is the end of the second act. Nothing is left standing but the weather."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "The North Star",
+      "role": "Resolution",
+      "summary": "A thousand cuts, a wizard in grey, a poison that rises from the sea, and a blessing that turns a random walk into a course.",
+      "chapters": [
+        {
+          "n": 11,
+          "c": "C11 Costs",
+          "title": "A Thousand Cuts",
+          "clock": "Every cut costs coin and trust",
+          "upaya": "daam and dand",
+          "sigma": 2.0,
+          "place": "A hundred small ports along the coast",
+          "cast": ["Vivekananda", "Nanda", "Morgiana", "Gandalf of Gujarat"],
+          "hook": "Gandalf the Grey arrives, and he is dying.",
+          "blurb": "The eleventh C is the cost, what it all added up to. The chapter begins with a bill, and the bill is paid in a currency the book has not used before: small coins, small favours, small acts of faith, from a hundred small ports. Gora's drone carrier has revealed itself, and Vivekananda has its position. He cannot strike it with the swarm, which would be what Gora expects. He does what the Marathas did against fifty thousand, when the enemy was too large to meet: he cuts. Ganimi kava, the war of a thousand cuts. Each small hull, each courier on a bicycle in the old angadia tradition, each shopkeeper who holds a parcel for a night, takes a little from Gora's lines, and none of it can be seen from above. Trade becomes decentralised in the oldest sense of the word, as it has always been in this country: through people who owe each other. Morgiana chalks every door the same again, knowing she was used, and this time as her own choice. Her chalk lies now to Gora's drones instead of to Gora. Nanda does not forgive Vivekananda. She does not leave him either, and the chapter turns on that refusal, which she can only explain by saying that a bond is not a feeling. The costs run in a column down the page: coin, trust, blood, time. Vivekananda pays them without comment. Vee is nowhere. The Katta gang is gone, and its absence sits in every scene. Then, at the end of the chapter, a figure in grey climbs off the last hull at the last small port: an old man with a staff, and a cough that sounds like a door being forced. He asks for Nanda by name. Gandalf of Gujarat has come, and he is dying."
+        },
+        {
+          "n": 12,
+          "c": "C12 Current Affairs and Volatility",
+          "title": "Grey to White",
+          "clock": "The world is watching; sanctions tighten",
+          "upaya": "saam",
+          "sigma": 1.0,
+          "place": "A power station on a mountain pass; the Mundra roads",
+          "cast": ["Gandalf of Gujarat", "Nanda", "Vivekananda", "East India Gora"],
+          "hook": "Four hundred and fifty gigawatts answers the call, and Gora offers Nanda a deal.",
+          "blurb": "The twelfth C is the world outside the cargo: wars, sanctions, currencies, strikes, the weather of power. The world is now watching. Gora's embargo has become a headline, the swarm has become a rumour, and the volatility of both has put every price on earth out of true. The chapter takes Nanda to a power station on a mountain pass, where a dying wizard in grey has done something he should not have been able to do. He has asked, and been answered. Like Rohan riding to Gondor, four hundred and fifty gigawatts of power from the east answer the call, a line of light across a continent. The chapter's set piece is the balrog, the creature of fire that has been under Gora's whole enterprise, a thing made of embargoes, debts and old grievances. Gandalf fights it on the lip of the pass and falls. The reader has met this beat before, and the book trusts that. He returns in white, with a clarity that frightens even Vivekananda. Gora's navy, which has always been a navy in name only, wavers. The pirates at the edge of his fleet look at the lit coast and at the flag on their own sleeves, and some of them lower their guns. Then Gora himself comes to the Mundra roads, alone, in a small boat, hook raised in greeting, and makes Nanda an offer. He will stand down. He will open the routes. He will take only one thing: her. The chapter ends before she answers. The deal might be real. It might be the last move of a man who has lost and does not yet know it. Nanda says she will think, and the sea waits."
+        },
+        {
+          "n": 13,
+          "c": "C13 Corruption and Integrity Risk",
+          "title": "The Poison and the Blessing",
+          "clock": "The last bond, at the sea's edge",
+          "upaya": "all four, once",
+          "sigma": 0.4,
+          "place": "The sea's edge at Mundra; the forest; the horizon",
+          "cast": ["Nanda", "Vee", "Vivekananda", "East India Gora", "Shiva"],
+          "hook": "Shiva takes the poison; Shakti rises; Gora follows; Vee finds the star.",
+          "blurb": "The thirteenth C is the last, and it is the one the whole trade has been avoiding. The old story of the churning of the ocean gave the book its shape: the sea is churned, treasures rise, and last of all comes the poison. Here the poison is corruption, every bribe and every lie the swarm and its enemies told, rising from the bottom of the sea like a dark tide, including Vivekananda's own. The last bond is played at the water's edge with all four moves in one hand: saam, daam, dand and bhed, once each. Gora comes to the shore and does not ask for Nanda. He asks to be allowed to follow. Nanda forgives Vivekananda, knowing what it is and what it is not. It is not an excuse, and it does not undo the hull. Then the poison reaches the shore, and the book's one moment of grace arrives. Shiva takes it. He drinks it and holds it in his throat, as he did at the beginning of the world, and the trade goes on. From the blessing Shakti is created: Nanda herself, no longer a walk but a course, the energy that moves once the stillness has been given its due. The random walk narrows to a line. Vee, who has come back out of the forest, forgives Vivekananda too, but not himself. He never does. He stands on the shore and reads his friends' names against the twenty-seven mansions of the Moon, and finds the one star among them that agrees with his madness. Shiva has placed the waning crescent on Chandra's head, not to cure the curse but to give it a home. The book ends on the moon, not at the full, over a calm sea, with a ship leaving harbour on a course."
+        }
+      ]
+    }
+  ],
+  "interludes": [
+    {
+      "slot": 0,
+      "title": "The Moon Has Twenty-Seven Wives",
+      "place": "Before chapter 1",
+      "blurb": "The first lines of the book are lunar. Chandra, the Moon, has twenty-seven wives, the daughters of Daksha, and loves one of them, Rohini, above all the rest. The other twenty-six wait. Their father's curse falls on him: he will waste away. The interlude is told in the slow, ornate present tense of classical erotic poetry, with the heat of appetite and the grief of neglect, and it sets the book's measure, the wax and wane of a thing that cannot hold still."
+    },
+    {
+      "slot": 7,
+      "title": "The Star Taken",
+      "place": "After chapter 7, the midpoint",
+      "blurb": "Chandra sees Tara, the star-wife of Brihaspati, in her husband's hermitage, and takes her. The affair is told in full shringara: scent, sweat, moonlight, the body as landscape, suggestive and rich, not graphic. Brihaspati's grief becomes a war of gods and asuras. This is the book's raunchy centrepiece, and it lands beside the swarm's best week and its hidden trap. The war over a star is the war over a cargo, and its child will be Budha, the merchant."
+    },
+    {
+      "slot": 10,
+      "title": "Viraha",
+      "place": "Between chapters 10 and 11",
+      "blurb": "Radha waits on the bank of the Yamuna at night, and the river and the sea become one image. Krishna, who has just sacrificed a hull, is the lover who does not come. The interlude gives the book its tenderest register right after its hardest chapter. It also lets the reader hold two things at once: Krishna the strategist, whose methods Vivekananda borrowed, and Krishna the absent lover."
+    },
+    {
+      "slot": 13,
+      "title": "The Child of the Quarrel",
+      "place": "Inside chapter 13",
+      "blurb": "Brahma ends the war over Tara. She returns to her husband carrying a child, and the child is Budha, Mercury, the merchant. Commerce is born of a stolen star and a quarrel. Shiva sets the waning crescent on Chandra's head. The curse is not lifted; it is given a home. The last interlude closes the myth and tells the reader what the thirteen Cs have been walking toward."
+    }
+  ]
+}
