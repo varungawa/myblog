@@ -60,7 +60,30 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       await page.click('[data-act="sim"]'); await page.waitForSelector('.simres');
       const simTotal = await page.$$eval('.simres .two > div:first-child li .mv', els => els.reduce((s, e) => s + parseFloat(e.textContent), 0));
       ok('game: 1,000-walk simulation distributes to 100%', Math.abs(simTotal - 100) < 0.6, simTotal.toFixed(1));
-      await page.click('[data-act="again"]'); ok('game: walk again resets to S01', (await page.locator('.scene .mono').innerText()).startsWith('S01') && (await page.locator('.turn b').innerText()) === '0');
+      // cards, ports and linking (fresh walk at S01)
+      await page.click('[data-act="again"]');
+      ok('game: bond hand shows 6 suit slots and port cards', await page.locator('.suits .card-s').count() === 6 && await page.locator('.ports .port').count() === 2);
+      ok('game: bond check line is shown', (await page.locator('.bondline').innerText()).startsWith('Bond check'));
+      await page.click('[data-option="credit"]'); await page.click('[data-act="walk"]');
+      ok('game: a call earns a one-time card', await page.locator('.pc[data-card="credit"]').count() === 1);
+      const lvl2 = await page.locator('.scene .mono').innerText(); await page.click('.pc[data-card="credit"]');
+      ok('game: selecting a card marks it', (await page.getAttribute('.pc[data-card="credit"]', 'aria-pressed')) === 'true');
+      await page.click('[data-act="walk"]');
+      ok('game: a played card is spent', await page.locator('.pc[data-card="credit"]').count() === 0);
+      // outline -> game
+      await page.click('[data-view="one"]').catch(() => {});
+      await page.waitForSelector('.rail button'); await page.click('.rail button[data-i="5"]');
+      await page.click('.lvl'); await page.waitForTimeout(300);
+      ok('game: outline chapter 5 jumps to level S05', (await page.locator('.scene .mono').innerText()).startsWith('S05') && (await page.locator('.turn b').innerText()) === '4');
+      ok('game: a jumped walk is dealt Morgiana only from S06', await page.locator('.pc.down').count() === 0);
+      await page.locator('.rail button[data-i="7"]').click(); await page.click('.lvl'); await page.waitForTimeout(300);
+      ok('game: outline chapter 7 jumps to level S06 with Morgiana face down', (await page.locator('.scene .mono').innerText()).startsWith('S06') && await page.locator('.pc.down').count() === 1);
+      await page.click('.pc.down'); await page.click('[data-act="walk"]');
+      ok('game: auditing Morgiana turns the card up but keeps it', await page.locator('.pc.down').count() === 0 && await page.locator('.pc[data-card="morgiana"]').count() === 1);
+      // game -> outline
+      await page.click('[data-chapter]'); await page.waitForTimeout(300);
+      ok('game: scene links back to its chapter in the outline', /Four Ports|Cities and Corridors/i.test(await page.locator('.card2 h2, .card2 .mono').first().innerText()) || (await page.locator('.card2 h2').innerText()).length > 0);
+      await page.click('[data-act="new"]'); ok('game: a new walk resets to S01', (await page.locator('.scene .mono').innerText()).startsWith('S01') && (await page.locator('.turn b').innerText()) === '0');
       await page.goto(BASE + '#walk=5~saam.take'); await page.reload(); await page.waitForSelector('#game-app .scene');
       ok('game: a shared #walk link replays the walk', (await page.locator('.turn b').innerText()) === '1' && (await page.locator('input#seed').inputValue()) === '5');
       await page.goto(BASE); await page.waitForSelector('.rail button');

@@ -47,6 +47,70 @@
     weatherMatrix: { calm: { calm: 0.88, storm: 0.12 }, storm: { calm: 0.50, storm: 0.50 } },
     stormBoostAtLevel: { 8: 0.35 },
 
+    // ---- cards ----
+    // The bond hand: one card per suit, filled by your calls. Cover helps the paper hold up; heat draws attention.
+    suits: [
+      { id: 'commerce', name: 'Commerce', c: 'C1', level: 1 },
+      { id: 'commodity', name: 'Commodity', c: 'C2', level: 2 },
+      { id: 'consignor', name: 'Consignor', c: 'C3', level: 3 },
+      { id: 'consignee', name: 'Consignee', c: 'C4', level: 4 },
+      { id: 'carriage', name: 'Carriage', c: 'C5', level: 5 },
+      { id: 'carrier', name: 'Carrier', c: 'C6', level: 5 }
+    ],
+    defaultCards: {
+      commerce: { name: 'Standing order', cover: 2, heat: 2 }, commodity: { name: 'Mixed lot', cover: 2, heat: 2 },
+      consignor: { name: 'Old supplier', cover: 2, heat: 2 }, consignee: { name: 'Regular buyer', cover: 2, heat: 2 },
+      carriage: { name: 'Coastal leg', cover: 2, heat: 1 }, carrier: { name: 'Coaster', cover: 2, heat: 1 }
+    },
+    // Placeholder port control ratings (not real ratings of real ports): scrutiny = how hard customs look,
+    // palm = how far favours bend them, heat = geopolitical pressure on the corridor.
+    ports: {
+      'Gwadar': { scrutiny: 2, palm: 3, heat: 4 }, 'Dammam': { scrutiny: 3, palm: 2, heat: 3 }, 'Kandla': { scrutiny: 3, palm: 3, heat: 2 },
+      'Mundra': { scrutiny: 3, palm: 2, heat: 2 }, 'Dighi': { scrutiny: 2, palm: 2, heat: 1 }, 'Jaigad': { scrutiny: 2, palm: 2, heat: 1 },
+      'Open sea': { scrutiny: 1, palm: 0, heat: 1 }, 'Kutch sea': { scrutiny: 1, palm: 0, heat: 1 }
+    },
+    levelPorts: { 1: ['Mundra', 'Dammam'], 2: ['Gwadar', 'Mundra'], 3: ['Gwadar', 'Kandla'], 4: ['Kandla', 'Dammam'], 5: ['Kandla', 'Open sea'], 6: ['Mundra', 'Jaigad'], 7: ['Dighi', 'Kutch sea'], 8: ['Jaigad', 'Open sea'], 9: ['Mundra', 'Mundra'], 10: ['Mundra', 'Mundra'] },
+    levelChapters: { 1: [1], 2: [2], 3: [3], 4: [4], 5: [5, 6], 6: [7], 7: [8], 8: [9, 10], 9: [11, 12], 10: [13] },
+    // Cards that a call puts into the bond hand, keyed 'level.option'.
+    suitCards: {
+      '1.take': [{ suit: 'commerce', name: 'Net Three', cover: 3, heat: 2 }],
+      '1.credit': [{ suit: 'commerce', name: 'Letter of credit terms', cover: 4, heat: 0 }],
+      '1.refuse': [{ suit: 'commerce', name: 'Order refused', cover: 2, heat: 0 }],
+      '2.stand': [{ suit: 'commodity', name: 'Aid label', cover: 3, heat: 4 }],
+      '2.hold': [{ suit: 'commodity', name: 'Held crate', cover: 1, heat: 2 }],
+      '2.katta': [{ suit: 'commodity', name: 'Checked by the Katta gang', cover: 3, heat: 1 }],
+      '3.trust': [{ suit: 'consignor', name: 'The House at Gwadar', cover: 3, heat: 3 }],
+      '3.replace': [{ suit: 'consignor', name: 'A clean seller', cover: 2, heat: 1 }],
+      '3.turn': [{ suit: 'consignor', name: 'The turned clerk', cover: 3, heat: 2 }],
+      '4.pay': [{ suit: 'consignee', name: 'The bought buyer', cover: 3, heat: 2 }],
+      '4.walk': [{ suit: 'consignee', name: 'No buyer', cover: 0, heat: 1 }],
+      '4.new': [{ suit: 'consignee', name: 'New consignee at Kandla', cover: 2, heat: 2 }],
+      '5.sesame': [{ suit: 'carriage', name: 'The cave leg', cover: 3, heat: 2 }, { suit: 'carrier', name: 'Swarm hull', cover: 2, heat: 1 }],
+      '5.long': [{ suit: 'carriage', name: 'The long leg round', cover: 2, heat: 0 }, { suit: 'carrier', name: 'Old coaster', cover: 1, heat: 0 }],
+      '5.jars': [{ suit: 'carriage', name: 'Jars on the road', cover: 3, heat: 1 }, { suit: 'carrier', name: 'Oil carrier', cover: 3, heat: 1 }]
+    },
+    // Playable one-time cards. One per turn, spent when played. Granted by a call, keyed 'level.option'.
+    grants: { '1.credit': 'credit', '2.katta': 'chit', '3.turn': 'ledger', '5.sesame': 'sesame', '5.jars': 'jars' },
+    oneTime: {
+      credit: { name: 'Letter of Credit', suit: 'Commerce', fx: { c8: 6, c1: 4, c4: 3 }, up: 0.03, tilt: {}, text: 'Paper a bank will honour.' },
+      chit: { name: 'The Katta chit', suit: 'Client', fx: { c13: 6, c3: 4, c10: 4 }, up: 0, tilt: {}, text: 'Twenty-seven friends vouch for you.' },
+      ledger: { name: 'Gora’s ledger page', suit: 'Consignor', fx: { c12: 6, c8: 4 }, up: 0.04, tilt: { war: -0.08 }, text: 'Proof that Gora has a man inside.' },
+      sesame: { name: 'Open Sesame', suit: 'Carriage', fx: { c5: 8, c7: 8, c13: -2 }, up: 0.12, tilt: { war: 0.03 }, text: 'A spoken word that opens one node once. The word changes after.' },
+      jars: { name: 'Forty Jars', suit: 'Carrier', fx: { c6: 8, c5: 4 }, up: 0.08, tilt: { war: -0.03 }, text: 'Oil carriers with something else inside.' }
+    },
+    // Morgiana: a Client card dealt face down once the walk reaches S06. Play it to audit (it costs time),
+    // play it again to warn her. Left face down, it flips at S08 if you send the hull.
+    morgiana: {
+      dealtAt: 6,
+      down: { name: 'A Client card, face down', suit: 'Client', text: 'Someone at Jaigad has been given a story. You could spend time to audit it.' },
+      audit: { fx: { c1: -2 }, up: -0.05, tilt: {}, label: 'Audit it (costs time)', reveal: 'The brother’s detention is unverified. Someone built it.' },
+      audited: { name: 'Morgiana, audited', suit: 'Client', text: 'The lie is not hers. You could warn her.' },
+      tell: { fx: { c13: 4, c3: -2 }, up: 0, tilt: {}, label: 'Warn her', reveal: 'You told Morgiana the truth. She chalks every door the same again.' },
+      flip: { fx: { c10: -6, c6: -4, c12: -2 }, text: 'The face-down card flips. Gora’s drones were waiting at the quiet corridor.' },
+      sendOptions: ['send', 'withvee'],
+      epilogue: { flipped: 'Morgiana’s card flipped at the worst moment, and the drones were waiting.', audited: 'You audited Morgiana’s card and knew the lie was not hers.', told: 'You told Morgiana the truth. She chalks every door the same again.', down: 'Morgiana’s card stayed face down to the end.' }
+    },
+
     approaches: {
       saam: { label: 'Saam', verb: 'Persuade', desc: 'Courtesy as a tool. Builds trust and keeps the peace, but takes time.', fx: { c3: 3, c4: 3, c13: 2 }, up: -0.02, tilt: { war: -0.08, market: 0 } },
       daam: { label: 'Daam', verb: 'Pay', desc: 'Money smooths the way and leaves a paper trail.', fx: { c1: -6, c11: -4, c3: 2, c4: 2, c13: -3 }, up: 0.10, tilt: { war: 0, market: 0 } },

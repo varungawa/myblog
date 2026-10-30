@@ -30,3 +30,10 @@ That gives the story the next `seq`, pins it as the main page and moves the prev
 
 `stories/cargothustra/game-data.js` (levels S01 to S10, calls, the 13 C meters, the Markov matrices), `game-engine.js` (pure engine, seeded, runs in the browser and node) and `game-ui.js` (the page). Three Markov chains move each turn: position S01..S10, regime (markets high/low x war/peace) and weather. All numbers are play-testing placeholders; tune them in `game-data.js`.
 `node tests/game.test.mjs` checks the data, the chains, determinism and the balance (random play should win rarely, careful play often, chasing speed should collapse more).
+
+### Cards, ports and links
+
+- The player's calls fill a **bond hand** (Commerce, Commodity, Consignor, Consignee, Carriage, Carrier; cover and heat) that is weighed against the **port of loading and discharge** of each level (scrutiny, palm, heat; placeholder ratings). The margin nudges the chance of moving forward.
+- **One-time cards** (Letter of Credit, the Katta chit, Gora's ledger page, Open Sesame, Forty Jars) are earned by calls and spent when played, one per turn.
+- **Morgiana** is dealt face down from S06. Play her to audit (costs time), play her again to warn her, or leave her: face down at S08, sending the hull flips her.
+- The outline's chapter cards have a "Play level" button, and each game level links back to its chapters. `#walk=SEED@LEVEL~approach.call.card` replays or shares a walk.

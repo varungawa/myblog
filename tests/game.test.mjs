@@ -59,6 +59,43 @@ ok('passing the poison on is hollow', G.takeTurn(fin, 'saam', 'pass').ended.id =
 const long = G.newGame(6); long.turn = D.maxTurns - 1; long.meters = Object.fromEntries(Object.keys(D.start).map(k => [k, 95]));
 ok('running out of turns ends the long walk', (() => { const e = G.takeTurn(long, 'saam', G.level(long).options[1].id); return !!e.ended; })());
 
+// cards and ports
+ok('every suit card key is a real level.option and suit', Object.entries(D.suitCards).every(([k, cs]) => { const [n, o] = k.split('.'); const lv = D.levels[n - 1]; return lv && lv.options.some(x => x.id === o) && cs.every(c => D.suits.some(s => s.id === c.suit)); }));
+ok('every grant is a real call and a real one-time card', Object.entries(D.grants).every(([k, id]) => { const [n, o] = k.split('.'); return D.levels[n - 1].options.some(x => x.id === o) && D.oneTime[id]; }));
+ok('every level has two known ports', D.levels.every(l => D.levelPorts[l.n].length === 2 && D.levelPorts[l.n].every(p => D.ports[p])));
+ok('chapters 1..13 each map to exactly one level', (() => { const all = Object.values(D.levelChapters).flat().sort((a, b) => a - b); return all.length === 13 && all.every((c, i) => c === i + 1); })());
+ok('one-time card fx only touch real meters', Object.values(D.oneTime).every(c => Object.keys(c.fx).every(k => D.start[k] !== undefined)));
+{
+  let st = G.newGame(11);
+  st = G.takeTurn(st, 'saam', 'credit');
+  ok('a call fills its suit slot in the bond hand', st.suits.commerce && st.suits.commerce.name === 'Letter of credit terms');
+  ok('a call can earn a one-time card', st.hand.includes('credit'));
+  const withCard = G.preview(st, 'saam', G.level(st).options[0].id, 'credit'), without = G.preview(st, 'saam', G.level(st).options[0].id, null);
+  ok('playing a card changes the board and chances', withCard.meters.c8 > without.meters.c8 && withCard.up > without.up);
+  const st2 = G.takeTurn(st, 'saam', G.level(st).options[0].id, 'credit');
+  ok('a played card is spent and cannot be played twice', !st2.hand.includes('credit') && st2.spent.includes('credit'));
+  ok('a card you do not hold is ignored', JSON.stringify(G.takeTurn(st2, 'saam', G.level(st2).options[0].id, 'credit').spent) === JSON.stringify(st2.spent));
+  const bc = G.bondCheck(st, st.suits);
+  ok('bond check is finite', ['cover', 'heat', 'palm', 'risk', 'margin'].every(k => Number.isFinite(bc[k])));
+}
+{
+  const jump = G.startAt(6, 9);
+  ok('startAt puts the walk at that level with earlier suits filled', jump.pos === 6 && jump.turn === 5 && D.suits.filter(s => s.level < 6).every(s => jump.suits[s.id]));
+  ok('Morgiana is dealt face down from S06', jump.hand.includes('morgiana') && jump.morgiana === 'down');
+  ok('a level before S06 has no Morgiana yet', !G.startAt(3, 9).hand.includes('morgiana'));
+  const a = G.takeTurn(jump, 'saam', G.level(jump).options[0].id, 'morgiana');
+  ok('auditing Morgiana keeps the card and reveals it', a.morgiana === 'audited' && a.hand.includes('morgiana'));
+  const b = G.takeTurn(a, 'saam', G.level(a).options[0].id, 'morgiana');
+  ok('warning Morgiana spends the card', b.morgiana === 'told' && !b.hand.includes('morgiana') && b.fates.morgiana === 'told');
+  const s8 = (m) => { const s = G.startAt(8, 9); s.morgiana = m; if (m === 'told') s.hand = s.hand.filter(x => x !== 'morgiana'); return s; };
+  const downSend = G.preview(s8('down'), 'saam', 'send'), toldSend = G.preview(s8('told'), 'saam', 'send'), downHold = G.preview(s8('down'), 'saam', 'hold');
+  ok('face down at S08, sending the hull flips the card', downSend.notes.length === 1 && downSend.meters.c10 < toldSend.meters.c10);
+  ok('face down at S08, holding the hull back does not', downHold.notes.length === 0);
+  ok('having warned her halves the damage and hides the carrier', toldSend.notes.length === 1 && toldSend.meters.c10 > downSend.meters.c10 && toldSend.meters.c6 > downSend.meters.c6);
+  const flipped = G.takeTurn(s8('down'), 'saam', 'send');
+  ok('the flip is recorded for the epilogue', flipped.fates.morgiana === 'flipped' && !flipped.hand.includes('morgiana'));
+}
+
 // balance: the walk should be hard but winnable, and thought should beat luck
 const N = 2000, s0 = G.newGame(7);
 const rnd = G.simulate(s0, N, 'random'), spd = G.simulate(s0, N, 'speed'), safe = G.simulate(s0, N, 'safe');

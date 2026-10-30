@@ -2,32 +2,36 @@
 (function () {
   var G = window.CargoGame, D = G.data, root = document.getElementById('game-app');
   if (!root) return;
-  var S = { game: null, approach: 'saam', option: null, picks: [], policy: 'safe', sim: null, shareMsg: '' };
+  var S = { game: null, approach: 'saam', option: null, card: null, picks: [], startLevel: 0, policy: 'safe', sim: null, shareMsg: '' };
 
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var pct = function (x) { return Math.round(x * 100) + '%'; };
   var pad = function (n) { return String(n).padStart(2, '0'); };
   var sgn = function (n) { return n > 0 ? '+' + n : String(n); };
+  var f1 = function (x) { return (Math.round(x * 10) / 10).toFixed(1); };
+  var randSeed = function () { return Math.floor(Math.random() * 999999) + 1; };
 
-  function start(seed, picks) {
-    S.game = G.newGame(seed); S.picks = []; S.sim = null; S.shareMsg = '';
+  function start(seed, picks, startLevel) {
+    S.startLevel = startLevel || 0;
+    S.game = S.startLevel > 1 ? G.startAt(S.startLevel, seed) : G.newGame(seed);
+    S.picks = []; S.sim = null; S.shareMsg = ''; S.card = null;
     (picks || []).forEach(function (p) {
       if (S.game.ended) return;
       var lv = G.level(S.game);
-      if (D.approaches[p[0]] && G.findOption(lv, p[1])) { S.game = G.takeTurn(S.game, p[0], p[1]); S.picks.push(p); }
+      if (D.approaches[p[0]] && G.findOption(lv, p[1])) { S.game = G.takeTurn(S.game, p[0], p[1], p[2] || null); S.picks.push(p); }
     });
     S.approach = 'saam'; S.option = S.game.ended ? null : G.level(S.game).options[0].id;
     render();
   }
 
   function parseHash() {
-    var m = /^#walk=(\d+)((?:~[a-z]+\.[a-z]+)*)$/.exec(location.hash);
+    var m = /^#walk=(\d+)(?:@(\d+))?((?:~[a-z]+\.[a-z]+(?:\.[a-z]+)?)*)$/.exec(location.hash);
     if (!m) return null;
-    return { seed: +m[1], picks: m[2].split('~').filter(Boolean).map(function (x) { return x.split('.'); }) };
+    return { seed: +m[1], level: m[2] ? +m[2] : 0, picks: m[3].split('~').filter(Boolean).map(function (x) { return x.split('.'); }) };
   }
 
   function shareLink() {
-    return location.href.split('#')[0] + '#walk=' + S.game.seed + S.picks.map(function (p) { return '~' + p[0] + '.' + p[1]; }).join('');
+    return location.href.split('#')[0] + '#walk=' + S.game.seed + (S.startLevel > 1 ? '@' + S.startLevel : '') + S.picks.map(function (p) { return '~' + p.filter(Boolean).join('.'); }).join('');
   }
 
   function meterRows(g, pv) {
@@ -39,7 +43,7 @@
       return '<li class="mt' + (tested ? ' tested' : '') + '"><span class="mn"><b>' + mt.short + '</b> ' + esc(mt.name) + (tested ? ' <i>(tested here)</i>' : '') + '</span>' +
         '<span class="bar" role="img" aria-label="' + esc(mt.name) + ' ' + v + ' of 100"><span style="width:' + v + '%"></span></span>' +
         '<span class="mv">' + v + '</span><span class="md">' + (d ? (d > 0 ? '▲' : '▼') + Math.abs(d) : '') + '</span>' +
-        (pvv ? '<span class="mp" title="change if you walk this choice, before the world moves">' + sgn(pvv) + '</span>' : '') + '</li>';
+        '<span class="mp" title="change if you walk this choice, before the world moves">' + (pvv ? sgn(pvv) : '') + '</span></li>';
     }).join('');
   }
 
@@ -62,7 +66,8 @@
   function trackHtml(g) {
     return '<ol class="track" aria-label="Position on the walk">' + D.levels.map(function (lv) {
       var cls = lv.n === g.pos && !g.ended ? ' now' : (lv.n < g.pos ? ' done' : '');
-      return '<li class="stn' + cls + '"' + (lv.n === g.pos ? ' aria-current="step"' : '') + '><b>S' + pad(lv.n) + '</b><span>' + esc(lv.title) + '</span>' + (lv.n === g.pos ? '<em class="tok" aria-hidden="true">◆</em>' : '') + '</li>';
+      var chs = D.levelChapters[lv.n];
+      return '<li class="stn' + cls + '"' + (lv.n === g.pos ? ' aria-current="step"' : '') + '><b>S' + pad(lv.n) + '</b><span>' + esc(lv.title) + '</span><i class="chs">Ch ' + chs.join(', ') + '</i>' + (lv.n === g.pos ? '<em class="tok" aria-hidden="true">◆</em>' : '') + '</li>';
     }).join('') + '</ol>';
   }
 
@@ -72,13 +77,43 @@
       (pv.down > 0 ? '<span class="pd" style="flex:' + pv.down + '">Back ' + pct(pv.down) + '</span>' : '') + '</div>';
   }
 
+  function portCard(label, name) {
+    var p = D.ports[name];
+    return '<div class="port"><span class="mono">' + label + '</span><b>' + esc(name) + '</b><small>scrutiny ' + p.scrutiny + ' · palm ' + p.palm + ' · heat ' + p.heat + '</small></div>';
+  }
+
+  function portsHtml(pv) {
+    var b = pv.bond, adj = Math.max(-8, Math.min(8, b.margin));
+    return '<div class="ports">' + portCard('Port of loading', b.from) + '<span class="arrow" aria-hidden="true">→</span>' + portCard('Port of discharge', b.to) + '</div>' +
+      '<p class="bondline">Bond check: cover <b>' + b.cover + '</b> + palm <b>' + f1(b.palm) + '</b> − risk <b>' + f1(b.risk) + '</b> (heat ' + b.heat + ' × scrutiny ' + f1(b.scrutiny) + ') = <b>' + (b.margin >= 0 ? '+' : '') + f1(b.margin) + '</b>, which moves your chance of going forward by <b>' + (adj >= 0 ? '+' : '') + f1(adj) + ' points</b>.</p>';
+  }
+
+  function handHtml(g, pv) {
+    var slots = D.suits.map(function (s) {
+      var c = pv.suits[s.id], pending = c && JSON.stringify(c) !== JSON.stringify(g.suits[s.id]);
+      return c ? '<li class="card-s' + (pending ? ' pending' : '') + '"><span class="mono">' + s.c + ' ' + esc(s.name) + '</span><b>' + esc(c.name) + '</b><small>cover ' + c.cover + ' · heat ' + c.heat + '</small></li>'
+        : '<li class="card-s empty"><span class="mono">' + s.c + ' ' + esc(s.name) + '</span><b>empty</b><small>filled at S' + pad(s.level) + '</small></li>';
+    }).join('');
+    var hv = G.handView(g);
+    var cards = hv.length ? hv.map(function (c) {
+      var sel = S.card === c.id;
+      return '<button type="button" class="pc' + (c.faceDown ? ' down' : '') + '" data-card="' + c.id + '" aria-pressed="' + sel + '"><span class="mono">' + esc(c.suit) + ' · one-time</span>' +
+        '<b>' + (c.faceDown ? '❔ ' : '') + esc(c.name) + '</b><small>' + esc(c.text) + '</small><em>' + (sel ? '✓ Playing this turn: ' : 'Tap to play: ') + esc(c.label) + '</em></button>';
+    }).join('') : '<p class="note">No one-time cards yet. Some calls earn them: a letter of credit, the Katta chit, Gora’s ledger page, Open Sesame, the forty jars.</p>';
+    return '<div class="handbox"><div class="mono">Your bond hand · one card per suit</div><ul class="suits">' + slots + '</ul>' +
+      '<div class="mono" style="margin-top:12px">Cards to play · one per turn, spent when played</div><div class="pcs">' + cards + '</div></div>';
+  }
+
   function lastHtml(g) {
     var l = g.last; if (!l || l.step === undefined) return '';
     var lvFrom = D.levels[l.from - 1];
-    var txt = l.step === undefined ? '' : (l.step > 0 ? 'The walk moved forward to S' + pad(l.to) + '.' : l.step < 0 ? 'The walk was pushed back to S' + pad(l.to) + '.' : 'The walk stalled at S' + pad(l.to) + '.');
+    var txt = l.step > 0 ? 'The walk moved forward to S' + pad(l.to) + '.' : l.step < 0 ? 'The walk was pushed back to S' + pad(l.to) + '.' : 'The walk stalled at S' + pad(l.to) + '.';
     var reg = l.regFrom !== l.regTo ? 'The regime changed: ' + D.regimes[l.regFrom].name + ' → <b>' + D.regimes[l.regTo].name + '</b>.' : 'The regime held: ' + D.regimes[l.regTo].name + '.';
     var wx = l.wxFrom !== l.wxTo ? (l.wxTo === 'storm' ? ' A storm rolled in.' : ' The storm passed.') : (l.wxTo === 'storm' ? ' The storm holds.' : '');
-    return '<div class="lastturn"><div class="mono">Last turn · S' + pad(l.from) + ' ' + esc(lvFrom.title) + '</div><p>' + txt + ' ' + reg + wx + '</p></div>';
+    var extra = '';
+    if (l.card) { var ce = l.probs.card; if (ce) extra += ' You played <b>' + esc(ce.name) + '</b>.'; }
+    if (l.probs && l.probs.notes && l.probs.notes.length) extra += ' ' + esc(l.probs.notes.join(' '));
+    return '<div class="lastturn"><div class="mono">Last turn · S' + pad(l.from) + ' ' + esc(lvFrom.title) + '</div><p>' + txt + ' ' + reg + wx + extra + '</p></div>';
   }
 
   function simHtml() {
@@ -95,8 +130,7 @@
   }
 
   function endingHtml(g) {
-    var e = g.ended;
-    var d = e.derived;
+    var e = g.ended, d = e.derived;
     return '<div class="ending ' + e.kind + '"><div class="mono">The walk ends · S' + pad(e.pos) + ' · turn ' + e.turn + ' of ' + D.maxTurns + '</div><h3 id="game-scene" tabindex="-1">' + esc(e.title) + '</h3><p>' + esc(e.text) + '</p>' +
       (e.epilogue.length ? '<ul class="epi">' + e.epilogue.map(function (x) { return '<li><b>' + esc(x[0]) + '.</b> ' + esc(x[1]) + '</li>'; }).join('') + '</ul>' : '') +
       '<p class="scores">Trust ' + d.trust + ' · Risk ' + d.risk + ' · Liquidity ' + d.liquidity + ' · Insurance ' + d.insurance + ' · Fraud probability ' + d.fraud + '</p>' +
@@ -105,20 +139,26 @@
   }
 
   function render() {
-    var g = S.game, lv = g.ended ? null : G.level(g), pv = g.ended ? null : G.preview(g, S.approach, S.option);
+    var g = S.game, lv = g.ended ? null : G.level(g);
+    if (S.card && g.hand.indexOf(S.card) < 0) S.card = null;
+    var pv = g.ended ? null : G.preview(g, S.approach, S.option, S.card);
     var reg = D.regimes[g.regime], wx = D.weather[g.weather];
     var html = '<div class="gamebar"><label>Seed <input id="seed" type="number" min="1" value="' + g.seed + '" aria-label="Seed"></label><button type="button" data-act="new">New walk</button>' +
       '<span class="turn">Turn <b>' + g.turn + '</b> of ' + D.maxTurns + '</span></div>' + trackHtml(g) + '<div class="gamegrid"><div class="gcol">';
     html += '<div class="world"><span class="chip">' + esc(reg.name) + '</span><span class="chip' + (g.weather === 'storm' ? ' storm' : '') + '">' + esc(wx.name) + '</span><span class="wb">' + esc(reg.blurb) + '</span></div>';
     if (g.ended) html += endingHtml(g);
     else {
-      html += '<div class="scene"><div class="mono">S' + pad(lv.n) + ' · ' + esc(lv.c) + '</div><h3 id="game-scene" tabindex="-1">' + esc(lv.title) + '</h3><p>' + esc(lv.scene) + '</p></div>';
+      html += '<div class="scene"><div class="mono">S' + pad(lv.n) + ' · ' + esc(lv.c) + '</div><h3 id="game-scene" tabindex="-1">' + esc(lv.title) + '</h3><p>' + esc(lv.scene) + '</p>' +
+        '<p class="inoutline">In the outline: ' + D.levelChapters[lv.n].map(function (n) { return '<button type="button" class="lnk" data-chapter="' + n + '">Chapter ' + n + ' ↗</button>'; }).join(' ') + '</p></div>';
+      html += portsHtml(pv);
       html += '<fieldset class="choices"><legend>Your approach <span class="hint">(a move of Krishna’s)</span></legend><div class="opts four">' +
         Object.keys(D.approaches).map(function (k) { var a = D.approaches[k]; return '<button type="button" class="opt" data-approach="' + k + '" aria-pressed="' + (S.approach === k) + '"><b>' + a.label + '</b><span>' + a.verb + '</span><small>' + esc(a.desc) + '</small></button>'; }).join('') + '</div></fieldset>';
       html += '<fieldset class="choices"><legend>' + esc(lv.prompt) + '</legend><div class="opts three">' +
-        lv.options.map(function (o) { return '<button type="button" class="opt" data-option="' + o.id + '" aria-pressed="' + (S.option === o.id) + '"><b>' + esc(o.label) + '</b><small>' + esc(o.text) + '</small></button>'; }).join('') + '</div></fieldset>';
+        lv.options.map(function (o) { var cs = (D.suitCards[lv.n + '.' + o.id] || []).map(function (c) { return esc(c.name) + ' (cover ' + c.cover + ', heat ' + c.heat + ')'; }).join(' + '); return '<button type="button" class="opt" data-option="' + o.id + '" aria-pressed="' + (S.option === o.id) + '"><b>' + esc(o.label) + '</b><small>' + esc(o.text) + '</small>' + (cs ? '<em class="gives">Adds: ' + cs + '</em>' : '') + (D.grants[lv.n + '.' + o.id] ? '<em class="gives">Earns the card ' + esc(D.oneTime[D.grants[lv.n + '.' + o.id]].name) + '</em>' : '') + '</button>'; }).join('') + '</div></fieldset>';
+      html += handHtml(g, pv);
+      if (pv.notes.length) html += '<p class="warn" role="status">' + esc(pv.notes.join(' ')) + '</p>';
       if (lv.final) html += '<p class="note">This is the last bond. The walk ends with your answer.</p>';
-      else html += '<div class="preview"><div class="mono">Position chain · exact chances for this choice</div>' + probBar(pv) + '</div>';
+      else html += '<div class="preview"><div class="mono">Position chain · exact chances for this choice' + (S.card ? ' with ' + esc(pv.card.name) : '') + '</div>' + probBar(pv) + '</div>';
       html += '<div class="actions"><button type="button" class="go" data-act="walk">' + (lv.final ? 'Hold the poison' : 'Take the walk') + '</button></div>';
     }
     html += lastHtml(g);
@@ -134,15 +174,17 @@
     var t = e.target.closest('button'); if (!t || !root.contains(t)) return;
     if (t.dataset.approach) { S.approach = t.dataset.approach; render(); return; }
     if (t.dataset.option) { S.option = t.dataset.option; render(); return; }
+    if (t.dataset.card) { S.card = S.card === t.dataset.card ? null : t.dataset.card; render(); return; }
+    if (t.dataset.chapter) { if (window.CargoOutline) window.CargoOutline.open(+t.dataset.chapter); return; }
     var act = t.dataset.act;
     if (act === 'walk') {
-      S.picks.push([S.approach, S.option]); S.game = G.takeTurn(S.game, S.approach, S.option); S.sim = null;
+      S.picks.push([S.approach, S.option, S.card].filter(function (x, i) { return i < 2 || x; })); S.game = G.takeTurn(S.game, S.approach, S.option, S.card); S.sim = null; S.card = null;
       if (!S.game.ended) { S.option = G.level(S.game).options[0].id; }
       render(); var sc = document.getElementById('game-scene'); if (sc) sc.focus({ preventScroll: true });
     } else if (act === 'new' || act === 'again') {
       var v = act === 'new' ? parseInt(document.getElementById('seed').value, 10) : 0;
-      start(v > 0 ? v : Math.floor(Math.random() * 999999) + 1);
-    } else if (act === 'replay') start(S.game.seed);
+      start(v > 0 ? v : randSeed(), [], act === 'new' ? 0 : S.startLevel); // "New walk" always begins at S01
+    } else if (act === 'replay') start(S.game.seed, [], S.startLevel);
     else if (act === 'sim') {
       S.sim = G.simulate(S.game.ended ? G.newGame(S.game.seed) : S.game, 1000, S.policy); render();
     } else if (act === 'share') {
@@ -152,6 +194,9 @@
   });
   root.addEventListener('change', function (e) { if (e.target.id === 'policy') { S.policy = e.target.value; S.sim = null; render(); } });
 
+  // The outline's "Play level" buttons call this.
+  window.CargoGameUI = { jump: function (n) { start(randSeed(), [], n); } };
+
   var h = parseHash();
-  if (h) start(h.seed, h.picks); else start(Math.floor(Math.random() * 999999) + 1);
+  if (h) start(h.seed, h.picks, h.level); else start(randSeed());
 })();
