@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#07142c"/><stop offset=".55" stop-color="#221b37"/><stop offset="1" stop-color="#100d13"/></linearGradient><radialGradient id="glow"><stop stop-color="#c88942" stop-opacity=".65"/><stop offset="1" stop-color="#c88942" stop-opacity="0"/></radialGradient><filter id="blur"><feGaussianBlur stdDeviation="18"/></filter></defs>
+<rect width="1600" height="900" fill="url(#sky)"/><circle cx="830" cy="390" r="440" fill="url(#glow)" opacity=".5"/>
+<g fill="none" stroke="#d0a56a" stroke-width="2" opacity=".5"><path d="M0 130H1600M0 320H1600M0 500H1600"/><path d="M150 0V700M390 0V700M1210 0V700M1450 0V700"/></g>
+<g fill="#1c1d29" stroke="#bd8e55" stroke-width="3"><path d="M625 410Q680 250 800 160Q920 250 975 410L930 530H670Z"/><circle cx="800" cy="270" r="83" fill="#222538"/><path d="M715 320Q800 420 885 320L935 520H665Z"/></g>
+<g stroke="#d2b27e" stroke-width="10" stroke-linecap="round"><path d="M1000 110V465M968 132Q1000 95 1032 132M968 132V175M1032 132V175"/><path d="M760 130Q800 76 840 130" fill="none"/></g>
+<g fill="none" stroke="#ddbd88" stroke-width="9"><path d="M800 425V560M740 425H860M745 550H855"/><path d="M745 425L855 550M855 425L745 550"/></g>
+<ellipse cx="800" cy="690" rx="690" ry="120" fill="#231a1a" stroke="#a77a4b" stroke-width="15"/><path d="M100 700H1500L1400 900H200Z" fill="#2b201d"/>
+<g font-family="Georgia" font-size="180" text-anchor="middle"><text x="235" y="665">🌾</text><text x="440" y="650">🍚</text><text x="625" y="660">🍅</text><text x="975" y="660">👩🏽</text><text x="1190" y="660">⚽</text><text x="1380" y="660">🏏</text></g>
+<g fill="none" stroke="#dfbd78" stroke-width="7"><path d="M775 770L735 810H815Z"/><path d="M790 760L830 810H750Z"/></g>
+<g fill="#f0ca80" opacity=".6"><circle cx="130" cy="95" r="2"/><circle cx="380" cy="82" r="2"/><circle cx="1250" cy="112" r="3"/><circle cx="1410" cy="70" r="2"/><circle cx="520" cy="165" r="3"/></g>
+</svg>
