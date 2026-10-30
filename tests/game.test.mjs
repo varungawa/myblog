@@ -96,6 +96,15 @@ ok('one-time card fx only touch real meters', Object.values(D.oneTime).every(c =
   ok('the flip is recorded for the epilogue', flipped.fates.morgiana === 'flipped' && !flipped.hand.includes('morgiana'));
 }
 
+{
+  const early = G.startAt(7, 3); early.pos = 10; early.meters = Object.fromEntries(Object.keys(D.start).map(k => [k, 80]));
+  const e1 = G.takeTurn(early, 'saam', 'shiva');
+  ok('a walk that ends with Morgiana still face down says so', e1.ended.epilogue.some(x => x[0] === 'Morgiana' && /face down/.test(x[1])));
+  const aud = G.startAt(7, 3); aud.pos = 10; aud.morgiana = 'audited'; aud.meters = early.meters;
+  ok('a walk that ends with her audited says so', G.takeTurn(aud, 'saam', 'shiva').ended.epilogue.some(x => x[0] === 'Morgiana' && /audited/.test(x[1])));
+  ok('a walk that never reached S06 has no Morgiana line', !G.takeTurn(Object.assign(G.newGame(3), { pos: 10, meters: early.meters }), 'saam', 'shiva').ended.epilogue.some(x => x[0] === 'Morgiana'));
+}
+
 // balance: the walk should be hard but winnable, and thought should beat luck
 const N = 2000, s0 = G.newGame(7);
 const rnd = G.simulate(s0, N, 'random'), spd = G.simulate(s0, N, 'speed'), safe = G.simulate(s0, N, 'safe');

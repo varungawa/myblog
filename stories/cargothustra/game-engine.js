@@ -189,7 +189,8 @@
     if (f.vee && D.vee[f.vee]) out.push(['Vee', D.vee[f.vee]]);
     if (f.consignor && D.consignor[f.consignor]) out.push(['The consignor', D.consignor[f.consignor]]);
     if (f.consignee && D.consignee[f.consignee]) out.push(['The consignee', D.consignee[f.consignee]]);
-    if (f.morgiana && D.morgiana.epilogue[f.morgiana]) out.push(['Morgiana', D.morgiana.epilogue[f.morgiana]]);
+    var mg = f.morgiana || st.morgiana; // still face down or audited if the walk ended before S08
+    if (mg && D.morgiana.epilogue[mg]) out.push(['Morgiana', D.morgiana.epilogue[mg]]);
     return out;
   }
 
