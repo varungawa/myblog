@@ -7,3 +7,5 @@ chapter navigation, history <-> story navigation, lightbox (click, arrow keys, w
 Run against production: `BASE=https://varungawa.github.io/myblog/ node tests/verify.mjs`
 Screenshots go to `tests/screenshots/` (git-ignored). Needs the `playwright` package and a Chromium.
 `python3 tools/build_assets.py` regenerates `assets/history/*` and `assets/story/*` from the untouched originals in `assets/source/`.
+
+`node tests/game.test.mjs` checks the game engine on its own (no browser): data integrity, probabilities, determinism, endings, and a Monte Carlo balance check.

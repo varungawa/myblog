@@ -25,3 +25,8 @@ That gives the story the next `seq`, pins it as the main page and moves the prev
 
 `python3 tools/build_site.py --check` fails if the generated files are out of date. `node tests/verify.mjs` runs the browser checks (see `tests/README.md`).
 `stories/cargothustra/cover-art.html` plus `node tools/render_cover.mjs cargothustra` and `python3 tools/build_site.py --covers` regenerate that story's cover.
+
+## The game (Thus Spake Cargothustra, "Play the walk")
+
+`stories/cargothustra/game-data.js` (levels S01 to S10, calls, the 13 C meters, the Markov matrices), `game-engine.js` (pure engine, seeded, runs in the browser and node) and `game-ui.js` (the page). Three Markov chains move each turn: position S01..S10, regime (markets high/low x war/peace) and weather. All numbers are play-testing placeholders; tune them in `game-data.js`.
+`node tests/game.test.mjs` checks the data, the chains, determinism and the balance (random play should win rarely, careful play often, chasing speed should collapse more).

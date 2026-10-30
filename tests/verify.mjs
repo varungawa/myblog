@@ -47,6 +47,23 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       await page.waitForSelector('.rail button');
       ok('home: rail lists 13 chapters + 4 interludes', await page.locator('.rail button').count() === 17);
       ok('home: hero image has real content & not lazy', imgs[0].std > 20 && await page.$eval('.cover', e => e.loading !== 'lazy'), 'std=' + imgs[0].std.toFixed(1));
+      // the game
+      await page.waitForSelector('#game-app .scene');
+      ok('game: 10 stations and 13 C meters', await page.locator('.track .stn').count() === 10 && await page.locator('.board ul[aria-label="The thirteen Cs"] > li').count() === 13);
+      ok('game: starts at S01', (await page.locator('.scene .mono').innerText()).startsWith('S01'));
+      const probs = await page.getAttribute('.prob', 'aria-label'); const nums = (probs.match(/\d+/g) || []).map(Number);
+      ok('game: exact chances are shown and sum to about 100%', nums.length >= 2 && Math.abs(nums.reduce((a, b) => a + b, 0) - 100) <= 2, probs);
+      await page.click('[data-approach="dand"]'); ok('game: choosing an approach marks it', (await page.getAttribute('[data-approach="dand"]', 'aria-pressed')) === 'true');
+      ok('game: regime matrix has 4 rows', await page.locator('table.matrix tbody tr').count() === 4);
+      let gturns = 0; while (!(await page.locator('.ending').count()) && gturns < 40) { await page.locator('[data-approach]').nth(gturns % 4).click(); await page.locator('[data-option]').nth((gturns + 1) % 3).click(); await page.click('[data-act="walk"]'); gturns++; }
+      ok('game: a walk reaches an ending', await page.locator('.ending').count() === 1, gturns + ' turns: ' + await page.locator('.ending h3').innerText());
+      await page.click('[data-act="sim"]'); await page.waitForSelector('.simres');
+      const simTotal = await page.$$eval('.simres .two > div:first-child li .mv', els => els.reduce((s, e) => s + parseFloat(e.textContent), 0));
+      ok('game: 1,000-walk simulation distributes to 100%', Math.abs(simTotal - 100) < 0.6, simTotal.toFixed(1));
+      await page.click('[data-act="again"]'); ok('game: walk again resets to S01', (await page.locator('.scene .mono').innerText()).startsWith('S01') && (await page.locator('.turn b').innerText()) === '0');
+      await page.goto(BASE + '#walk=5~saam.take'); await page.reload(); await page.waitForSelector('#game-app .scene');
+      ok('game: a shared #walk link replays the walk', (await page.locator('.turn b').innerText()) === '1' && (await page.locator('input#seed').inputValue()) === '5');
+      await page.goto(BASE); await page.waitForSelector('.rail button');
       await page.click('#next'); ok('home: Next opens chapter 1', (await page.locator('.card2 h2').innerText()) === 'A Need Arises');
       await page.click('[data-view="all"]'); await page.waitForSelector('.all article');
       ok('home: whole outline has 17 entries', await page.locator('.all article').count() === 17);
