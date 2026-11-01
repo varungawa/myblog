@@ -8,4 +8,4 @@ Run against production: `BASE=https://varungawa.github.io/myblog/ node tests/ver
 Screenshots go to `tests/screenshots/` (git-ignored). Needs the `playwright` package and a Chromium.
 `python3 tools/build_assets.py` regenerates `assets/history/*` and `assets/story/*` from the untouched originals in `assets/source/`.
 
-`node tests/game.test.mjs` checks the game engine on its own (no browser): data integrity, probabilities, determinism, endings, and a Monte Carlo balance check.
+`node tests/story.test.mjs` checks the interactive story on its own (no browser): links, flags, items, reachability of every passage and ending, determinism, and that readers cannot get stuck.

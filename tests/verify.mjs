@@ -47,47 +47,33 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       await page.waitForSelector('.rail button');
       ok('home: rail lists 13 chapters + 4 interludes', await page.locator('.rail button').count() === 17);
       ok('home: hero image has real content & not lazy', imgs[0].std > 20 && await page.$eval('.cover', e => e.loading !== 'lazy'), 'std=' + imgs[0].std.toFixed(1));
-      // the game
-      await page.waitForSelector('#game-app .scene');
-      ok('game: 10 stations and 13 C meters', await page.locator('.track .stn').count() === 10 && await page.locator('.board ul[aria-label="The thirteen Cs"] > li').count() === 13);
-      ok('game: starts at S01', (await page.locator('.scene .mono').innerText()).startsWith('S01'));
-      const probs = await page.getAttribute('.prob', 'aria-label'); const nums = (probs.match(/\d+/g) || []).map(Number);
-      ok('game: exact chances are shown and sum to about 100%', nums.length >= 2 && Math.abs(nums.reduce((a, b) => a + b, 0) - 100) <= 2, probs);
-      await page.click('[data-approach="dand"]'); ok('game: choosing an approach marks it', (await page.getAttribute('[data-approach="dand"]', 'aria-pressed')) === 'true');
-      ok('game: regime matrix has 4 rows', await page.locator('table.matrix tbody tr').count() === 4);
-      let gturns = 0; while (!(await page.locator('.ending').count()) && gturns < 40) { await page.locator('[data-approach]').nth(gturns % 4).click(); await page.locator('[data-option]').nth((gturns + 1) % 3).click(); await page.click('[data-act="walk"]'); gturns++; }
-      ok('game: a walk reaches an ending', await page.locator('.ending').count() === 1, gturns + ' turns: ' + await page.locator('.ending h3').innerText());
-      await page.click('[data-act="sim"]'); await page.waitForSelector('.simres');
-      const simTotal = await page.$$eval('.simres .two > div:first-child li .mv', els => els.reduce((s, e) => s + parseFloat(e.textContent), 0));
-      ok('game: 1,000-walk simulation distributes to 100%', Math.abs(simTotal - 100) < 0.6, simTotal.toFixed(1));
-      // cards, ports and linking (fresh walk at S01)
-      await page.click('[data-act="again"]');
-      ok('game: bond hand shows 6 suit slots and port cards', await page.locator('.suits .card-s').count() === 6 && await page.locator('.ports .port').count() === 2);
-      ok('game: bond check line is shown', (await page.locator('.bondline').innerText()).startsWith('Bond check'));
-      await page.click('[data-option="credit"]'); await page.click('[data-act="walk"]');
-      ok('game: a call earns a one-time card', await page.locator('.pc[data-card="credit"]').count() === 1);
-      const lvl2 = await page.locator('.scene .mono').innerText(); await page.click('.pc[data-card="credit"]');
-      ok('game: selecting a card marks it', (await page.getAttribute('.pc[data-card="credit"]', 'aria-pressed')) === 'true');
-      await page.click('[data-act="walk"]');
-      ok('game: a played card is spent', await page.locator('.pc[data-card="credit"]').count() === 0);
-      // outline -> game
-      await page.click('[data-view="one"]').catch(() => {});
-      await page.waitForSelector('.rail button'); await page.click('.rail button[data-i="5"]');
-      await page.click('.lvl'); await page.waitForTimeout(300);
-      ok('game: outline chapter 5 jumps to level S05', (await page.locator('.scene .mono').innerText()).startsWith('S05') && (await page.locator('.turn b').innerText()) === '4');
-      ok('game: a jumped walk is dealt Morgiana only from S06', await page.locator('.pc.down').count() === 0);
-      await page.locator('.rail button[data-i="7"]').click(); await page.click('.lvl'); await page.waitForTimeout(300);
-      ok('game: outline chapter 7 jumps to level S06 with Morgiana face down', (await page.locator('.scene .mono').innerText()).startsWith('S06') && await page.locator('.pc.down').count() === 1);
-      await page.click('.pc.down'); await page.click('[data-act="walk"]');
-      ok('game: auditing Morgiana turns the card up but keeps it', await page.locator('.pc.down').count() === 0 && await page.locator('.pc[data-card="morgiana"]').count() === 1);
-      // game -> outline
-      await page.click('[data-chapter]'); await page.waitForTimeout(300);
-      ok('game: scene links back to its chapter in the outline', /Four Ports|Cities and Corridors/i.test(await page.locator('.card2 h2, .card2 .mono').first().innerText()) || (await page.locator('.card2 h2').innerText()).length > 0);
-      await page.click('[data-act="new"]'); ok('game: a new walk resets to S01', (await page.locator('.scene .mono').innerText()).startsWith('S01') && (await page.locator('.turn b').innerText()) === '0');
-      await page.goto(BASE + '#walk=5~saam.take'); await page.reload(); await page.waitForSelector('#game-app .scene');
-      ok('game: a shared #walk link replays the walk', (await page.locator('.turn b').innerText()) === '1' && (await page.locator('input#seed').inputValue()) === '5');
-      await page.goto(BASE); await page.waitForSelector('.rail button');
-      await page.click('#next'); ok('home: Next opens chapter 1', (await page.locator('.card2 h2').innerText()) === 'A Need Arises');
+      // the interactive story
+      await page.waitForSelector('#story-app .pass');
+      ok('story: opens with the myth and a Continue', (await page.locator('#story-app .pass').first().innerText()).includes('twenty-seven wives') && await page.locator('#story-app [data-choice]').count() === 1);
+      ok('story: no levels, turns, seeds, meters or scores on screen', !/\bS\d\d\b|\bTurn \d|\bSeed\b|\bscore\b|\bmeter\b|\bprobab/i.test(await page.locator('#story-app').innerText()));
+      await page.click('[data-choice="0"]'); await page.click('[data-choice="0"]');
+      ok('story: the first hurdle offers three decisions', await page.locator('#story-app .choices .ch').count() === 3);
+      const nBefore = await page.locator('#story-app .pass').count();
+      await page.locator('#story-app .ch').first().click(); await page.waitForTimeout(200);
+      ok('story: a decision adds prose and records what you chose', await page.locator('#story-app .pass').count() > nBefore && await page.locator('#story-app .you').count() === 1);
+      await page.locator('[data-act="back"]').first().click();
+      ok('story: going back one choice undoes it', await page.locator('#story-app .you').count() === 0 && await page.locator('#story-app .choices .ch').count() === 3);
+      let sc = 0; while (!(await page.locator('#the-end').count()) && sc < 90) { await page.locator('#story-app [data-choice]').first().click(); sc++; }
+      const end1 = await page.locator('#end-title').innerText();
+      ok('story: reading with the first choice each time reaches an ending', await page.locator('#the-end').count() === 1, sc + ' choices: ' + end1);
+      ok('story: the endings tracker counts it', /Endings found: [1-9]\d? of 14/.test(await page.locator('[data-act="ends"]').innerText()));
+      await page.locator('[data-act="restart"]').first().click();
+      ok('story: start again returns to the beginning', (await page.locator('#story-app .pass').first().innerText()).includes('twenty-seven wives') && await page.locator('#the-end').count() === 0);
+      sc = 0; while (!(await page.locator('#the-end').count()) && sc < 90) { const n = await page.locator('#story-app [data-choice]').count(); await page.locator('#story-app [data-choice]').nth(n - 1).click(); sc++; }
+      const end2 = await page.locator('#end-title').innerText();
+      ok('story: taking the last choice each time reaches a different ending', end2 !== end1, end1 + ' vs ' + end2);
+      await page.click('[data-act="ends"]'); ok('story: the endings list shows found and hidden endings', await page.locator('.endlist li.got').count() >= 2 && await page.locator('.endlist li:not(.got)').count() >= 1);
+      // outline -> story and back
+      await page.waitForSelector('.rail button'); await page.click('.rail button[data-i="5"]'); await page.click('.lvl'); await page.waitForTimeout(300);
+      ok('story: an outline chapter opens the story at that chapter', /chapter 5/i.test(await page.locator('#story-app .chh').first().innerText()));
+      await page.click('#story-app [data-chapter]'); await page.waitForTimeout(300);
+      ok('story: a chapter heading links back to the outline', /Legs, and the Cave/.test(await page.locator('.card2 h2').innerText()));
+      await page.click('.rail button[data-i="0"]'); await page.click('#next'); ok('home: Next opens chapter 1', (await page.locator('.card2 h2').innerText()) === 'A Need Arises');
       await page.click('[data-view="all"]'); await page.waitForSelector('.all article');
       ok('home: whole outline has 17 entries', await page.locator('.all article').count() === 17);
       const wc = await page.$$eval('.all article .mono', els => els.map(e => (e.textContent.match(/^(\d+) words$/) || [])[1]).filter(Boolean).map(Number));

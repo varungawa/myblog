@@ -26,14 +26,11 @@ That gives the story the next `seq`, pins it as the main page and moves the prev
 `python3 tools/build_site.py --check` fails if the generated files are out of date. `node tests/verify.mjs` runs the browser checks (see `tests/README.md`).
 `stories/cargothustra/cover-art.html` plus `node tools/render_cover.mjs cargothustra` and `python3 tools/build_site.py --covers` regenerate that story's cover.
 
-## The game (Thus Spake Cargothustra, "Play the walk")
+## The interactive story (Thus Spake Cargothustra, "Choose Nanda's walk")
 
-`stories/cargothustra/game-data.js` (levels S01 to S10, calls, the 13 C meters, the Markov matrices), `game-engine.js` (pure engine, seeded, runs in the browser and node) and `game-ui.js` (the page). Three Markov chains move each turn: position S01..S10, regime (markets high/low x war/peace) and weather. All numbers are play-testing placeholders; tune them in `game-data.js`.
-`node tests/game.test.mjs` checks the data, the chains, determinism and the balance (random play should win rarely, careful play often, chasing speed should collapse more).
+First person, as Nanda. Prose, then a hurdle, then a decision that changes the course. There are 14 endings. Nothing is scored or numbered on screen.
 
-### Cards, ports and links
-
-- The player's calls fill a **bond hand** (Commerce, Commodity, Consignor, Consignee, Carriage, Carrier; cover and heat) that is weighed against the **port of loading and discharge** of each level (scrutiny, palm, heat; placeholder ratings). The margin nudges the chance of moving forward.
-- **One-time cards** (Letter of Credit, the Katta chit, Gora's ledger page, Open Sesame, Forty Jars) are earned by calls and spent when played, one per turn.
-- **Morgiana** is dealt face down from S06. Play her to audit (costs time), play her again to warn her, or leave her: face down at S08, sending the hull flips her.
-- The outline's chapter cards have a "Play level" button, and each game level links back to its chapters. `#walk=SEED@LEVEL~approach.call.card` replays or shares a walk.
+- `stories/cargothustra/story-data-1.js`, `-2.js`, `-3.js`: the passages. Each node has prose (paragraphs, or `{if, t}` for conditional ones), then choices, a single continue, a `route` (conditions pick the next node), a `chance` (weighted dice) or an `end`. Choices set flags, carry items and bend a hidden world (markets high or low, war or peace) that drifts as a Markov chain between chapters, tilted by how gentle or harsh you have been. The reader only sees what it does to the prose.
+- `story-engine.js`: pure engine (node and browser). `story-ui.js`: the reading page, with go-back, start again, and a tracker of endings found (kept in the browser).
+- The outline's chapter cards have a "Read chapter N as an interactive story" button, and each chapter heading in the story links back to the outline.
+- To add a passage, add a node to a data file and link to it. `node tests/story.test.mjs` checks every link, flag and item, that every passage and every ending can be reached, and that no reader can get stuck.
