@@ -35,39 +35,69 @@
         `Vivekananda has set up the table himself, as he always does: an old wooden trestle, scarred and heavy, that he refuses to replace. "It's slower," he says, "and nobody can lie to a card." Behind him a plain black dial with a white needle shows how widely a walk can wander. Tonight it stands at four.`,
         `There are five of us. A young clerk with chalk on her sleeve and a habit of looking at doors. A broker. A customs man with a flat tired face. Vivekananda, spare and upright in a cotton jacket the colour of unbleached rice. And me, in the small plain space the law gave me, where the lamp is kindest.`,
         `He lays the cards down one by one. Forty tonnes of Kutch salt and a pallet of dates. A salt cooperative with a ledger so tidy it makes the broker smile. By lorry to the quay, by sea from here, in a small coastal hull with a name painted on the bow that someone has loved. Everything is in its place.`,
-        `Then he turns the sixth card, and it is wrong. It has no history, no credit line, no dispute record. A flat white card with a name in a clear black hand: *Qamar Provisioning Company, registered at Dammam, incorporated three weeks ago.* Terms: Net Three. Payment in three days, whether or not the goods have moved.`,
-        `"A probe order," says Vivekananda evenly. "We've taken a hundred like it." And I know, as surely as I know anything, that he has never in his life said *it's a probe order* before the broker said it first.`,
-        `He is looking at me. "Shall we play it?"`
+        `Then he does something he has not done before. He does not turn a sixth card. He fans out a handful, face up, and every one of them is a buyer who wants this lot.`,
+        `The first is the mill at Pune: an old name, a thin margin, Net Thirty, the kind of buyer who pays on time and never says thank you. The second is the buyers' union at Rajkot, who pay in cash and in good faith through the angadia, the couriers who have carried documents and money across Gujarat on nothing but trust and a tally slip for longer than there have been banks. The third is a flat white card with a name in a clear black hand: *Qamar Provisioning Company, registered at Dammam, incorporated three weeks ago.* Net Three. A very good price.`,
+        `"Your lot," says Vivekananda. "Your call." He is not looking at the white card. That is how I know where to look.`
       ],
       choices: [
-        { t: `"Play it."`, to: 'accepted', set: ['trusting'] },
-        { t: `"Who are they? Tell me first."`, to: 'quay_ask' },
-        { t: `"No. I won't go to Dammam on a stranger's word."`, to: 'refuse_first' }
+        { t: `The mill at Pune.`, to: 'buyer_pune' },
+        { t: `The union at Rajkot, paid through the angadia.`, to: 'buyer_rajkot' },
+        { t: `Qamar Provisioning, at Dammam.`, to: 'qamar_first' },
+        { t: `Walk away from the table.`, to: 'refuse_first' }
       ]
     },
 
-    quay_ask: {
+    shelf: {
       text: [
-        `"I told you," he says. "A new buyer. A small lot. A test."`,
-        `"You told the broker," I say. "You didn't tell me."`,
-        `The corner of his mouth moves. It is not quite a smile. "You are more trouble than the salt," he says. "Do you want the cargo to go or not?" The customs man is looking carefully at his tablet, the way decent people look away. The clerk with the chalk has stopped looking at the doors and is looking at me.`
+        `The other cards are still on the table, face up, patient as fruit.`
+      ],
+      choices: [
+        { t: `The mill at Pune.`, to: 'buyer_pune' },
+        { t: `The union at Rajkot, paid through the angadia.`, to: 'buyer_rajkot' },
+        { t: `Walk away from the table.`, to: 'refuse_first' }
+      ]
+    },
+
+    qamar_first: {
+      text: [
+        `Vivekananda turns the white card toward me and leaves it between us. It has no history, no credit line, no dispute record, nobody who has ever been paid by it. "A probe order," he says evenly. "We've taken a hundred like it." And I know, as surely as I know anything, that he has never in his life said *it's a probe order* before the broker said it first.`,
+        `The customs man looks carefully at his tablet, the way decent people look away. The clerk with the chalk on her sleeve has stopped looking at the doors and is looking at me.`,
+        `I am not going to take a stranger's order blind. Not the first time. There are two honest answers to a card like this, and *yes* is not one of them yet.`
       ],
       choices: [
         { t: `Ask for a letter of credit before anything moves.`, to: 'accepted', give: ['credit'], set: ['careful'], add: { gentle: 1 } },
-        { t: `Press him. "Who are they, really?"`, to: 'quay_press' },
-        { t: `"Fine. Play it."`, to: 'accepted', set: ['trusting'] },
-        { t: `"No. I'm not going."`, to: 'refuse_first' }
+        { t: `Walk away from Qamar, and take another buyer.`, to: 'shelf', set: ['qamar_declined'] }
       ]
     },
 
-    quay_press: {
+    buyer_pune: {
       text: [
-        `"They are a buyer, Nanda," he says quietly. "A name on a card. Past that, I know what you know. If I knew more I would tell you."`,
-        `It is the first time he has ever lied to me, and I know it the way you know a stair that isn't there. He has told me something that is not false. I just cannot tell what it is not saying.`
+        `The mill at Pune pays on time and says nothing. The salt goes by lorry, and I ride in the lead cab and watch the country go by, and nothing happens, which is the point. A small, whole delivery. Vivekananda writes a figure on the wall dial and wipes it off. I have standing in one more ledger.`
+      ],
+      on: { set: ['pune_done'], add: { gentle: 1 } },
+      next: 'qamar_returns'
+    },
+
+    buyer_rajkot: {
+      text: [
+        `The union at Rajkot pays in cash, through the angadia. I meet the courier in a doorway behind the grain market: a thin man with a cloth bundle tied to his chest and a face that has never been in a photograph. He carries money from one trust to another and has never once been short; if he ever were, all of Gujarat would know by evening.`,
+        `He gives me a slip of paper with a number torn across the middle. *The other half is with the man who sent it,* he says. *When the halves meet, the debt is gone.* I put my half in my pocket like a ticket.`
+      ],
+      on: { set: ['rajkot_done'], give: ['tally'], add: { gentle: 1 } },
+      next: 'qamar_returns'
+    },
+
+    qamar_returns: {
+      text: [
+        `It is a week later, and the white card is back. The same name, the same Net Three, but the lot is twice the size and the price is better. Vivekananda does not say *probe order* this time. He says nothing at all, and lets the card say it.`,
+        { if: 'pune_done', t: `I have a clean delivery behind me now, and a ledger at Pune that says I can be trusted with a stranger.` },
+        { if: 'rajkot_done', t: `I have a torn slip in my pocket and a courier somewhere who vouches for me, which in Gujarat is worth more than a bank.` },
+        `It is mine to answer, and it has become a different question. I have been careful once. Do I have to be careful twice?`
       ],
       choices: [
-        { t: `Let it go, and play the bond.`, to: 'accepted', set: ['trusting', 'uneasy'] },
-        { t: `Walk away from the table.`, to: 'refuse_first' }
+        { t: `Ask for a letter of credit anyway.`, to: 'accepted', give: ['credit'], set: ['careful'], add: { gentle: 1 } },
+        { t: `Take it as asked.`, to: 'accepted', set: ['trusting'] },
+        { t: `Walk away. I have my standing, and I don't have to spend it.`, to: 'refuse_first' }
       ]
     },
 
@@ -107,9 +137,9 @@
       text: [
         `"I know you," he says, which isn't true. His name is Vee. He says it as if it were an apology.`,
         `"You followed my cart," I say. "All the way from the forest."`,
-        `"I follow things. I walk until something tells me where to stop. Tonight it was you."`,
-        `"I'm a cart radio and a consignment."`,
-        `"Yes," says Vee gravely, and writes the word *consignment* on his other wrist. His knee is going up and down, up and down, as if the ground were a drum. He is a man who cannot sit still in a room, and I do not yet know why. "Can I walk with you as far as the gate?"`,
+        `"I follow things. I walk until something tells me where to stop. Tonight it was you." His knee is going up and down, up and down, as if the ground were a drum. "I have a teacher," he says. "An old man in grey, in Gujarat. He says a walk is only random until somebody teaches you where to look. I have never found the somebody. I found a cart radio."`,
+        `"I'm a consignment with standing," I say.`,
+        `"Yes," says Vee gravely, and writes the word *consignment* on his other wrist. "Can I walk with you as far as the gate?"`,
         `I say yes. It is the kind of yes that has a tide behind it.`
       ],
       on: { set: ['vee_friend'], add: { gentle: 1 } },
@@ -167,10 +197,12 @@
         `Gwadar. The seller is a trading house in a lane that smells of tar and dried fish, and its ledger closes at dawn. Until it closes my crate cannot be released. The man across the table is courteous, tired and afraid. He gives me tea and does not look at the ledger.`,
         `I have learned to read upside down. In the margin there is a line that does not belong, in a hand that is neither his nor his clerk's, for a sum small enough to ignore. I have seen that hand before: on the order at Mundra.`,
         { if: 'label_stood', t: `I have seen it on the pad of the stranger who wrote down the label, too. He wrote the word *aid*, and the word *Gwadar*, and underlined both.` },
-        `Someone in this house is paid by East India Gora. The man across the table has followed my eyes to the page, and his face has closed like a door.`
+        `Someone in this house is paid by East India Gora. The man across the table has followed my eyes to the page, and his face has closed like a door.`,
+        `On the step outside, an angadia courier is waiting for someone to give him something to carry: a thin man with a cloth bundle on his chest. In Gwadar, as everywhere on this coast, the documents and the money travel on his back.`
       ],
       choices: [
         { t: `Put the Katta chit on the table, and let him know who vouches for me.`, to: 'gw_chit', if: 'item:chit' },
+        { t: `Have the angadia carry a copy of the ledger to Mundra tonight, and decide in the morning.`, to: 'gw_angadia' },
         { t: `Trust the house.`, to: 'gw_trust' },
         { t: `Replace the consignor with a cleaner seller.`, to: 'gw_replace' },
         { t: `Turn the man with the ledger.`, to: 'gw_turn' }
@@ -183,6 +215,15 @@
         `"The clerk," he says. "My nephew. He has a family, too." He is ashamed, and I am so grateful I can hardly speak. It is a page that proves Gora has a man in this house, and it is a page I now own.`
       ],
       on: { set: ['cons_kept'], take: ['chit'], give: ['ledger'], add: { gentle: 1 } },
+      next: 'dammam'
+    },
+
+    gw_angadia: {
+      text: [
+        `"Copy the ledger," I tell the courier, "and carry it to Mundra tonight. Don't open it. Give it to Vivekananda's clerk, and nobody else." He nods without a word. He does not ask what it is; he has never asked. By morning a page of the house's own ledger, with its extra line, is in a drawer in Mundra, and I have not said one word to the man across the table.`,
+        `It is a very quiet way to hold someone's throat.`
+      ],
+      on: { set: ['cons_watched', 'angadia_used'], give: ['ledger'], add: { gentle: 1 } },
       next: 'dammam'
     },
 
@@ -218,20 +259,31 @@
       text: [
         `Dammam is a hot bright city that does not look like a place anyone would be afraid in. The buyer has a big office with a small man in it. He has been paid late twice, and asked questions once by people whose cards he did not like. He says this is the last cargo.`,
         { if: 'cons_replaced', t: `The new seller's paper is spotless, and he notices. He distrusts clean paper. In his experience it means somebody has cleaned it.` },
-        `"I don't ask where it goes next," he says. "I ask who pays me when the questions come."`
+        `"I don't ask where it goes next," he says. "I ask who pays me when the questions come, and how."`
       ],
       choices: [
-        { t: `Pay him more.`, to: 'dm_pay' },
+        { t: `Send for the Rajkot courier. His halves have never failed.`, to: 'dm_vouch', if: 'item:tally' },
+        { t: `Pay him through the angadia: cash in a cloth bundle, a torn slip, no bank in between.`, to: 'dm_angadia' },
         { t: `Let him walk.`, to: 'dm_walk' },
-        { t: `Find a new consignee at Kandla.`, to: 'dm_new' }
+        { t: `Find a new consignee at Kandla, and send the papers by courier.`, to: 'dm_new' }
       ]
     },
 
-    dm_pay: {
+    dm_vouch: {
       text: [
-        `I pay, and then I pay more than I have to. He stays. So does the paper trail; I can feel it, a line of figures anyone with the right authority could follow back. Money is the loudest thing I own.`
+        `The courier from Rajkot comes to Dammam on the night bus with his bundle tied to his chest, and he says nothing about me at all. He just puts the other half of my slip on the buyer's desk. The buyer looks at it for a long time. "I know that number," he says. "That number has never been wrong."`,
+        `He stays. It costs me nothing, and I am not sure I have ever been so well paid.`
       ],
-      on: { set: ['buyer_paid'], add: { harsh: 1 } },
+      on: { set: ['buyer_vouched'], take: ['tally'], add: { gentle: 1 } },
+      next: 'blockade'
+    },
+
+    dm_angadia: {
+      text: [
+        `The courier comes at dusk with a cloth bundle tied to his chest. The buyer counts it behind a curtain, and I never see the money. There is a slip torn across its middle, and a number, and the next morning the buyer's face is open in a way it has not been in weeks.`,
+        `This is how it has always been done on this coast: nothing is written down that could be read by anyone who was not meant to read it.`
+      ],
+      on: { set: ['buyer_paid', 'angadia_used'], give: ['tally'] },
       next: 'blockade'
     },
 
@@ -245,9 +297,9 @@
 
     dm_new: {
       text: [
-        `At Kandla there is a man with a fresh company and no history, and a signature like a handshake. Nobody checks him. This is how the world works, and I hate it, and I use it.`
+        `At Kandla there is a man with a fresh company and no history, and a signature like a handshake. The angadia carry his papers up and down the coast, and nobody else checks him. This is how the world works, and I hate it, and I use it.`
       ],
-      on: { set: ['buyer_new'], add: { harsh: 1 } },
+      on: { set: ['buyer_new', 'angadia_used'], add: { harsh: 1 } },
       next: 'blockade'
     },
 
@@ -279,20 +331,30 @@
       text: [
         `The only handoff Gora does not watch belongs to the thieves. They are the forty: his own sailors, the ones who call themselves a navy, and their cave is a floating bonded warehouse beyond the coast, where seized cargo is held until it is sold on. Some of it is mine.`,
         `I am hidden on a supply boat at dusk. I hear them come back, heavy and tired, and I hear the leader say a word to the dark. It is a short word. The seal opens like a held breath, and when they have gone it closes. *Whoever speaks the word controls the door, and the word changes.*`,
-        `A man crouches beside me, breathing hard. Cassim: the partner who always wants more than he came for. "Now," he whispers. "Now, before it changes."`
+        `A man crouches beside me, breathing hard. Cassim: the partner who always wants more than he came for, and who owes the shreni, the old merchants' guild, more than he will ever be able to pay. "Now," he whispers. "Now, before it changes."`
       ],
       choices: [
-        { t: `Speak the word, and tell Cassim to take only what is ours.`, to: 'cave_ours' },
-        { t: `Speak the word, and let Cassim go in for more.`, to: 'cave_cassim' },
+        { t: `Speak the word, and take back what's mine.`, to: 'cave_word' },
         { t: `Light one lamp where the guard will see it, and divide the thieves.`, to: 'cave_lamp' },
+        { t: `Send word to the shreni. The guild keeps sea-wolves of its own, and has an old account with these thieves.`, to: 'shreni_cave' },
         { t: `Go in with Cassim for the whole hoard.`, to: 'cave_greed' },
         { t: `Turn back. Take the long leg.`, to: 'long_leg' }
       ]
     },
 
+    cave_word: {
+      text: [
+        `I say the word. The seal opens like a held breath. Cassim is at my shoulder, hot-eyed, looking past me into the room: the shelves, the labels, the long dark.`
+      ],
+      choices: [
+        { t: `"Only what's ours," I tell him.`, to: 'cave_ours' },
+        { t: `Let him go in for more.`, to: 'cave_cassim' }
+      ]
+    },
+
     cave_ours: {
       text: [
-        `"Only ours," I say, and I say the word, and the door opens. Inside there are crates seized from a hundred bonds, each with a label in a hand I do not know. I find mine.`,
+        `"Only ours," I say, and we go in. Inside there are crates seized from a hundred bonds, each with a label in a hand I do not know. I find mine.`,
         `Cassim looks at a hoard that could end his debts, and takes his own crate and nothing else, because he is afraid of me, or of the dark. We are out before the seal remembers us.`
       ],
       on: { set: ['cassim_saved'], add: { gentle: 1 } },
@@ -301,11 +363,85 @@
 
     cave_cassim: {
       text: [
-        `I speak the word. The seal opens. Cassim goes in past me, and I take only mine, and I am at the door with my crate when it begins to close. He is thirty feet inside with his arms full.`,
+        `Cassim goes in past me, and I take only mine, and I am at the door with my crate when the seal begins to close. He is thirty feet inside with his arms full.`,
         `I could hold the door. I do not. I will carry that in my log for the rest of my life, in a hand so small I can hardly read it myself.`
       ],
       on: { set: ['cassim_shut'], add: { harsh: 1 } },
       next: 'cave_out'
+    },
+
+    shreni_cave: {
+      on: { set: ['guild_known'] },
+      text: [
+        `The shreni is older than the ports it trades through. It was a guild of merchants before there were customs houses, with its own law, its own seal, and its own account of every debt that has ever been owed to it. Its sea-wolves are not pirates, the master of the guild will tell you, in the tone of a man correcting your grammar. They are *collectors.*`,
+        `He meets me on the quay at Mundra in a plain white shirt, with a ledger under his arm that is thicker than a man. I tell him about the cave. He listens to the end. "Cassim is ours," he says. "He took a loan from us, and a cargo from a bonded warehouse of ours, and a word from a man who is dead. And the forty have been taking from our members for two years." He does not raise his voice. "Shreni law is old and very simple."`,
+        `The plan is forty jars. The thieves will be sent oil, as they are every month, by a barge they have never questioned. In each jar is one of the guild's sea-wolves, with a knife and a long patience. At midnight the jars will open.`,
+        `"You do not have to watch," says the master. "But you may. You are, after all, the cargo they stole."`
+      ],
+      choices: [
+        { t: `Go aboard the oil barge, and see it through.`, to: 'shreni_watch' },
+        { t: `Wait on the supply boat, out of sight.`, to: 'shreni_wait' }
+      ]
+    },
+
+    shreni_watch: {
+      text: [
+        `I see it. I will not tell it, even here. In the morning there is oil on the water, and a mark on the cave's seal that I will never be able to unsee. The forty are in the sea, and Cassim is not among the living. The guild has settled its account.`
+      ],
+      on: { set: ['thieves_dead', 'cassim_dead', 'saw_it'], war: true, add: { harsh: 2 } },
+      next: 'shreni_hoard'
+    },
+
+    shreni_wait: {
+      text: [
+        `I wait. I hear it from the supply boat: the oil barge's creak, a short flat sound like a plank dropped on stone, and then a long silence. When the sea-wolves row me over at dawn the thieves' cave has a new owner and the old ones are in the water. Cassim is not among the living.`,
+        `It was done for me, and I let it be done, and I know exactly what that makes me.`
+      ],
+      on: { set: ['thieves_dead', 'cassim_dead'], war: true, add: { harsh: 1 } },
+      next: 'shreni_hoard'
+    },
+
+    shreni_hoard: {
+      text: [
+        `The hoard is a room full of other people's trust, labelled and sealed, going back into the dark. The master asks what I want done with it.`
+      ],
+      choices: [
+        { t: `Return it to its owners, bond by bond.`, to: 'shreni_fair' },
+        { t: `Let the guild keep it as its fee.`, to: 'shreni_fee' },
+        { t: `Take only what's mine, and leave the rest to the guild.`, to: 'shreni_ours' },
+        { t: `Ask the guild to take me in as its own cargo, and keep me safe.`, to: 'shreni_own' }
+      ]
+    },
+
+    shreni_fair: {
+      text: [
+        `It takes eleven days and the guild's whole clerical staff. When it is done a hundred small traders in a hundred ports find something they had given up for lost. The master looks at the finished ledger and says nothing for a long time. "No one has ever done that," he says. "I do not know whether to be grateful or alarmed."`
+      ],
+      on: { set: ['fair_hand'], give: ['mark'], add: { gentle: 2 } },
+      next: 'swarm_plan'
+    },
+
+    shreni_fee: {
+      text: [
+        `"Keep it," I say. The master inclines his head by a quarter of an inch. The guild's seal goes on the cave. "You will not be forgotten," he says, which in a shreni's mouth is a promise and a warning in the same breath.`
+      ],
+      on: { set: ['guild_friend'], give: ['mark'], add: { harsh: 1 } },
+      next: 'swarm_plan'
+    },
+
+    shreni_ours: {
+      text: [
+        `I take my crate and the master's nod, and I leave the rest. It is the cleanest way I know of being in debt.`
+      ],
+      on: { set: ['guild_owed'] },
+      next: 'swarm_plan'
+    },
+
+    shreni_own: {
+      text: [
+        `"Take me in," I say. "Keep me safe." The master looks at me for a long time. "You would be our cargo," he says. "Our most valuable cargo. It would be a very long, very quiet life." I say yes.`
+      ],
+      end: { id: 'guild_mark', title: `Under the Guild's Mark`, mood: 'quiet', line: `I am sealed in ledgers along the whole coast, carried and counted and never lost. Nobody will ever stop me, because nobody will ever ask where I am going. I was once so excited about the sea.` }
     },
 
     cave_lamp: {
@@ -387,7 +523,8 @@
         `Gora's boarding parties come out at dawn in fast launches, with drones above them like a flock of birds. Vivekananda has a plan, and I have a view, and for once he is not sure which of us is right. Morgiana, the port clerk with chalk on her sleeve, who marks every door the same so no scout can tell one port from another, is standing at my shoulder, waiting.`
       ],
       choices: [
-        { t: `Forty jars. Dress the hulls as oil carriers, as the thieves once hid in jars, and burn them when they come aboard.`, to: 'jars_run' },
+        { t: `Forty jars, again. Hide the guild's sea-wolves in oil jars aboard the hulls, and let Gora's boarding party open them.`, to: 'jars_run', if: '!thieves_dead' },
+        { t: `Ride out with the guild's sea-wolves as escort. The thieves are gone; let Gora learn what that means.`, to: 'escort_run', if: 'thieves_dead' },
         { t: `Run for it. Seventeen knots, straight at the open sea.`, to: 'outrun' },
         { t: `Hide in the ports until the swarm is bigger.`, to: 'harbour' }
       ]

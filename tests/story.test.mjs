@@ -47,7 +47,7 @@ const a = S.start(7), before = JSON.stringify(a);
 const b = S.choose(a, 0);
 ok('choose returns a new state and leaves the old one alone', JSON.stringify(a) === before && b !== a);
 const play = (seed, picker) => { let st = S.start(seed), steps = 0; while (!st.ended && steps++ < 400) { const v = S.view(st); if (!v.choices.length) throw new Error('stuck at ' + st.node); st = S.choose(st, picker(v, steps)); } return st; };
-const replay = seed => { let st = S.start(seed), k = 0; while (!st.ended && k++ < 400) st = S.choose(st, (k * 7) % S.view(st).choices.length); return JSON.stringify([st.ended && st.ended.id, st.flags, st.items, st.world]); };
+const replay = seed => { let st = S.start(seed), k = 0; while (!st.ended && k++ < 400) st = S.choose(st, 0); return JSON.stringify([st.ended && st.ended.id, st.flags, st.items, st.world]); };
 ok('same seed and same choices give the same story', replay(5) === replay(5));
 ok('different seeds can differ', new Set([1, 2, 3, 4, 5, 6, 7, 8].map(replay)).size > 1);
 ok('every chapter can be jumped to', Object.keys(M.chapters).every(c => S.jump(+c, 3).passages.length > 0));

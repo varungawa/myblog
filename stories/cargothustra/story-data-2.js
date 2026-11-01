@@ -61,49 +61,59 @@
     },
 
     jars_run: {
+      on: { set: ['guild_known', 'guild_owed'] },
       text: [
-        `We launch forty hulls from the yard at Jaigad, dressed as oil carriers, jars lashed on deck. It is the thieves' own trick turned on them: jars with something else inside.`,
-        `Gora's boarding party comes over the rail at dawn, laughing, and the first jar they open is full of oil. So is the second. So is the third. The officer in charge is still frowning at it when Morgiana, on the foredeck, lifts the oil in its great bronze ladle over the side of the hull the boarders are standing on.`,
-        `And waits. There is a pause before the match. A heartbeat, longer than the plan.`
+        `We launch forty hulls from the yard at Jaigad dressed as oil carriers, jars lashed on deck. In each jar sits one of the shreni's sea-wolves: a man who has been folded into a clay mouth since midnight with a knife in his teeth. The guild has lent them, and it will want something in return. It always does.`,
+        `Gora's boarding party comes over the rail at dawn, laughing, with long knives. The first jar they open is full of oil. So is the second. They are a little disappointed. The officer in charge is still frowning at the third when Morgiana, on the foredeck, lifts the lantern that is the signal.`,
+        `And waits. There is a pause before she moves it. A heartbeat, longer than the plan.`
       ],
       choices: [
-        { t: `Say nothing. Let her strike the match.`, to: 'jars_burn', set: ['missed_pause'] },
+        { t: `Say nothing. Let her give the signal.`, to: 'jars_rise', set: ['missed_pause'] },
         { t: `"Why did you wait?" I ask her, quietly.`, to: 'jars_ask' },
-        { t: `Take the match from her and strike it myself.`, to: 'jars_match', add: { harsh: 1 } }
+        { t: `Take the lantern from her and signal myself.`, to: 'jars_match', add: { harsh: 1 } }
       ]
     },
 
     jars_ask: {
       text: [
         `"The wind," she says. "It shifted."`,
-        `The wind did not shift. I look at her, and she looks at the door, the way she always does, and I let it go. But I write the pause in my log with a small question mark beside it, the way you mark a stair that may not be there.`
+        `The wind did not shift. I look at her, and she looks at the door, the way she always does, and I let it go. But I write the pause in my log with a small question mark beside it, the way you mark a stair that may not be there. Then she lifts the lantern.`
       ],
       on: { set: ['noticed_pause'] },
-      next: 'jars_burn'
+      next: 'jars_rise'
     },
 
     jars_match: {
       text: [
-        `I take the match from her fingers. She lets me, which I will think about later. The flame is small and very bright.`
+        `I take the lantern from her fingers. She lets me, which I will think about later. The flame inside it is small and very bright.`
       ],
       chance: [
-        { to: 'jars_burn', w: 0.7 },
+        { to: 'jars_rise', w: 0.7 },
         { to: 'oil_water', w: 0.3 }
       ]
     },
 
     oil_water: {
       text: [
-        `The oil catches wrong. It catches the jar beside me, and the deck, and the lead hull burns to the waterline in the time it takes to say so. I am in the water. Morgiana pulls me out by my collar and does not say one word.`,
-        `The swarm survives. It never recovers. Gora's drones have a lit hull to follow all the way home.`
+        `I move the lantern too early. Forty men come out of the jars before the boarding party has come close enough, and Gora's deck guns, which I did not know about, are waiting. It is a very short fight and a very long silence.`,
+        `The swarm survives. It never quite recovers the guild's trust, and the guild never forgets who gave the signal.`
       ],
-      end: { id: 'oil_water', title: 'Oil on the Water', mood: 'dark', line: `I struck the match myself because I did not trust the pause, and the pause was the least of it. The swarm became a legend without a fleet.` }
+      end: { id: 'jars_early', title: 'Jars Opened Too Soon', mood: 'dark', line: `I signalled myself because I did not trust the pause, and the pause was the least of it. The shreni sent its sea-wolves home in boxes, and sent me the account.` }
     },
 
-    jars_burn: {
+    jars_rise: {
       text: [
-        `The oil burns. The boarding party, who have never been burned by their own trick, go over the side in a single movement, like birds. I watch them in the water, and I am not proud of what I feel, which is joy.`,
-        `Gora's officer, soaked and singed, looks up at our sails turning on their own and says that this is not a fleet. It is weather, he says, and he does not yet know how to count it. A hull of ours is boarded in return. I never learn the names of the crew.`
+        `The jars open. Forty men come out of forty clay mouths at once, like a field of reeds standing up, and the boarding party, who have never been boarded by their own trick, find that the oil was the least of it. It is over in a few minutes. It is not pretty, and I watch all of it, and I am not proud of what I feel, which is joy.`,
+        `Gora's officer, if he lives, will tell his master that this is not a fleet. It is weather, and a guild, and he does not yet know how to count either. A hull of ours is boarded in return, and I never learn the names of the crew.`
+      ],
+      on: { set: ['boarders_dead'], add: { harsh: 1 } },
+      next: 'ports'
+    },
+
+    escort_run: {
+      on: { set: ['guild_known'], add: { gentle: 1 } },
+      text: [
+        `With the thieves gone and the guild's sea-wolves riding the swarm's flanks, Gora's launches keep a long way off. They are learning something about a coast they used to own. I ride in the lead hull, in a small plain space, with the sails opening on their own, and for the first time since the blockade I am not afraid.`
       ],
       next: 'ports'
     },
@@ -117,38 +127,62 @@
         { if: 'low', t: `The markets are low and the cranes idle between hulls, but the swarm doesn't need a loud market. It needs a rhythm.` },
         { if: 'war', t: `On the horizon, patrol launches wait in the haze, like punctuation.` },
         `I notice that I am happy. I write in my log that happiness is the thing I cannot model.`,
-        { if: 'vee_friend', t: `Vee is here, among the Katta gang, sober for days at a stretch. He sits on a bollard at dusk with the wits laughing around him, and he almost writes a line. When he sees me he lifts his marker like a man raising a glass.` }
+        { if: 'vee_friend', t: `Vee is here, somewhere among the Katta gang, sober for days at a stretch. When he sees me he lifts his marker like a man raising a glass.` }
       ],
       choices: [
-        { t: `Keep Vee close, with the Katta gang.`, to: 'ports_close', if: 'vee_friend' },
-        { t: `Let Vee wander the forest the way he likes.`, to: 'ports_wander', if: 'vee_friend' },
-        { t: `Send Vee away from the ports. They are getting dangerous.`, to: 'ports_away', if: 'vee_friend' },
+        { t: `Think about Vee.`, to: 'vee_hub', if: 'vee_friend' },
         { t: `Go and see Vivekananda.`, to: 'ports_b', if: '!vee_friend' }
       ]
     },
 
-    ports_close: {
+    vee_hub: {
+      text: [
+        `Vee is not one thing, and I have stopped trying to make him one. He is a poet and a drunk and a walker and the Katta's last bench, and he can be all of them in the same hour.`,
+        { if: 'vee_close', t: `He is on the bench with the gang, sober, almost laughing.` },
+        { if: 'vee_wander', t: `He has been into the forest and come back with a line.` },
+        { if: 'vee_away', t: `He has been north, and come back with a letter he will not read aloud.` },
+        { if: 'vee_sailed', t: `He has been to sea, and been sick, and loved it.` },
+        `What shall I let him be?`
+      ],
+      choices: [
+        { t: `Keep Vee close, with the Katta gang.`, to: 'vee_r_close', if: '!vee_close' },
+        { t: `Let Vee wander the forest the way he likes.`, to: 'vee_r_wander', if: '!vee_wander' },
+        { t: `Send Vee north on an errand, to his teacher.`, to: 'vee_r_away', if: '!vee_away' },
+        { t: `Put Vee on a hull with the Katta for a short coastal run.`, to: 'vee_r_sail', if: '!vee_sailed' },
+        { t: `That is enough. Let him be all of them.`, to: 'ports_b' }
+      ]
+    },
+
+    vee_r_close: {
       text: [
         `I put Vee on the Katta's bench with a cup of tea and a pencil, and tell him it is his post. He nods, solemn as a boy. The wits tease him. He laughs, which I had not seen him do, and writes a line, and crosses it out, and writes it again.`
       ],
       on: { set: ['vee_close'], add: { gentle: 1 } },
-      next: 'ports_b'
+      next: 'vee_hub'
     },
 
-    ports_wander: {
+    vee_r_wander: {
       text: [
         `I tell him he can walk wherever he likes, and he looks at me as if I had given him back something he had lost. He goes into the forest at dusk with his marker and his bad knee. In the morning he is back, with a poem on his wrist that is not finished and a look of peace.`
       ],
       on: { set: ['vee_wander'] },
-      next: 'ports_b'
+      next: 'vee_hub'
     },
 
-    ports_away: {
+    vee_r_away: {
       text: [
-        `He does not argue. That is how I know it hurts. He takes the bus north in the morning with one bag, and a tiny wave, and a look that I will think about for a long time.`
+        `I send him north, to the old man in grey, with a bag and a bus ticket. He does not argue. He comes back four days later with a letter he will not read aloud. "He says to keep walking," says Vee. "And to look up more." He is steadier. I do not ask what else the letter said.`
       ],
-      on: { set: ['vee_away'], add: { harsh: 1 } },
-      next: 'ports_b'
+      on: { set: ['vee_away', 'vee_letter'], add: { gentle: 1 } },
+      next: 'vee_hub'
+    },
+
+    vee_r_sail: {
+      text: [
+        `I put him on a hull with the Katta gang for a short run along the coast. He comes back green and exultant. "I was sick over the side the whole way," he says, "and I loved it." The wits have named a rope after him.`
+      ],
+      on: { set: ['vee_sailed'] },
+      next: 'vee_hub'
     },
 
     ports_b: {
@@ -316,15 +350,37 @@
       ],
       choices: [
         { t: `Send the Katta gang's hull through the corridor.`, to: 'send_hull' },
-        { t: `Hold the hull back. Nobody crosses.`, to: 'hold_hull' },
-        { t: `Ask Vivekananda for another way across.`, to: 'decoy', if: ['no_bait'] }
+        { t: `Hold the hull back, and send it out as a pirate hull instead.`, to: 'hold_hull' },
+        { t: `Ask Vivekananda for another way across.`, to: 'decoy', if: 'no_bait' },
+        { t: `Warn Morgiana before anyone sails.`, to: 'warn_late', if: ['audited', '!told'] }
+      ]
+    },
+
+    warn_late: {
+      text: [
+        `I find Morgiana at the end of the quay with her chalk. "The story about your brother," I say. "It wasn't Gora's." I had not meant to say it like this, in a storm, with the Katta waiting on the boats. She listens, and I see her understand, and I watch the whole shape of the last month turn over in her face.`,
+        `"Then let me fix it," she says.`
+      ],
+      on: { set: ['told', 'no_bait'], take: ['card_up'], add: { gentle: 1 } },
+      next: 'weather_b'
+    },
+
+    weather_b: {
+      text: [
+        `The storm has not waited for us. Morgiana goes down to the signal lamps, and by the time she comes back Gora's scouts have been given a false corridor, and a little of the dread has left the air.`
+      ],
+      choices: [
+        { t: `Send the Katta gang's hull through the corridor.`, to: 'send_hull' },
+        { t: `Hold the hull back, and send it out as a pirate hull instead.`, to: 'hold_hull' },
+        { t: `Ask Vivekananda for another way across.`, to: 'decoy' }
       ]
     },
 
     send_hull: {
       text: [
         `"Send them," I say. It is the shortest sentence I have ever spoken, and I hear it go out across the water.`,
-        { if: 'vee_friend', t: `Vee is on the quay with his marker uncapped and a face like a man at a wake. "Let me go with them," he says.` }
+        { if: 'vee_friend', t: `Vee is on the quay with his marker uncapped and a face like a man at a wake. "Let me go with them," he says.` },
+        { if: ['vee_friend', 'vee_away'], t: `He has come back from the north without being called. That is what Vee does.` }
       ],
       choices: [
         { t: `Let Vee sail with his friends.`, to: 'hull_with_vee', if: 'vee_friend' },
@@ -337,16 +393,18 @@
       route: [
         { if: 'told', to: 'hull_saved', set: ['vee_sailed_safe'] },
         { if: 'no_bait', to: 'hull_saved', set: ['vee_sailed_safe'] },
-        { to: 'sailed' }
+        { to: 'hull_lost_vee' }
       ]
     },
 
-    sailed: {
+    hull_lost_vee: {
+      on: { set: ['gang_lost', 'carrier_known', 'vee_survivor'], take: ['card_down', 'card_up'], give: ['card_flipped'] },
       text: [
         `They go into the weather singing. Vee is at the bow with his hair in his eyes, and for a minute I see him as he must once have been, at school, with twenty-six people he loved.`,
-        `Something is waiting in the corridor. It had been waiting for hours. The attack is over almost before I understand it. A hull goes down in the dark, and with it twenty-seven names, and the man who wrote them on his wrist.`
+        `Something is waiting in the corridor. It had been waiting for hours. The attack is over almost before I understand it. A hull goes down in the dark and the weather, and with it twenty-seven names.`,
+        `At dawn a plank comes ashore at Dighi with one man on it, wet through, holding a marker in his fist. He is the only one the sea gave back. Vee can be and do all of it, and this, too, he has done: he has lived.`
       ],
-      end: { id: 'sailed', title: 'Sailed Into Weather', mood: 'dark', line: `I let Vee go with them, and he never came back. The last ghazal was never finished. I carry it, half-made, in my log, and I walk on, because there is nothing else to do.` }
+      next: 'loss'
     },
 
     hull_router: {
@@ -379,11 +437,12 @@
 
     hold_hull: {
       text: [
-        `"Hold it," I say. "Nobody crosses." There is a silence like a held breath, and then twenty-seven people let it go at once.`,
-        `The drones wait at the quiet corridor for hours for a hull that never comes. The swarm scatters in the storm. At dawn Jaigad's customs close the port altogether, and it is gone, just like that, a door that stays shut.`,
-        `The Katta gang is alive and furious. Vivekananda looks at me for a long time. "You saved twenty-seven," he says, "and lost a port." He does not say which of those he would have chosen.`
+        `"Hold it," I say. "Nobody crosses. Not as a convoy. Send her out as a pirate."`,
+        `The Katta gang takes a few seconds to understand what I have said, and then makes a noise I will remember all my life. They are not soldiers. They are twenty-seven school friends from every corner of the country, and they have just been given a licence to be rude to the sea. Chopra takes the wheel. Chabria composes a flag out of a tea towel. The hull goes out at dusk under no colours, not toward the corridor but along the edge of the storm, where Gora's slow convoys creep from port to port.`,
+        `By dawn they have taken two of them. By the next dusk, four. Nobody is hurt: it turns out that men who have been told for years that they are a navy are not much good at being one. The drones, meanwhile, wait for hours at the quiet corridor for a hull that never comes, and at first light Jaigad's customs close the port altogether, a door that stays shut.`,
+        `Vivekananda looks at me for a long time. "You saved twenty-seven," he says, "and lost a port." He does not say which of them he would have chosen.`
       ],
-      on: { set: ['hull_held', 'gang_alive'], add: { gentle: 1, harsh: 0 }, war: true },
+      on: { set: ['hull_held', 'gang_alive', 'pirate_hull'], war: true, add: { harsh: 1 } },
       next: 'quiet_loss'
     },
 

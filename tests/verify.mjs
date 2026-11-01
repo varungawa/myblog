@@ -52,12 +52,12 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       ok('story: opens with the myth and a Continue', (await page.locator('#story-app .pass').first().innerText()).includes('twenty-seven wives') && await page.locator('#story-app [data-choice]').count() === 1);
       ok('story: no levels, turns, seeds, meters or scores on screen', !/\bS\d\d\b|\bTurn \d|\bSeed\b|\bscore\b|\bmeter\b|\bprobab/i.test(await page.locator('#story-app').innerText()));
       await page.click('[data-choice="0"]'); await page.click('[data-choice="0"]');
-      ok('story: the first hurdle offers three decisions', await page.locator('#story-app .choices .ch').count() === 3);
+      ok('story: the first hurdle offers several buyers and a way out', await page.locator('#story-app .choices .ch').count() === 4);
       const nBefore = await page.locator('#story-app .pass').count();
       await page.locator('#story-app .ch').first().click(); await page.waitForTimeout(200);
       ok('story: a decision adds prose and records what you chose', await page.locator('#story-app .pass').count() > nBefore && await page.locator('#story-app .you').count() === 1);
       await page.locator('[data-act="back"]').first().click();
-      ok('story: going back one choice undoes it', await page.locator('#story-app .you').count() === 0 && await page.locator('#story-app .choices .ch').count() === 3);
+      ok('story: going back one choice undoes it', await page.locator('#story-app .you').count() === 0 && await page.locator('#story-app .choices .ch').count() === 4);
       let sc = 0; while (!(await page.locator('#the-end').count()) && sc < 90) { await page.locator('#story-app [data-choice]').first().click(); sc++; }
       const end1 = await page.locator('#end-title').innerText();
       ok('story: reading with the first choice each time reaches an ending', await page.locator('#the-end').count() === 1, sc + ' choices: ' + end1);
