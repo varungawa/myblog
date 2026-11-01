@@ -10,6 +10,10 @@ All others are the HISTORY: each is written to /history/<slug>/index.html, and /
 lists them as cards, newest first. Publishing a new story therefore automatically pins it as the main
 and moves every previous main into the history. See tools/publish_story.py.
 
+Posts (separate from stories): posts/sections.json defines sections such as "3ps"; each post is posts/<slug>/post.json
+(section, seq, title, excerpt, cover, cover_alt, blocks). The newest post comes first. Each section is written to
+/<section>/index.html and each post to /<section>/<slug>/index.html. Posts never pin or demote a story.
+
 Usage:
     python3 tools/build_site.py            write the generated files
     python3 tools/build_site.py --check    exit 1 if generated files are out of date (used in CI)
@@ -79,7 +83,7 @@ def pinbar(main, prefix):
         '<div style="background:#201c25;border-bottom:1px solid #67503d;color:#c5b7a4;font:600 .8rem system-ui,sans-serif;'
         'padding:10px 18px;text-align:center">Archived story · '
         f'<a href="{prefix}" style="color:#efc17c">← Latest: {esc(main["title"])}</a> · '
-        f'<a href="{prefix}history/" style="color:#efc17c">All stories</a></div>'
+        f'<a href="{prefix}history/" style="color:#efc17c">All stories</a> · <a href="{prefix}3ps/" style="color:#efc17c">3Ps</a></div>'
     )
 
 
@@ -110,7 +114,7 @@ HUB_CSS = (
     ".card img{display:block;width:100%;height:230px;object-fit:cover}.card div{padding:24px}.card h3{color:var(--gold);margin:4px 0}.card p{line-height:1.6;color:var(--mut)}"
     ".tag{font:800 .7rem system-ui,sans-serif;letter-spacing:.1em;color:var(--gold)}.pinned{border:1px solid var(--gold);border-radius:20px;overflow:hidden;margin:28px 0}"
     ".pinned .card{border:0;border-radius:0;background:#2b2227}.pin{display:block;background:var(--gold);color:#100f18;font:800 .74rem system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:8px 24px}"
-    "footer{text-align:center;padding:35px;color:var(--mut);font:.8rem system-ui,sans-serif}@media(max-width:750px){.cards{grid-template-columns:1fr}}"
+    ".links{display:flex;gap:18px;flex-wrap:wrap}footer{text-align:center;padding:35px;color:var(--mut);font:.8rem system-ui,sans-serif}@media(max-width:750px){.cards{grid-template-columns:1fr}}"
 )
 
 
@@ -123,7 +127,7 @@ def render_hub(stories):
     )
     cards = "".join(card(s, "../", f"{s['slug']}/", "Open the story ↗") for s in older)
     body = (
-        '<nav class="nav" aria-label="Site"><a class="brand" href="../">VARUN / STORIES</a><a href="../">← Latest story</a></nav>'
+        '<nav class="nav" aria-label="Site"><a class="brand" href="../">VARUN / STORIES</a><span class="links"><a href="../3ps/">3Ps</a><a href="../">← Latest story</a></span></nav>'
         '<main class="wrap"><div class="eyebrow">History</div><h1>Earlier stories</h1>'
         '<p class="lede">Each new story becomes the main page. The story it replaces moves here, kept whole and unchanged, '
         'with its own address. Newest first.</p>'
@@ -136,6 +140,89 @@ def render_hub(stories):
         '<meta name="theme-color" content="#100f18"><meta name="description" content="Earlier stories from Varun, kept whole under their own addresses.">'
         f"<title>History — Varun's Stories</title><style>{HUB_CSS}</style></head><body>{body}</body></html>\n"
     )
+
+
+POSTS = ROOT / "posts"
+SITE_URL = "https://varungawa.github.io/myblog/"
+POST_CSS = (
+    ".wrap.post{max-width:780px}.post h1{font-size:clamp(2.2rem,6vw,3.6rem)}.post .hero{margin:22px 0 34px}.post .hero img,.post figure img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}"
+    ".post .line{font-size:clamp(1.25rem,3vw,1.6rem);line-height:1.75;margin:0 0 1.1em}.post .big{font-size:clamp(3rem,10vw,5.5rem);line-height:1.1;color:var(--gold);margin:.4em 0 .5em}"
+    ".post hr{border:0;border-top:1px solid var(--line);margin:56px 0 28px}.post .note{color:var(--mut);font:700 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;margin:0 0 14px}"
+    ".post figure{margin:0 0 20px}.post figcaption{color:var(--mut);font:.85rem system-ui,sans-serif;margin-top:8px}.post .back{margin-top:40px}"
+)
+
+
+def load_posts():
+    secs = json.loads((POSTS / "sections.json").read_text(encoding="utf-8")) if (POSTS / "sections.json").exists() else {}
+    posts = []
+    for meta in sorted(POSTS.glob("*/post.json")):
+        d = json.loads(meta.read_text(encoding="utf-8"))
+        d["slug"] = meta.parent.name
+        for k in ("section", "seq", "title", "excerpt", "cover", "cover_alt", "blocks"):
+            if k not in d:
+                sys.exit(f"{meta}: missing {k}")
+        if d["section"] not in secs:
+            sys.exit(f"{meta}: unknown section {d['section']}")
+        if not (ROOT / d["cover"]).exists():
+            sys.exit(f"{meta}: cover {d['cover']} does not exist")
+        for b in d["blocks"]:
+            if b["type"] == "img" and not (ROOT / b["src"]).exists():
+                sys.exit(f"{meta}: image {b['src']} does not exist")
+        posts.append(d)
+    posts.sort(key=lambda p: -p["seq"])
+    return secs, posts
+
+
+def post_page(title, desc, body, prefix, extra_head="", css=""):
+    return (
+        "<!doctype html>\n" + GENERATED_BANNER
+        + '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        f'<meta name="theme-color" content="#100f18"><meta name="description" content="{esc(desc)}">{extra_head}'
+        f"<title>{esc(title)}</title><style>{HUB_CSS}{css}</style></head><body>{body}</body></html>\n"
+    )
+
+
+def posts_nav(prefix, current):
+    return (f'<nav class="nav" aria-label="Site"><a class="brand" href="{prefix}">VARUN / STORIES</a><span class="links">'
+            f'<a href="{prefix}3ps/"{" aria-current=\"page\"" if current else ""}>3Ps</a><a href="{prefix}history/">HISTORY</a><a href="{prefix}">← Latest story</a></span></nav>')
+
+
+def render_section(sec_id, sec, posts):
+    mine = [p for p in posts if p["section"] == sec_id]
+    cards = "".join(
+        f'<a class="card" href="{esc(p["slug"])}/"><img src="../{esc(p["cover"])}" width="1536" height="1024" alt="{esc(p["cover_alt"])}" loading="lazy" decoding="async">'
+        f'<div><span class="tag">{esc(sec["title"]).upper()}</span><h3>{esc(p["title"])}</h3><p>{esc(p["excerpt"])}</p><span class="button">Read it ↗</span></div></a>'
+        for p in mine)
+    body = (posts_nav("../", True) + f'<main class="wrap"><div class="eyebrow">{esc(sec["subtitle"])}</div><h1>{esc(sec["title"])}</h1>'
+            f'<p class="lede">{esc(sec["blurb"])}</p><div class="cards">{cards}</div></main>'
+            '<footer>VARUN / STORIES · <a href="../">Latest story</a> · <a href="../history/">History</a></footer>')
+    return post_page(f"{sec['title']} — Varun's Stories", sec["blurb"], body, "../")
+
+
+def render_post(p, sec):
+    parts = []
+    for b in p["blocks"]:
+        t = b["type"]
+        if t == "img":
+            img = f'<img src="../../{esc(b["src"])}" width="{b["w"]}" height="{b["h"]}" alt="{esc(b["alt"])}" decoding="async">'
+            if b.get("zoom"):
+                img = f'<a href="../../{esc(b["src"])}" aria-label="Open the picture full size">{img}</a>'
+            cap = f'<figcaption>{esc(b["caption"])}</figcaption>' if b.get("caption") else ""
+            parts.append(f'<figure class="{"hero" if not parts else "fig"}">{img}{cap}</figure>')
+        elif t == "line":
+            parts.append(f'<p class="line">{esc(b["t"])}</p>')
+        elif t == "big":
+            parts.append(f'<p class="big">{esc(b["t"])}</p>')
+        elif t == "note":
+            parts.append(f'<p class="note">{esc(b["t"])}</p>')
+        elif t == "rule":
+            parts.append("<hr>")
+    og = (f'<meta property="og:type" content="article"><meta property="og:title" content="{esc(p["title"])}"><meta property="og:description" content="{esc(p["excerpt"])}">'
+          f'<meta property="og:image" content="{SITE_URL}{esc(p["cover"])}"><meta name="twitter:card" content="summary_large_image">')
+    body = (posts_nav("../../", True) + f'<main class="wrap post"><div class="eyebrow">{esc(sec["title"])} · {esc(sec["subtitle"])}</div>'
+            f'<h1>{esc(p["title"])}</h1>{"".join(parts)}<a class="button back" href="../">← More from {esc(sec["title"])}</a></main>'
+            '<footer>VARUN / STORIES · <a href="../../">Latest story</a> · <a href="../../history/">History</a></footer>')
+    return post_page(f"{p['title']} — {sec['title']} — Varun's Stories", p["excerpt"], body, "../../", og, POST_CSS)
 
 
 def convert_covers():
@@ -158,6 +245,11 @@ def main():
     outputs = {ROOT / "index.html": render_story(stories[0], True, stories), ROOT / "history" / "index.html": render_hub(stories)}
     for s in stories[1:]:
         outputs[ROOT / "history" / s["slug"] / "index.html"] = render_story(s, False, stories)
+    secs, posts = load_posts()
+    for sid, sec in secs.items():
+        outputs[ROOT / sid / "index.html"] = render_section(sid, sec, posts)
+    for p in posts:
+        outputs[ROOT / p["section"] / p["slug"] / "index.html"] = render_post(p, secs[p["section"]])
     stale = []
     for path, text in outputs.items():
         current = path.read_text(encoding="utf-8") if path.exists() else None

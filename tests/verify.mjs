@@ -30,7 +30,7 @@ const imageAudit = (page) => page.evaluate(async () => {
       r.std = Math.sqrt(s2 / n - (s / n) ** 2); r.mean = s / n; }
     out.push(r);
   } return out; });
-for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['mandi', BASE + 'history/mandi/'], ['millie', BASE + 'history/millie/']]) {
+for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['mandi', BASE + 'history/mandi/'], ['millie', BASE + 'history/millie/'], ['threeps', BASE + '3ps/'], ['post', BASE + '3ps/the-first-bite-is-yours/']]) {
   for (const [w, h, label] of sizes) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: w < 800 }); const page = await ctx.newPage();
     const errs = [], failed = [], bad = [];
@@ -80,6 +80,7 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       ok('home: 13 chapter blurbs of 250-350 words', wc.length === 13 && wc.every(n => n >= 250 && n <= 350), wc.join(','));
       await page.click('[data-view="one"]'); await page.click('.rail button:nth-of-type(3)'); ok('home: rail selects a chapter', /act 1/i.test(await page.locator('.card2 .mono').first().innerText()));
       ok('home: previous stories cards link into history', await page.locator('#previous a.card[href="history/mandi/"]').count() === 1 && await page.locator('#previous a.card[href="history/millie/"]').count() === 1);
+      ok('home: nav links to 3Ps', await page.locator('.nav a[href="3ps/"]').count() === 1);
       await page.click('.nav a[href="history/"]'); await page.waitForURL('**/myblog/history/'); ok('home→history hub nav works', page.url().endsWith('/myblog/history/'));
     }
     if (name === 'history' && w === 1440) {
@@ -94,6 +95,18 @@ for (const [name, url] of [['home', BASE], ['history', BASE + 'history/'], ['man
       await page.click('.nav a[href="../../history/"]'); await page.waitForURL('**/myblog/history/'); ok('mandi→history hub nav works', page.url().endsWith('/myblog/history/'));
       await page.click('a.card[href="millie/"]'); await page.waitForURL('**/history/millie/'); ok('hub→millie card works', page.url().endsWith('/history/millie/'));
       await page.click('.back'); await page.waitForURL(u => u.pathname.endsWith('/myblog/')); ok('millie→latest story nav works', true);
+    }
+    if (name === 'threeps' && w === 1440) {
+      ok('3Ps: section lists the post', await page.locator('a.card[href="the-first-bite-is-yours/"]').count() === 1 && (await page.locator('h1').innerText()) === '3Ps');
+      ok('3Ps: shows the four themes', /personal.*psychology.*philosophy.*perspectives/i.test(await page.locator('.eyebrow').innerText()));
+      await page.click('a.card'); await page.waitForURL('**/3ps/the-first-bite-is-yours/'); ok('3Ps: card opens the post', true);
+    }
+    if (name === 'post' && w === 1440) {
+      const body = await page.locator('main').innerText();
+      ok('post: title, Marathi lines and the closing line are all present', body.includes('The first bite is yours. Always.') && body.includes('तू खाशील का रे?') && body.includes('नको गं आई, तुला आवडतं ना? तू खा. माझं मी बघेन.') && body.includes('wanting the person beside you to have the first bite'));
+      ok('post: both pictures are on the page, and the comic opens full size', await page.locator('figure img').count() === 2 && await page.locator('figure a[href$="first-bite-comic.jpg"]').count() === 1);
+      ok('post: has share metadata', await page.locator('meta[property="og:image"]').count() === 1);
+      await page.click('.back'); await page.waitForURL(u => u.pathname.endsWith('/3ps/')); ok('post: back link returns to 3Ps', true);
     }
     if (name === 'millie') {
       const srcs = imgs.filter(i => i.src.includes('assets/history/') && /\/\d\d-/.test(i.src)).map(i => i.src);

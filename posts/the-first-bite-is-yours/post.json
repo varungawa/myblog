@@ -1,0 +1,57 @@
+{
+  "section": "3ps",
+  "seq": 1,
+  "title": "The first bite is yours. Always.",
+  "excerpt": "Somewhere between making sure you've eaten and finally taking my own bite, I find something that no penthouse, infinity pool or fortune could ever buy. Home.",
+  "cover": "assets/3ps/first-bite-hero.jpg",
+  "cover_alt": "A man with curly hair feeds a bite of dosa to a laughing woman beside a hot griddle in a penthouse kitchen at sunset, with an infinity pool and a city skyline behind them.",
+  "blocks": [
+    {
+      "type": "img",
+      "src": "assets/3ps/first-bite-hero.jpg",
+      "alt": "A man with curly hair feeds a bite of dosa to a laughing woman beside a hot griddle in a penthouse kitchen at sunset, with an infinity pool and a city skyline behind them.",
+      "w": 1536,
+      "h": 1024
+    },
+    {
+      "type": "line",
+      "t": "Not because I am any less hungry."
+    },
+    {
+      "type": "line",
+      "t": "But because somewhere between making sure you've eaten and finally taking my own bite, I find something that no penthouse, infinity pool, or fortune could ever buy."
+    },
+    {
+      "type": "big",
+      "t": "Home."
+    },
+    {
+      "type": "line",
+      "t": "And when Aai says, “तू खाशील का रे?”"
+    },
+    {
+      "type": "line",
+      "t": "I say, “नको गं आई, तुला आवडतं ना? तू खा. माझं मी बघेन.”"
+    },
+    {
+      "type": "line",
+      "t": "Because love, sometimes, is simply wanting the person beside you to have the first bite. ❤️"
+    },
+    {
+      "type": "rule"
+    },
+    {
+      "type": "note",
+      "t": "The same idea, told as a comic."
+    },
+    {
+      "type": "img",
+      "src": "assets/3ps/first-bite-comic.jpg",
+      "alt": "A comic-strip love story titled Isabel of Karakal and the Boy from Konkan, with faces blurred: dancing and arguing late into the night, a 4 a.m. craving for dosa, a woman cooking in a long T-shirt, a golden dosa with chutney, the first bite as love and home, sleeping with a dog and a cat, and a sunset ending that says a simple thing made it a kingdom.",
+      "w": 1199,
+      "h": 1312,
+      "zoom": true,
+      "caption": "Isabel of Karakal and the Boy from Konkan. Tap the picture to open it full size."
+    }
+  ]
+}

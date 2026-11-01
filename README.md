@@ -34,3 +34,7 @@ First person, as Nanda. Prose, then a hurdle, then a decision that changes the c
 - `story-engine.js`: pure engine (node and browser). `story-ui.js`: the reading page, with go-back, start again, and a tracker of endings found (kept in the browser).
 - The outline's chapter cards have a "Read chapter N as an interactive story" button, and each chapter heading in the story links back to the outline.
 - To add a passage, add a node to a data file and link to it. `node tests/story.test.mjs` checks every link, flag and item, that every passage and every ending can be reached, and that no reader can get stuck.
+
+## Posts and sections (3Ps)
+
+Separate from stories: a post never pins or demotes a story. `posts/sections.json` defines sections (now `3ps`: Personal, Psychology, Philosophy, Perspectives). Each post is `posts/<slug>/post.json` (section, seq, title, excerpt, cover, cover_alt, blocks of `img`, `line`, `big`, `note`, `rule`); put its images in `assets/<section>/`. `tools/build_site.py` writes `/3ps/index.html` (newest first) and `/3ps/<slug>/index.html`, with social-share metadata. Add a post by adding a folder and rebuilding.
