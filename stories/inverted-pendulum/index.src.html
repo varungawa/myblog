@@ -1,0 +1,374 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Why tall, heavy cargo wants to fall over: a pencil-sketch explainer with a tipping demo."><meta property="og:type" content="article"><meta property="og:title" content="The Inverted Pendulum Effect"><meta property="og:description" content="Why tall, heavy cargo wants to fall over, and why a small lean can turn into a big problem."><meta property="og:image" content="https://varungawa.github.io/myblog/assets/story/inverted-pendulum-cover.jpg"><meta name="twitter:card" content="summary_large_image">
+<title>The Inverted Pendulum Effect — Varun's Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one portrait sheet of graph paper on a desk. Pencil-grey ink, red pencil for danger, blue pencil for measurements. Sketchy borders and a wobble filter give the hand-drawn feel. */
+:root {
+  --desk: #d9dde0;
+  --paper: #f6f7f5;
+  --grid: #dbe3ea;
+  --ink: #2a2c2f;
+  --soft: #5d6368;
+  --red: #c4291e;
+  --blue: #2557b3;
+  --tint-red: #f6dcd7;
+  --tint-blue: #dce6f6;
+  --tint-ink: #e9ebe8;
+  --pr: #d3281c;
+  --pb: #1a4fbd;
+  --halo: #ffffff;
+  --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --body: "Kalam", "Segoe Print", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --desk: #121416; --paper: #1d2023; --grid: #2a3036; --ink: #e8e5de; --soft: #a3a8ad;
+    --red: #ff7d6e; --blue: #86b4ff; --tint-red: #3a2420; --tint-blue: #1f2c44; --tint-ink: #272b2f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --desk: #121416; --paper: #1d2023; --grid: #2a3036; --ink: #e8e5de; --soft: #a3a8ad;
+  --red: #ff7d6e; --blue: #86b4ff; --tint-red: #3a2420; --tint-blue: #1f2c44; --tint-ink: #272b2f;
+  color-scheme: dark;
+}
+body { background: var(--desk); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 1.25rem 2.5rem; }
+.sheet { max-width: 540px; margin: 0 auto; background-color: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; padding: 1.6rem 1.25rem 2rem; box-shadow: 0 1px 0 var(--grid), 0 10px 30px #0003; border-radius: 3px; }
+@media (min-width: 600px) { .sheet { padding: 2.2rem 2.2rem 2.6rem; } }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+h1, h2, .hand { font-family: var(--hand); font-weight: 700; }
+h1 { font-size: clamp(2.7rem, 11vw, 3.7rem); line-height: .95; margin: .2rem 0 .5rem; transform: rotate(-1.5deg); text-wrap: balance; }
+h2 { font-size: 2.1rem; line-height: 1; margin: 0 0 .5rem; text-wrap: balance; }
+p { margin: 0 0 .85rem; max-width: 60ch; }
+.kicker { font-family: var(--hand); font-size: 1.35rem; color: var(--red); margin: 0; transform: rotate(-1deg); display: inline-block; }
+.lead { font-size: 1.15rem; }
+section { margin-top: 2.6rem; min-width: 0; }
+.num { display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; border: 2.5px solid var(--ink); border-radius: 50%; font-family: var(--hand); font-size: 1.4rem; margin-right: .4rem; vertical-align: .15rem; filter: url(#pencil); }
+.pencil svg, svg.pencil { filter: url(#pencil); }
+.ln { stroke: var(--ink); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.rd { stroke: var(--red); }
+.bl { stroke: var(--blue); }
+.dash { stroke-dasharray: 6 6; }
+.fillp { fill: var(--paper); }
+.fillr { fill: var(--red); stroke: none; }
+.t { font-family: var(--hand); font-size: 21px; font-weight: 700; fill: var(--ink); }
+.tr { fill: var(--red); }
+.tb { fill: var(--blue); }
+.ts { font-size: 17px; font-weight: 500; fill: var(--soft); }
+.sk { border: 2.5px solid var(--ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+.note { padding: .9rem 1.1rem; background: var(--tint-ink); }
+.note.red { background: var(--tint-red); border-color: var(--red); }
+.note.blue { background: var(--tint-blue); border-color: var(--blue); }
+.note p:last-child { margin-bottom: 0; }
+.formula { font-family: var(--hand); font-size: clamp(1.7rem, 7vw, 2.2rem); line-height: 1.15; text-align: center; margin: 0 0 .4rem; max-width: none; }
+.frac { display: inline-grid; vertical-align: middle; text-align: center; margin: 0 .25rem; }
+.frac > span:first-child { border-bottom: 2.5px solid var(--ink); padding: 0 .35rem; }
+.small { font-size: .95rem; color: var(--soft); }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+@media (max-width: 420px) { .row2 { grid-template-columns: minmax(0, 1fr); } }
+
+/* photos */
+.photo { margin: 1.1rem 0 .4rem; transform: rotate(-.8deg); background: #fff; padding: 9px 9px 0; box-shadow: 0 6px 16px #0003; position: relative; max-width: 100%; border: 1px solid #0002; }
+.photo.r { transform: rotate(.9deg); }
+.photo::before { content: ""; position: absolute; top: -12px; left: 50%; width: 92px; height: 26px; margin-left: -46px; background: #e9dca066; border: 1px solid #0001; transform: rotate(2deg); z-index: 2; }
+.shot { position: relative; aspect-ratio: 4 / 3; max-width: 100%; overflow: hidden; background: #888; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.shot svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: url(#pencil); }
+.shot .pl { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.shot .pr { stroke: var(--pr); }
+.shot .pb { stroke: var(--pb); }
+.shot text { font-family: var(--hand); font-size: 34px; font-weight: 700; paint-order: stroke; stroke: var(--halo); stroke-width: 7px; stroke-linejoin: round; }
+.shot text.fr { fill: var(--pr); }
+.shot text.fb { fill: var(--pb); }
+.shot .dotr { fill: var(--pr); stroke: var(--halo); stroke-width: 3; }
+.photo figcaption { font-family: var(--hand); font-size: 1.3rem; line-height: 1.15; color: #2a2c2f; padding: .5rem .2rem .6rem; }
+
+/* sketches */
+.sketch { display: block; width: 100%; height: auto; max-width: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .swing { transform-origin: 100px 28px; animation: swing 3.2s ease-in-out infinite alternate; }
+  @keyframes swing { from { transform: rotate(-22deg); } to { transform: rotate(22deg); } }
+}
+
+/* playground */
+.play { padding: 1rem 1rem 1.1rem; background: var(--paper); }
+.stage { display: block; width: 100%; height: auto; max-width: 100%; }
+.ctl { display: grid; gap: .15rem; margin: .7rem 0 0; }
+.ctl label { display: flex; justify-content: space-between; gap: .5rem; font-weight: 700; }
+.ctl output { font-family: var(--hand); font-size: 1.4rem; line-height: 1; color: var(--blue); font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--blue); height: 28px; margin: 0; }
+.presets { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.pbtn { font-family: var(--hand); font-size: 1.25rem; font-weight: 700; background: var(--paper); color: var(--ink); border: 2.5px solid var(--ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; padding: .1rem .9rem; cursor: pointer; }
+.pbtn:hover { background: var(--tint-ink); }
+.read { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: .9rem; }
+.read div { padding: .35rem .7rem; background: var(--tint-ink); border-radius: 12px; }
+.read b { display: block; font-family: var(--hand); font-size: 1.9rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.read span { font-size: .85rem; color: var(--soft); }
+.state { margin: .9rem 0 0; font-family: var(--hand); font-size: 1.7rem; line-height: 1.1; text-align: center; padding: .3rem .5rem; max-width: none; }
+.state.ok { color: var(--blue); }
+.state.bad { color: var(--red); }
+
+/* fixes */
+.fixes { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .8rem; }
+.fixes li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: .7rem; align-items: start; padding: .6rem .8rem .6rem .5rem; }
+.fixes svg { width: 3rem; height: 3rem; }
+.fixes b { font-family: var(--hand); font-size: 1.45rem; line-height: 1; display: block; }
+.fixes span { font-size: .98rem; display: block; line-height: 1.4; }
+.chk { list-style: none; margin: .8rem 0 0; padding: 0; display: grid; gap: .5rem; }
+.chk label { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .7rem; align-items: start; cursor: pointer; }
+.chk input { width: 22px; height: 22px; margin-top: .25rem; accent-color: var(--red); }
+.chk input:checked + span { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--soft); }
+.end { text-align: center; font-family: var(--hand); font-size: 1.5rem; margin: 2.4rem 0 0; transform: rotate(-1deg); }
+.topnav{display:flex;justify-content:space-between;gap:1rem;font-family:var(--hand);font-size:1.3rem;font-weight:700;margin:-.3rem 0 1rem}.topnav a{color:var(--ink);text-decoration:none}.topnav a:hover{color:var(--red)}
+</style></head><body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="pencil" x="-4%" y="-4%" width="108%" height="108%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/>
+  </filter>
+</svg>
+
+<main class="sheet">
+  <nav class="topnav" aria-label="Site"><a href="{{HOME}}">← VARUN / STORIES</a><a href="{{ROOT}}history/">HISTORY ↗</a></nav>
+  <header>
+    <p class="kicker">cargo physics, drawn simply</p>
+    <h1>The Inverted Pendulum Effect</h1>
+    <p class="lead">Why tall, heavy cargo wants to fall over, and why a small lean can turn into a big problem.</p>
+  </header>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="num">1</span>Balance a pencil</h2>
+    <p>Hang a weight on a string and push it. It swings, then comes back. Now stand a pencil on your fingertip. Lean it a little and it does not come back. It leans more, then falls.</p>
+    <svg class="sketch pencil" viewBox="0 0 400 250" role="img" aria-label="Left, a hanging pendulum pulled back toward the middle. Right, an upside-down pendulum on a fingertip, leaning and being pulled further out by gravity.">
+      <line class="ln" x1="40" y1="28" x2="160" y2="28"/>
+      <g class="swing"><line class="ln" x1="100" y1="28" x2="100" y2="150"/><circle class="ln fillp" cx="100" cy="162" r="16"/></g>
+      <line class="ln dash" x1="100" y1="28" x2="100" y2="205" stroke-opacity=".5"/>
+      <path class="ln bl" d="M150 175 Q130 205 104 200"/><path class="ln bl" d="M112 190 L103 200 L116 207"/>
+      <text class="t tb" x="26" y="232">comes back</text>
+      <text class="t" x="52" y="14">pendulum</text>
+      <g>
+        <path class="ln" d="M285 226 L300 205 L315 226"/>
+        <line class="ln" x1="300" y1="205" x2="300" y2="205"/>
+        <g style="transform: rotate(16deg); transform-origin: 300px 205px">
+          <line class="ln" x1="300" y1="205" x2="300" y2="62"/>
+          <circle class="ln fillp" cx="300" cy="50" r="16"/>
+        </g>
+        <line class="ln rd dash" x1="341" y1="52" x2="341" y2="150"/>
+        <path class="ln rd" d="M334 140 L341 152 L348 140"/>
+        <path class="ln rd" d="M352 90 Q372 80 376 60"/><path class="ln rd" d="M366 62 L377 56 L380 70"/>
+      </g>
+      <text class="t tr" x="296" y="238">falls over</text>
+      <text class="t" x="262" y="24">inverted pendulum</text>
+      <text class="t tr" x="348" y="125" style="font-size:18px">gravity</text>
+    </svg>
+    <div class="note sk blue"><p><b>The rule:</b> if the weight is above the pivot, any lean grows. If it hangs below, any swing shrinks.</p></div>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="num">2</span>Your cargo is the pencil</h2>
+    <p>A transformer on a trailer is a heavy block sitting high on a narrow base. The tyres and deck edge are the fingertip. The weight is the pencil.</p>
+    <figure class="photo" style="margin-inline:0">
+      <div class="shot">
+        <img alt="Blue transformer tank on a multi-axle platform trailer, lashed with straps over the top and chains to the deck" src="{{ROOT}}assets/story/inverted-pendulum-side.jpg">
+        <svg viewBox="0 0 900 675" aria-hidden="true">
+          <circle class="pl pr" cx="330" cy="235" r="20"/><line class="pl pr" x1="312" y1="235" x2="348" y2="235"/><line class="pl pr" x1="330" y1="217" x2="330" y2="253"/>
+          <text class="fr" x="358" y="226">CG</text>
+          <line class="pl pb" x1="108" y1="235" x2="108" y2="416"/><line class="pl pb" x1="96" y1="235" x2="120" y2="235"/><line class="pl pb" x1="96" y1="416" x2="120" y2="416"/>
+          <text class="fb" x="40" y="330">h</text>
+          <circle class="dotr" cx="510" cy="418" r="11"/>
+          <path class="pl pr" d="M600 338 Q570 380 528 410"/><path class="pl pr" d="M545 413 L526 413 L534 394"/>
+          <text class="fr" x="560" y="318">tips about</text><text class="fr" x="560" y="354">this edge</text>
+        </svg>
+      </div>
+      <figcaption>Straps over the top, chains to the deck. The red X is the centre of gravity (CG), roughly. Sketch marks are approximate.</figcaption>
+    </figure>
+    <p>The <b>centre of gravity (CG)</b> is the one point where all the weight acts. The higher it sits above the deck, the more like a balancing pencil the cargo behaves.</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="num">3</span>Two numbers decide it</h2>
+    <figure class="photo r" style="margin-inline:0">
+      <div class="shot">
+        <img alt="Rear view of the blue transformer tank on the trailer, with chains crossed in an X and straps over the top" src="{{ROOT}}assets/story/inverted-pendulum-rear.jpg">
+        <svg viewBox="0 0 900 675" aria-hidden="true">
+          <circle class="pl pr" cx="363" cy="270" r="22"/><line class="pl pr" x1="343" y1="270" x2="383" y2="270"/><line class="pl pr" x1="363" y1="250" x2="363" y2="290"/>
+          <line class="pl pr" stroke-dasharray="10 10" x1="363" y1="296" x2="363" y2="440"/>
+          <line class="pl pb" x1="150" y1="270" x2="150" y2="466"/><line class="pl pb" x1="138" y1="270" x2="162" y2="270"/><line class="pl pb" x1="138" y1="466" x2="162" y2="466"/>
+          <text class="fb" x="70" y="380">h</text>
+          <line class="pl pb" x1="186" y1="494" x2="540" y2="494"/><line class="pl pb" x1="186" y1="480" x2="186" y2="508"/><line class="pl pb" x1="540" y1="480" x2="540" y2="508"/>
+          <text class="fb" x="330" y="518">b</text>
+          <circle class="dotr" cx="540" cy="467" r="11"/>
+          <text class="fr" x="388" y="262">CG</text>
+        </svg>
+      </div>
+      <figcaption>The same load from behind. <b>h</b> is how high the CG is above the deck. <b>b</b> is how wide the base is.</figcaption>
+    </figure>
+    <p>Push the cargo sideways, as in a turn. It starts to rotate about its outer bottom edge, the red dot. It stays put as long as the CG is still over the base. Once the CG passes over that edge, gravity finishes the job.</p>
+    <div class="note sk red">
+      <p class="formula">tips when push ≥ <span class="frac"><span>b ÷ 2</span><span>h</span></span> <span style="font-size:.6em">(in g)</span></p>
+      <p class="small" style="text-align:center">Half the base width, divided by the CG height.</p>
+    </div>
+    <p class="small" style="margin-top:.8rem">A wide, low load has a big answer and is hard to tip. A narrow, tall one has a small answer.</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="num">4</span>Push it and see</h2>
+    <p>Change the CG height, the base width and the sideways push. The red dashed line is gravity through the CG. When it lands outside the pivot, the load goes over.</p>
+    <div class="play sk">
+      <svg id="stage" class="stage pencil" viewBox="0 0 360 290" role="img" aria-label="Side view of a block on a trailer deck being pushed sideways. A dashed red line drops from its centre of gravity to the deck.">
+        <line class="ln" x1="20" y1="240" x2="340" y2="240"/>
+        <line class="ln" x1="20" y1="256" x2="340" y2="256"/>
+        <path class="ln" d="M40 256 l-6 12 M80 256 l-6 12 M120 256 l-6 12 M160 256 l-6 12 M200 256 l-6 12 M240 256 l-6 12 M280 256 l-6 12 M320 256 l-6 12" stroke-opacity=".5"/>
+        <g id="body">
+          <rect id="box" class="ln fillp" x="0" y="0" width="10" height="10" style="fill: var(--tint-ink)"/>
+          <circle id="cgd" class="ln rd" cx="0" cy="0" r="9"/>
+          <line id="cgx1" class="ln rd" x1="0" y1="0" x2="0" y2="0"/><line id="cgx2" class="ln rd" x1="0" y1="0" x2="0" y2="0"/>
+        </g>
+        <line id="plumb" class="ln rd dash" x1="0" y1="0" x2="0" y2="0"/>
+        <circle id="piv" class="fillr" cx="0" cy="240" r="6"/>
+        <path id="push" class="ln bl" d=""/>
+        <text id="pushT" class="t tb" x="14" y="30">push</text>
+        <text id="pivT" class="t tr" x="0" y="278">pivot</text>
+      </svg>
+      <div class="ctl"><label for="h">CG height above deck <output id="hO"></output></label><input id="h" type="range" min="1" max="3.2" step="0.05" value="2.4"></div>
+      <div class="ctl"><label for="b">Base width <output id="bO"></output></label><input id="b" type="range" min="1.5" max="4" step="0.05" value="2.6"></div>
+      <div class="ctl"><label for="a">Sideways push <output id="aO"></output></label><input id="a" type="range" min="0" max="0.8" step="0.01" value="0.15"></div>
+      <div class="presets" role="group" aria-label="Push presets">
+        <button type="button" class="pbtn" data-a="0.1">gentle turn</button>
+        <button type="button" class="pbtn" data-a="0.3">sharp turn</button>
+        <button type="button" class="pbtn" data-a="0.6">panic swerve</button>
+      </div>
+      <div class="read">
+        <div><b id="rTip">0</b><span>push that tips it (g)</span></div>
+        <div><b id="rAng">0</b><span>lean that tips it (degrees)</span></div>
+      </div>
+      <p class="state ok" id="state" role="status"></p>
+    </div>
+    <p class="small" style="margin-top:.8rem">The lean is exaggerated so you can see it. Real loads tip earlier than this sums say, because tyres squash, the trailer rolls and the load can shift. Treat the number as the best case.</p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5"><span class="num">5</span>Speed is the big lever</h2>
+    <p>In a turn the push is <b>speed² ÷ radius</b>. Double the speed and the push is four times bigger.</p>
+    <div class="row2">
+      <div class="note sk blue"><p class="hand" style="font-size:1.5rem;line-height:1;margin-bottom:.3rem">20 km/h</p><p class="small">around a 30 m bend gives about <b>0.10 g</b></p></div>
+      <div class="note sk red"><p class="hand" style="font-size:1.5rem;line-height:1;margin-bottom:.3rem">40 km/h</p><p class="small">around the same bend gives about <b>0.42 g</b></p></div>
+    </div>
+    <p class="small" style="margin-top:.7rem">Try 0.42 g in the playground with the default load.</p>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6"><span class="num">6</span>How we stop it</h2>
+    <p>Every fix either lowers the CG, widens the base, or keeps the push small.</p>
+    <ul class="fixes">
+      <li class="sk">
+        <svg class="pencil" viewBox="0 0 48 48" aria-hidden="true"><rect class="ln" x="8" y="26" width="32" height="14" style="fill:var(--tint-blue)"/><circle class="ln rd" cx="24" cy="33" r="3"/><path class="ln bl" d="M24 6 L24 22 M18 16 L24 23 L30 16"/></svg>
+        <div><b>Lower the CG</b><span>Ride the load as low as the platform allows. Every centimetre of height costs margin.</span></div>
+      </li>
+      <li class="sk">
+        <svg class="pencil" viewBox="0 0 48 48" aria-hidden="true"><rect class="ln" x="14" y="16" width="20" height="24" style="fill:var(--tint-ink)"/><path class="ln bl" d="M4 44 L44 44 M8 40 L4 44 L8 48 M40 40 L44 44 L40 48"/></svg>
+        <div><b>Widen the base</b><span>A wider footprint pushes the pivot edge further from the CG.</span></div>
+      </li>
+      <li class="sk">
+        <svg class="pencil" viewBox="0 0 48 48" aria-hidden="true"><rect class="ln" x="10" y="12" width="28" height="28" style="fill:var(--tint-ink)"/><path class="ln rd" d="M10 12 L38 40 M38 12 L10 40"/></svg>
+        <div><b>Tie it down in an X</b><span>Crossed chains and straps, tight, from high points on the load to the deck. They stop sliding and hold the top from leaning.</span></div>
+      </li>
+      <li class="sk">
+        <svg class="pencil" viewBox="0 0 48 48" aria-hidden="true"><circle class="ln" cx="24" cy="26" r="16" style="fill:var(--tint-blue)"/><path class="ln bl" d="M24 26 L33 16"/><circle class="ln" cx="24" cy="26" r="2"/></svg>
+        <div><b>Slow down in turns</b><span>Keep the push small. Speed counts four times over.</span></div>
+      </li>
+      <li class="sk">
+        <svg class="pencil" viewBox="0 0 48 48" aria-hidden="true"><path class="ln" d="M4 36 L44 24 M4 40 L44 28"/><rect class="ln rd" x="16" y="12" width="14" height="16" transform="rotate(-16 23 28)" style="fill:var(--tint-red)"/></svg>
+        <div><b>Level the deck, watch the road</b><span>A sloped road or a tilted deck moves the CG toward the edge before the turn even starts.</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="s7">
+    <h2 id="s7"><span class="num">7</span>Before you roll</h2>
+    <ul class="chk">
+      <li><label><input type="checkbox" id="c1"><span>I know the CG height <b>h</b> and the base width <b>b</b>.</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>I worked out the tipping push, (b ÷ 2) ÷ h, and kept well under it.</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>Chains and straps are tight, crossed and on the lashing points.</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>The deck is level and the route has no harsh camber.</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>The driver has a speed limit for every turn.</span></label></li>
+    </ul>
+  </section>
+
+  <p class="end">tall + narrow + fast = pencil on a fingertip</p>
+  <p class="small" style="text-align:center;margin:1rem auto 0">A simplified teaching model. The transport engineer's own stability calculation and the method statement come first.</p>
+</main>
+
+<script>
+(function () {
+  var S = 30, CX = 180, DECK = 240;
+  var el = function (id) { return document.getElementById(id); };
+  var hI = el("h"), bI = el("b"), aI = el("a");
+  function fmt(n, d) { return n.toFixed(d); }
+  function set(e, o) { for (var k in o) e.setAttribute(k, o[k]); }
+
+  function draw() {
+    var h = parseFloat(hI.value), b = parseFloat(bI.value), a = parseFloat(aI.value);
+    el("hO").textContent = fmt(h, 2) + " m";
+    el("bO").textContent = fmt(b, 2) + " m";
+    el("aO").textContent = fmt(a, 2) + " g";
+    var tip = (b / 2) / h;
+    var crit = Math.atan(tip) * 180 / Math.PI;
+    el("rTip").textContent = fmt(tip, 2);
+    el("rAng").textContent = fmt(crit, 0) + "°";
+
+    var H = 2 * h, w = b * S, ht = H * S;
+    var left = CX - w / 2, top = DECK - ht;
+    var px = CX + w / 2, py = DECK;
+    var falling = a >= tip;
+    var theta = falling ? crit + 24 : crit * (a / tip) * 0.5;
+    var rad = theta * Math.PI / 180;
+
+    set(el("box"), { x: left, y: top, width: w, height: ht });
+    var cgx = CX, cgy = DECK - h * S;
+    set(el("cgd"), { cx: cgx, cy: cgy });
+    set(el("cgx1"), { x1: cgx - 12, x2: cgx + 12, y1: cgy, y2: cgy });
+    set(el("cgx2"), { x1: cgx, x2: cgx, y1: cgy - 12, y2: cgy + 12 });
+    var body = el("body");
+    body.style.transformOrigin = px + "px " + py + "px";
+    body.style.transform = "rotate(" + theta + "deg)";
+
+    // centre of gravity after rotating clockwise about the pivot edge
+    var xr = -(b / 2) * Math.cos(rad) + h * Math.sin(rad);
+    var yr = (b / 2) * Math.sin(rad) + h * Math.cos(rad);
+    var gx = px + xr * S, gy = py - yr * S;
+    set(el("plumb"), { x1: gx, y1: gy, x2: gx, y2: DECK });
+    set(el("piv"), { cx: px, cy: py });
+    set(el("pivT"), { x: Math.min(px - 14, 300), y: 278 });
+
+    // push arrow, pointing at the load from the left
+    var len = 18 + a * 110;
+    var ay = Math.max(40, cgy);
+    var ax1 = left - 14 - len, ax2 = left - 14;
+    if (ax1 < 8) { ax1 = 8; ax2 = 8 + len; }
+    el("push").setAttribute("d", "M" + ax1 + " " + ay + " L" + ax2 + " " + ay + " M" + (ax2 - 10) + " " + (ay - 8) + " L" + ax2 + " " + ay + " L" + (ax2 - 10) + " " + (ay + 8));
+    set(el("pushT"), { x: ax1, y: ay - 14 });
+
+    var st = el("state");
+    if (falling) {
+      st.className = "state bad";
+      st.textContent = "Gravity line is outside the pivot. It tips over.";
+    } else if (a >= tip * 0.7) {
+      st.className = "state bad";
+      st.textContent = "Very close. Real trailers would already be in trouble.";
+    } else {
+      st.className = "state ok";
+      st.textContent = "Gravity line stays over the base. It stands.";
+    }
+  }
+  [hI, bI, aI].forEach(function (i) { i.addEventListener("input", draw); });
+  document.querySelectorAll(".pbtn").forEach(function (btn) {
+    btn.addEventListener("click", function () { aI.value = btn.getAttribute("data-a"); draw(); });
+  });
+  draw();
+})();
+</script>
+</body></html>
