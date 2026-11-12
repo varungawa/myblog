@@ -8,6 +8,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   return {
     moon: {
+      sutra: [{ref:"Introduction",t:"…every shipment is a warrior, every transaction a strategic skirmish, and every loss a karmic message."}],
       myth: true, title: 'The Moon Has Twenty-Seven Wives',
       text: [
         `The Moon rises, and he has twenty-seven wives.`,
@@ -20,6 +21,7 @@
     },
 
     forest: {
+      sutra: [{ref:"Chapter 1 · Arjuna Vishada",t:"Then your sorrow is not in the act of trading—but in trading without belief, without dharma."}],
       ch: [1, 'A Need Arises'],
       text: [
         `I should say at the start that I am cargo.`,
@@ -147,6 +149,7 @@
     },
 
     gate: {
+      sutra: [{ref:"Chapter 2 · Sankhya Yoga",t:"The field is observed. The observer is named. The pattern awakens."}],
       ch: [2, 'What Is in the Box'],
       on: { tick: true },
       text: [
@@ -192,6 +195,7 @@
     },
 
     gwadar: {
+      sutra: [{ref:"Chapter 3 · Karma Yoga",t:"Action is better than inaction; yet only action born from awareness leads to liberation."}],
       ch: [3, 'The House at Gwadar'],
       text: [
         `Gwadar. The seller is a trading house in a lane that smells of tar and dried fish, and its ledger closes at dawn. Until it closes my crate cannot be released. The man across the table is courteous, tired and afraid. He gives me tea and does not look at the ledger.`,
@@ -255,6 +259,7 @@
     },
 
     dammam: {
+      sutra: [{ref:"Chapter 4 · Jnana Yoga",t:"He who sees action in inaction, and inaction in action, is truly wise."}],
       ch: [4, 'The Buyer at Dammam'],
       text: [
         `Dammam is a hot bright city that does not look like a place anyone would be afraid in. The buyer has a big office with a small man in it. He has been paid late twice, and asked questions once by people whose cards he did not like. He says this is the last cargo.`,
@@ -327,6 +332,7 @@
     },
 
     cave: {
+      sutra: [{ref:"Chapter 5 · Sannyasa Yoga",t:"The wise do not act out of compulsion, nor do they project their suffering onto others. They act, and detach from the fruits and faults alike."}],
       ch: [5, 'Legs, and the Cave'],
       text: [
         `The only handoff Gora does not watch belongs to the thieves. They are the forty: his own sailors, the ones who call themselves a navy, and their cave is a floating bonded warehouse beyond the coast, where seized cargo is held until it is sold on. Some of it is mine.`,
@@ -516,6 +522,7 @@
     },
 
     swarm_plan: {
+      sutra: [{ref:"Chapter 6 · Dhyana Yoga",t:"One who is harmonized by yoga, who is purified, who has subdued the senses and identified the self with all beings, is said to be in union with the divine."},{ref:"Chapter 14B · SPARTHA",t:"In the dharma of trade, valor is not in conquest, but in character. Let those who uplift be seen, and let those who believe in them, rise with them."}],
       ch: [6, 'Forty Jars'],
       text: [
         `Vivekananda has been building something in a shipyard at Jaigad. I thought he was building ships. He has built a different answer: a swarm. Five hundred tonnes each, small enough to hide and fast enough to matter, burning Persian Gulf fuel mixed with biodiesel and ethanol, under sails that open on their own. They know two thousand years of trade winds. At three quarters load, with the wind right, they make seventeen knots.`,

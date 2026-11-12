@@ -28,7 +28,8 @@
     var head = '';
     if (p.ch) head += '<h3 class="chh"><span>Chapter ' + p.ch[0] + '</span> ' + esc(p.ch[1]) + ' <button type="button" class="lnk" data-chapter="' + p.ch[0] + '">In the outline ↗</button></h3>';
     if (p.title) head += '<h3 class="myth-t">' + esc(p.title) + '</h3>';
-    return '<article class="pass' + (p.myth ? ' myth' : '') + (isNew ? ' new' : '') + '">' + head + p.paras.map(function (t) { return '<p>' + inline(t) + '</p>'; }).join('') + '</article>';
+    var su = p.sutra ? p.sutra.map(function (x) { return '<aside class="sutra"><span>' + esc(x.ref) + ' · <a href="https://varungawa.github.io/myblog/sutras/" target="_blank" rel="noopener">the CargoShakti Sutras</a></span>' + inline(x.t) + '</aside>'; }).join('') : '';
+    return '<article class="pass' + (p.myth ? ' myth' : '') + (isNew ? ' new' : '') + '">' + head + su + p.paras.map(function (t) { return '<p>' + inline(t) + '</p>'; }).join('') + '</article>';
   }
 
   function endingsHtml() {

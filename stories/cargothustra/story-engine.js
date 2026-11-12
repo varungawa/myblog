@@ -84,7 +84,7 @@
         st.node = id; st.steps += 1;
         apply(st, node.on);
         var ps = paras(st, node);
-        if (ps.length || node.title) st.passages.push({ id: id, ch: node.ch || null, myth: !!node.myth, title: node.title || null, paras: ps });
+        if (ps.length || node.title) st.passages.push({ id: id, ch: node.ch || null, myth: !!node.myth, title: node.title || null, sutra: node.sutra || null, paras: ps });
         if (node.end) {
           st.ended = { id: node.end.id, title: node.end.title, mood: node.end.mood, line: node.end.line, epilogue: node.end.epi ? epilogue(st) : [] };
           return st;

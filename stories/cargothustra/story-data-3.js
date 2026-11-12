@@ -6,6 +6,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   return {
     loss: {
+      sutra: [{ref:"Chapter 10 · Vishwarupa Darshan",t:"Behold, O Trader, the form of the system entire. With a thousand contracts, ten thousand carriers, and infinite connections—the supply chain is no longer a machine. It is a living cosmos."}],
       ch: [10, 'The Loss'],
       text: [
         `In an inquiry room at Mundra a surveyor reads the findings in a flat voice: weather, route, drones, and a manifest with a chalk stroke on it that does not match the other three. The room turns on Morgiana, and she does not deny it.`,
@@ -13,7 +14,8 @@
         `Then the surveyor reads the crew list, and the room stops.`,
         { if: 'vee_survivor', t: `Vee is in the room in a borrowed blanket, with a cup of tea he has not touched. He is the only one the sea gave back. He listens to the names. Chitale. Chinmay. Chopra. Charudutta. ChinnaSwamy. Chabria. Each one a person he went to school with, and with each name Vee does not move at all, which is worse than any step.` },
         { if: ['vee_friend', '!vee_survivor'], t: `Vee is at the back of the room, where he has been standing since the beginning, with a marker in his hand and no pen. He listens to the names. Chitale. Chinmay. Chopra. Charudutta. ChinnaSwamy. Chabria. Each one a person I met alive at the tea stall, and with each name Vee takes a step toward the door.` },
-        { if: '!vee_friend', t: `At the back of the room stands a man I have seen once at a fence, with a marker and no pen. He listens to the names, and with each one he takes a step toward the door.` }
+        { if: '!vee_friend', t: `At the back of the room stands a man I have seen once at a fence, with a marker and no pen. He listens to the names, and with each one he takes a step toward the door.` },
+        `Afterwards, in the cold of the inquiry room, I am entered into the ledger the way every loss is, as a row. Loss event: yes. Blame node: the consignor, the carrier, the consignee and the insurer each point at another, and for once every finger is right. Emotional resonance: regret, rage, guilt, numbness, all four, one per person. Resolution path: abandonment is on the list, and I read it with the part of me that is only a line. The last column is the one that matters, and it is not blank. *System learning.* A loss is not the end of the entry. It is the entry's first honest sentence.`
       ],
       choices: [
         { t: `"I know it wasn't you, Morgiana."`, to: 'loss_forgive' },
@@ -68,6 +70,7 @@
     },
 
     viraha: {
+      sutra: [{ref:"Chapter 11 · Bhakti Yoga",t:"Previously I panicked at loss. Now I pause and watch. Previously I fought blame. Now I document."}],
       myth: true, title: 'Viraha',
       text: [
         `Radha waits on the bank of the Yamuna, in the night. The river is slow and black and full of small lamps, and she has been waiting since the moon was a rind.`,
@@ -79,13 +82,15 @@
     },
 
     cuts: {
+      sutra: [{ref:"Chapter 13 · Gunatraya Vibhaga Yoga",t:"Trade behavior is not neutral. Each action, each clause, each reaction arises from one of the three gunas—Purity, Passion, or Ignorance."}],
       ch: [11, 'A Thousand Cuts'],
       on: { tick: true },
       text: [
         `Every cut costs coin and trust. Vivekananda cannot strike with the swarm; that is exactly what Gora wants. So he does what the Marathas did against fifty thousand when the enemy was too large to meet: guerrilla war. *Ganimi kava.* Not one blow but a thousand, small and patient, each taking something Gora thought was his. His customs. His money. His convoys. His doors. Slowly and steadily, until he is holding an empire made of nothing.`,
         { if: 'gang_alive', t: `The Katta gang is loud and alive at the back of every room, and I have never been so glad of an interruption.` },
         { if: 'gang_lost', t: `The Katta gang is gone, and its absence sits in every scene.` },
-        { if: 'carrier_known', t: `We know where Gora's drone carrier sits, and we leave it alone. A thing you know the position of is a thing you can wait for.` }
+        { if: 'carrier_known', t: `We know where Gora's drone carrier sits, and we leave it alone. A thing you know the position of is a thing you can wait for.` },
+        `Each cut has a quality, if you are willing to look at it. Some are clarity: a fair fee for a fair thing, said openly. Some are ambition, the frenzy of the man who must be seen to win. Some are only fear, the cut made in the dark because opening the book would show what is in it. Vee learns to tell them apart by the hand that holds the knife, and to ask of every cost not what it takes but who is afraid.`
       ],
       next: 'cuts_hub'
     },
@@ -204,6 +209,7 @@
     },
 
     white: {
+      sutra: [{ref:"Chapter 14 · Purushottama Yoga",t:"They are the best not because they win—but because everyone wins with them."}],
       ch: [12, 'Grey to White'],
       on: { tick: true },
       text: [
@@ -343,6 +349,7 @@
     },
 
     poison_a: {
+      sutra: [{ref:"Chapter 15 · Daivasura Sampad Vibhaga Yoga",t:"The greatest danger is not in loss… but in allowing the Asuric to look like Dharma. True evil in trade does not appear as theft. It appears as cleverness without conscience."}],
       ch: [13, 'The Poison and the Blessing'],
       on: { tick: true },
       text: [
@@ -415,12 +422,14 @@
     },
 
     end_shakti: {
+      sutra: [{ref:"Chapter 16 · The Return of the Child",t:"He who has become the child again, can now rebuild trade from wonder. Such a one is not a trader. Such a one is the dance of commerce itself."},{ref:"Epilogue · The Lotus Contract",t:"You are not a trader. You are a designer of trust. A poet of protection. A warrior of fairness. And now, a child again."}],
       text: [
         `Vee takes it. He does what his teacher taught him: he does not drink it and he does not refuse it. He holds it, in the throat, as Shiva did at the beginning of the world, and the trade goes on.`,
         { if: 'gandalf_dead', t: `The old man is not there, and is there entirely: a voice in Vee's throat, a direction.` },
         { if: 'white', t: `The old man in white stands at his shoulder, and says nothing, and does not need to.` },
         { if: 'gang_lost', t: `Vee reads the twenty-seven names against the twenty-seven mansions of the Moon, and finds the one star that agrees with his madness. He forgives everyone but himself. Shiva places the waning crescent on the Moon's head, not to cure the curse but to give it a home.` },
-        { if: 'gang_alive', t: `Vee reads the sky with the Katta gang beside him, and finds the one star that agrees with his madness. He forgives everyone but himself. Shiva places the waning crescent on the Moon's head, not to cure the curse but to give it a home.` }
+        { if: 'gang_alive', t: `Vee reads the sky with the Katta gang beside him, and finds the one star that agrees with his madness. He forgives everyone but himself. Shiva places the waning crescent on the Moon's head, not to cure the curse but to give it a home.` },
+        `Later, much later, the swarm writes its own terms, and they are short. Every clause must serve a purpose and not only a protection. Nothing is hidden: not the value, not the paper, not the risk. A first loss is tuition, not betrayal. Every loss leaves a lesson in the ledger, signed by both sides. Where only one party profits the trade has already failed. Whoever is helped, helps the next. Trust is not advertised, it is measured, and behaviour is audited when nobody is watching. They call it the Lotus Contract, because it opens slowly, and because the last line is the one everyone laughs at and nobody removes. *After all is built, allow joy.*`
       ],
       end: { id: 'shakti', title: 'Shakti Rises', mood: 'good', epi: true, line: `From the blessing Shakti is made: no longer a walk but a course. I am the energy that moves once the stillness has been given its due. The sea is wide, the horizon recedes each time I reach it, and I would not have it any other way.` }
     },

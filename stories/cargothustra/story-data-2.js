@@ -119,6 +119,7 @@
     },
 
     ports: {
+      sutra: [{ref:"Chapter 7 · Vijnana Yoga",t:"To know many things is one thing. To know them as one is true knowledge."}],
       ch: [7, 'Four Ports'],
       on: { tick: true },
       text: [
@@ -230,6 +231,7 @@
     },
 
     star_taken: {
+      sutra: [{ref:"Chapter 12 · Kshetra–Kshetrajna Yoga",t:"You are not the data. You are the one who perceives, remembers, and transforms it."}],
       myth: true, title: 'The Star Taken',
       text: [
         `At the hermitage of Brihaspati, guru of the gods, the lamp is trimmed and the evening smells of ghee and crushed jasmine. Tara, his wife, a star among the stars, has come down to the tank to bathe. The Moon sees her.`,
@@ -242,6 +244,7 @@
     },
 
     fine_print: {
+      sutra: [{ref:"Chapter 8 · Akshara Yoga",t:"That which is imperishable, beyond time and decay, is the Self. In commerce, it is not stillness—but the point where no one needs to change. Not silence—but perfect consensus."}],
       ch: [8, 'Fine Print'],
       on: { tick: true },
       text: [
@@ -340,6 +343,7 @@
     },
 
     weather: {
+      sutra: [{ref:"Chapter 9 · Vibhuti Yoga",t:"Among carriers, I am the one who delivers even through a flood."}],
       ch: [9, 'Weather'],
       on: { tick: true },
       text: [
