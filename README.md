@@ -26,6 +26,18 @@ That gives the story the next `seq`, pins it as the main page and moves the prev
 `python3 tools/build_site.py --check` fails if the generated files are out of date. `node tests/verify.mjs` runs the browser checks (see `tests/README.md`).
 `stories/cargothustra/cover-art.html` plus `node tools/render_cover.mjs cargothustra` and `python3 tools/build_site.py --covers` regenerate that story's cover.
 
+## ODC.ai mobile app (JM Baxi × ODC.ai concept)
+
+The app is built in `varungawa/ODC-icargofinsure-design` (branch `feat/odc-ai-mobile`, folder `prototypes/odc-ai`). To publish a new build:
+
+```bash
+cd prototypes/odc-ai && npm run data && npm run build      # in the design repo; `data` needs the passphrase
+python3 tools/import_odc_ai.py /path/to/prototypes/odc-ai/dist   # in this repo
+python3 tools/build_site.py
+```
+
+`/odc-ai/` holds the app's own files (assets, sealed data packs, `roadmap.html`, `pitch.html`); `stories/odc-ai/` is the story wrapper that `build_site.py` pins or archives like any other story. The sealed packs open only with the passphrase; plain-text survey data is never committed here.
+
 ## The interactive story (Thus Spake Cargothustra, "Choose Nanda's walk")
 
 First person, as Nanda. Prose, then a hurdle, then a decision that changes the course. There are 14 endings. Nothing is scored or numbered on screen.
