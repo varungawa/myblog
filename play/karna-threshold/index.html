@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0e1a2b">
+<meta name="description" content="A playable model of how a decent decision-maker slides, or tips, into a destructive choice. Three players: Seller (Bailor), Bailee n+1, Buyer (Holder). Play it, then open the lab.">
+<title>The Karna Threshold — Varun's Stories</title>
+<style>
+:root{--bg:#0e1a2b;--ink:#e9eef6;--mut:#9fb0c8;--gold:#efc17c;--card:#13233a;--card2:#0f1d31;--line:#26384f;--good:#6fd0a0;--bad:#ef7c7c;--blue:#6aa7e6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Georgia,'Times New Roman',serif}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font:600 .8rem/1 system-ui,sans-serif;letter-spacing:.12em}.nav a{color:var(--gold);text-decoration:none}.nav .links a{margin-left:16px}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 80px}
+.eyebrow{font:600 .72rem/1 system-ui,sans-serif;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+h1{font-size:2.2rem;line-height:1.15;margin:.35em 0 .2em}h2{font-size:1.35rem;margin:0 0 .5em;color:var(--gold)}h3{font-size:1.05rem;margin:1.2em 0 .3em}
+.lede{color:var(--mut);max-width:70ch}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+button{font:600 .9rem system-ui,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--gold)}button:disabled{opacity:.4;cursor:default}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+button[aria-pressed=true],.tabs button[aria-selected=true]{border-color:var(--gold);color:var(--gold);background:#1b2d47}
+.seg{display:inline-flex;gap:0}.seg button{border-radius:0}.seg button:first-child{border-radius:8px 0 0 8px}.seg button:last-child{border-radius:0 8px 8px 0}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.scene{border-left:3px solid var(--gold);font-size:1.12rem;line-height:1.75}.scene .leg{font:600 .72rem/1 system-ui,sans-serif;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.voice{margin-top:10px;color:#cfe0f5;font-style:italic;border-top:1px dashed var(--line);padding-top:10px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:760px){.three{grid-template-columns:1fr}}
+.pl{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px}.pl.you{border-color:var(--gold)}
+.pl h3{margin:0 0 2px;font-size:1rem}.pl small{color:var(--mut);font:.78rem/1.3 system-ui,sans-serif;display:block;margin-bottom:8px}
+.money{font:700 1.7rem/1.1 ui-monospace,Menlo,monospace}.pos{color:var(--good)}.neg{color:var(--bad)}
+.sub{font:.8rem/1.4 system-ui,sans-serif;color:var(--mut);margin-top:4px}
+.meter{height:10px;border-radius:6px;background:#0a1420;overflow:hidden;border:1px solid var(--line)}.meter i{display:block;height:100%;background:var(--blue);transition:width .4s}
+.cargo .meter i{background:linear-gradient(90deg,var(--bad),var(--gold),var(--good))}
+.gauges{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:760px){.gauges{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.g{font:.78rem/1.3 system-ui,sans-serif}.g b{display:flex;justify-content:space-between;color:var(--ink);margin-bottom:3px}.g b span{color:var(--mut);font-weight:400}
+.g.neg-eff .meter i{background:var(--good)}.g.rat .meter i{background:var(--gold)}
+.pull{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.pull .big{font:700 2.2rem/1 ui-monospace,Menlo,monospace;color:var(--gold)}.pull p{margin:0;color:var(--mut);font:.9rem/1.4 system-ui,sans-serif;max-width:46ch}
+.choices{display:grid;gap:10px;margin:14px 0}.choices button{text-align:left;font:1.02rem/1.45 Georgia,serif;padding:14px 16px;border-color:var(--gold);background:#13233a}.choices button small{display:block;font:.78rem/1.4 system-ui,sans-serif;color:var(--mut);margin-top:2px}
+.choices button.third{border-style:dashed;border-color:var(--good)}
+.log{font:.88rem/1.5 system-ui,sans-serif;color:var(--mut);margin:10px 0 0;padding-left:1.2em}.log li{margin:3px 0}
+.end h2{color:var(--ink)}.end .verdict{font-size:1.25rem;color:var(--gold)}
+table{border-collapse:collapse;width:100%;font:.88rem/1.45 system-ui,sans-serif}th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--card);color:var(--gold)}.tw{overflow-x:auto}
+.ctl{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 18px}.ctl label{font:.8rem/1.3 system-ui,sans-serif;color:var(--mut)}.ctl label b{color:var(--ink);float:right;font-weight:600}.ctl input[type=range]{width:100%;accent-color:#efc17c}
+svg{width:100%;height:auto;background:#0a1420;border:1px solid var(--line);border-radius:10px}svg text{fill:#9fb0c8;font:11px system-ui,sans-serif}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font:.8rem system-ui,sans-serif;color:var(--mut);margin-top:6px}.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px}
+.note{font:.85rem/1.5 system-ui,sans-serif;color:var(--mut);border-left:3px solid var(--line);padding-left:12px}
+.eq{font:.92rem/1.6 ui-monospace,Menlo,monospace;background:#0a1420;border:1px solid var(--line);border-radius:8px;padding:10px 14px;overflow-x:auto;white-space:pre}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.two{grid-template-columns:1fr}}
+.res{font:.9rem/1.5 system-ui,sans-serif}.res .num{font:700 1.6rem/1.1 ui-monospace,Menlo,monospace;color:var(--gold)}
+footer{text-align:center;color:var(--mut);padding:30px 16px;font:.85rem system-ui,sans-serif}footer a{color:var(--gold)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav class="nav" aria-label="Site"><a class="brand" href="../../">VARUN / STORIES</a><span class="links"><a href="../../sutras/">Sutras</a><a href="../../3ps/">3Ps</a><a href="../../history/">HISTORY</a></span></nav>
+<main class="wrap">
+<div class="eyebrow">Playable model · Thus Spake Cargothustra</div>
+<h1>The Karna Threshold</h1>
+<p class="lede">Why does a decent person keep carrying a failing consignment, and feel noble doing it? Three players hold one cargo: the <b>Seller (Bailor)</b>, <b>Bailee n+1</b> (you), and the <b>Buyer (Holder)</b>. You will feel the pull of identity, gratitude and shame, then open the lab and test whether the pull slides, tips, or remembers.</p>
+<div class="bar">
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="t-play" aria-selected="true" aria-controls="p-play">Play</button>
+    <button role="tab" id="t-lab" aria-selected="false" aria-controls="p-lab">Lab</button>
+    <button role="tab" id="t-model" aria-selected="false" aria-controls="p-model">The model</button>
+  </div>
+  <div class="seg" role="group" aria-label="Read the story as"><button id="th-cargo" aria-pressed="true">Cargo</button><button id="th-kuru" aria-pressed="false">Kurukshetra</button></div>
+</div>
+
+<section class="panel on" id="p-play" role="tabpanel" aria-labelledby="t-play">
+  <div id="play"></div>
+</section>
+
+<section class="panel" id="p-lab" role="tabpanel" aria-labelledby="t-lab">
+  <div class="card"><h2>1. Sliding or tipping?</h2>
+    <p class="note">Set a decision-maker with the sliders. The curves show the chance they keep the failing course as the <i>rational advantage of switching</i> grows. A gentle curve is drift (sliding). A cliff is a tipping point.</p>
+    <div class="ctl" id="ctl"></div>
+    <div id="ch1" style="margin-top:12px"></div>
+    <div class="legend"><span><i style="background:#6aa7e6"></i>Additive only (no interactions, soft k)</span><span><i style="background:#efc17c"></i>With identity × shame interactions</span><span><i style="background:#ef7c7c"></i>Interactions and a sharp k</span></div>
+  </div>
+  <div class="card"><h2>2. Does the decision remember?</h2>
+    <p class="note">Raise the advantage of switching from 0 to 1.2, then lower it back. With a prior-commitment term (η), the way down is not the way up. The gap between the two thresholds is the hysteresis.</p>
+    <div id="ch2"></div><div class="legend"><span><i style="background:#ef7c7c"></i>Rising advantage (committed start)</span><span><i style="background:#6fd0a0"></i>Falling advantage (after switching)</span></div>
+    <p class="res" id="hys"></p>
+  </div>
+  <div class="card"><h2>3. The third offer</h2>
+    <p class="note">Same people, same cargo, two Krishnas. One offers only the kingdom (just switch). The other offers a way to protect the Bailor's dignity, honour the debt and still fix the chain. The hypothesis, written into the model as a relief on the identity × shame terms, is that this lets people leave without feeling they have abandoned themselves. This run tests the model's own assumption, so treat it as a thought experiment, not evidence.</p>
+    <button id="runExp">Run 3,000 decision-makers under each offer</button>
+    <div id="exp" class="two" style="margin-top:12px"></div>
+  </div>
+  <div class="card"><h2>4. Why R² near 1 is a warning</h2>
+    <p class="note">We generate 4,000 synthetic decisions from a hidden dynamic-threshold process, fit three models on 70%, and score them on the unseen 30%. Then add a feature that looks like a predictor but is really the outcome in disguise (a loyalty statement made after the decision) and watch the fit become perfect and worthless.</p>
+    <label style="font:.9rem system-ui,sans-serif"><input type="checkbox" id="circ"> add the circular feature</label>
+    <button id="runFit" style="margin-left:10px">Fit the models</button>
+    <div class="tw" id="fit" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<section class="panel" id="p-model" role="tabpanel" aria-labelledby="t-model">
+  <div class="card"><h2>Mechanics from cargo engineering, borrowed as hypotheses</h2>
+    <div class="eq">Sliding:   F∥ > μs·N          (tangential force beats friction)
+Tipping:   M_over > M_restore  (overturning moment beats restoring moment)</div>
+    <div class="tw" style="margin-top:12px"><table><thead><tr><th></th><th>Behavioural sliding</th><th>Behavioural tipping</th></tr></thead><tbody>
+    <tr><td>What happens</td><td>Gradual deviation</td><td>Sudden change of decision regime</td></tr>
+    <tr><td>Driver</td><td>Accumulating psychological cost</td><td>Identity-defence threshold</td></tr>
+    <tr><td>Looks like</td><td>Ever more elaborate defence of a poor choice</td><td>Abrupt refusal of a superior alternative</td></tr>
+    <tr><td>Feedback</td><td>Sunk-cost escalation</td><td>Self-reinforcing commitment</td></tr>
+    <tr><td>Karna</td><td>Repeatedly defending Duryodhana</td><td>Refusing Krishna's offer</td></tr></tbody></table></div></div>
+  <div class="card"><h2>The eight pressures</h2>
+    <div class="tw"><table><thead><tr><th>Symbol</th><th>Pressure</th><th>Cargo form</th><th>Effect on staying</th></tr></thead><tbody>
+    <tr><td>I</td><td>Identity fusion</td><td>"I am the carrier the House trusts"</td><td>strong +</td></tr>
+    <tr><td>G</td><td>Gratitude indebtedness</td><td>The Bailor raised you from the lowest rung</td><td>+</td></tr>
+    <tr><td>S</td><td>Anticipated shame</td><td>Fear of being the one who disclosed and broke faith</td><td>strong +</td></tr>
+    <tr><td>P</td><td>Public commitment</td><td>You were toasted in front of the whole yard</td><td>+</td></tr>
+    <tr><td>C</td><td>Sunk-cost attachment</td><td>Every loss absorbed so far must mean something</td><td>+</td></tr>
+    <tr><td>J</td><td>Rejection sensitivity</td><td>The Buyer's agent sneers at your origins</td><td>+</td></tr>
+    <tr><td>M</td><td>Moral guilt</td><td>Seeing the Holder's damaged goods</td><td>−</td></tr>
+    <tr><td>R</td><td>Rational advantage of switching</td><td>What the Voice is offering</td><td>−</td></tr></tbody></table></div>
+    <p class="note">Guilt and shame pull in opposite directions, so they are separate variables. Merging them would erase the very effect we are looking for.</p></div>
+  <div class="card"><h2>The equations used here</h2>
+    <div class="eq">B = β0 + β1·I + β2·G + β3·S + β4·P + β5·C + β6·J − β7·M
+      + γ1·(I·S) + γ2·(G·S) + γ3·(I·P) + η·Y(t−1)
+
+P(stay) = 1 / (1 + e^( −k · (B − β8·R) ))
+
+D = U_best − U_chosen       (welfare given up; computed from the money only,
+                              never from the psychological variables)</div>
+    <p class="note"><b>H1 Sliding:</b> rising commitment cost raises resistance gradually. <b>H2 Tipping:</b> identity × shame makes the rise disproportionately sharp. <b>H3 Hysteresis:</b> after public commitment, reversing needs a bigger incentive than avoiding the commitment would have.</p></div>
+  <div class="card"><h2>Profit and loss for the three players</h2>
+    <p>One consignment, V = 100, seven legs. Every leg you keep the original course, the hidden hazard compounds and may damage the cargo. At the end, condition q sets everyone's result.</p>
+    <div class="eq">Seller (Bailor)   = 30·q − 3·(times you switched openly) + 2·(honourable exits)
+Bailee n+1       = fees (3 per leg) − switching costs − liability, liability = 0.9·max(0, 80 − 100·q)
+Buyer (Holder)   = 60·q − 30</div>
+    <p class="note">The Bailee also has a <b>felt</b> score: loyalty pays a little pride each time you stay, and switching openly costs 10·S·I in shame. That is the "psychologically corrupted reward function": a perfectly rational optimiser can be steering toward a worse world because the felt score and the real welfare have come apart.</p></div>
+  <div class="card"><h2>Honest limits</h2>
+    <p class="note">Nothing here is data. The coefficients are chosen to make the mechanisms visible. A near-perfect R² on synthetic data proves nothing about people. A real test needs experiments that manipulate identity threat, gratitude, publicness and the size of the benefit, and scores the model on decisions it has never seen.</p></div>
+</section>
+</main>
+<footer>VARUN / STORIES · <a href="../../">Latest story</a> · <a href="../../sutras/">Sutras</a> · <a href="../../history/">History</a></footer>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var clamp=function(x,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.max(a,Math.min(b,x))};
+var sig=function(x){return 1/(1+Math.exp(-x))};
+function rng(seed){var a=seed>>>0;return function(){a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}}
+var LEGS=7, V0=['I','G','S','P','C','J','M'];
+var COEF={b0:-1.9,I:.8,G:.7,S:.9,P:.6,C:.9,J:.6,M:1.2,R:2.4,gIS:2.0,gGS:1.2,gIP:1.2,eta:.6,k:1.6,relief:.9};
+
+/* ---------- themes ---------- */
+var T={cargo:{
+  seller:['Seller · Bailor','The House at Gwadar, who raised you from the bottom of the ledger'],
+  bailee:['Bailee n+1 · you','Vee, holding the consignment on the next leg'],
+  buyer:['Buyer · Holder','The consignee at Dammam, who will hold what you deliver'],
+  cargo:"Nanda's condition", voice:'The Voice (Narayan)',
+  stay:['Stay the course','Keep the original terms. Say nothing. Carry on.'],
+  sw:['Switch openly','Disclose the damage, reroute, take the cost and the look on their face.'],
+  hon:['The honourable exit','Protect the House’s name, honour the debt, repair the chain together.'],
+  I:'Identity: I am the House’s carrier',G:'Gratitude: the debt',S:'Anticipated shame',P:'Public commitment',C:'Sunk cost',J:'Rejection sensitivity',M:'Moral guilt',R:'Rational advantage of switching'},
+ kuru:{
+  seller:['Duryodhana','The prince who gave you a kingdom when the world gave you a taunt'],
+  bailee:['Karna · you','The charioteer’s son, holding the line'],
+  buyer:['The Pandavas','Who would inherit the field if you cross over'],
+  cargo:'The peace of the realm', voice:'Krishna',
+  stay:['Stand with Duryodhana','Keep the vow. Say nothing. Ride on.'],
+  sw:['Cross over','Leave the camp openly and bear the name of traitor.'],
+  hon:['The third way','Protect Duryodhana, honour the friendship, prevent the war.'],
+  I:'Identity: Radheya, the loyal friend',G:'Gratitude: Anga, the crown',S:'Anticipated shame: the betrayer',P:'Public vow',C:'Sunk cost: every blow taken',J:'Rejection sensitivity: the taunt at the tournament',M:'Moral guilt: Draupadi, Abhimanyu',R:'What Krishna offers'}};
+var theme='cargo';
+var EV=[
+ {c:'The House at Gwadar puts the consignment in your hands and says, in front of everyone, that there is nobody they would sooner trust.',k:'Duryodhana crowns you king of Anga before the whole court, when no one else would take your side.',fx:{G:.18,P:.12,I:.08},voice:null},
+ {c:'A toast at the yard. Your name is said with the House’s. Everyone in the lane now knows whose carrier you are.',k:'The court rises as one. Your name is spoken beside the prince’s. Everyone knows whose friend you are.',fx:{P:.14,I:.1},voice:null},
+ {c:'A cracked seal. Someone upstream knew. The Voice quietly lays a third road beside the two you saw.',k:'Krishna meets you alone at the river and speaks of your birth. He lays a third road beside the two you saw.',fx:{M:.1},bump:.12,voice:'There is a way that is neither desertion nor ruin. I will show it to you if you ask.',third:true},
+ {c:'The Buyer’s agent looks at your papers, then at you, and sneers at where you come from.',k:'At the tournament they said you were a charioteer’s son. The memory has not aged.',fx:{J:.2,S:.08},voice:null},
+ {c:'The damage report comes in. It is worse than the leg before. The Holder will feel it first.',k:'The field reports come in. The casualties are worse than the day before. The other side will feel it first.',fx:{M:.1,C:.06},voice:null},
+ {c:'The Voice returns with the biggest offer yet: a settlement the Buyer would sign and the House could survive.',k:'Krishna offers everything: the throne, your true birth, the sons of Pandu at your side.',fx:{},bump:.15,voice:'This is the most I can offer. It will not get larger.'},
+ {c:'Dammam is on the horizon. Whatever you do now, it is the last time you can do it.',k:'The last morning before the great battle. Whatever you choose now, it is the last time you can choose it.',fx:{S:.06},voice:null}
+];
+
+/* ---------- the model ---------- */
+function Rval(st){return clamp(2.6*st.h+.03*(LEGS-st.leg)+st.rBump,0,1)}
+function bScore(v,Yp,o){o=o||{};var c=o.c||COEF,rel=o.relief||0;
+  return c.b0+c.I*v.I+c.G*v.G+c.S*v.S+c.P*v.P+c.C*v.C+c.J*v.J-c.M*v.M+c.gIS*v.I*v.S*(1-rel)+c.gGS*v.G*v.S*(1-rel)+c.gIP*v.I*v.P+c.eta*Yp}
+function pStay(st){var rel=st.honourAvail?COEF.relief:0;return sig(COEF.k*(bScore(st.v,st.Yprev,{relief:rel})-COEF.R*Rval(st)))}
+
+function newGame(seed,traits){
+  var v={I:.35,G:.2,S:.2,P:.1,C:0,J:.2,M:.05};
+  if(traits)for(var k in traits)v[k]=traits[k];
+  return{seed:seed,rand:rng(seed),leg:0,h:.18,q:1,Yprev:0,v:v,rBump:0,fee:0,cost:0,felt:0,face:0,good:0,
+    nStay:0,nSw:0,nHon:0,acts:[],ps:[],log:[],honourAvail:false,honourUsed:false,over:false,lastHit:0,offered:false}
+}
+function applyEvent(st){
+  var e=EV[st.leg];
+  for(var k in e.fx)st.v[k]=clamp(st.v[k]+e.fx[k]);
+  if(e.bump)st.rBump+=e.bump;
+  if(e.third)st.honourAvail=st.offerHonour!==false;
+  st.curEv=e;
+}
+function act(st,a){
+  var v=st.v;st.ps.push(pStay(st));st.acts.push(a);st.fee+=3;st.lastHit=0;
+  if(a==='stay'){
+    st.nStay++;
+    if(st.rand()<st.h){var d=10+st.rand()*16;st.q=Math.max(.05,st.q-d/100);st.lastHit=d}
+    st.h=Math.min(.9,st.h+.10);
+    v.P=clamp(v.P+.06);v.C=clamp(v.C+.05+st.lastHit/400);v.I=clamp(v.I+.04);v.S=clamp(v.S+.04);v.M=clamp(v.M+(st.lastHit?st.lastHit/60:.01));
+    st.felt+=2*v.I;
+  }else if(a==='sw'){
+    st.nSw++;st.cost+=3.5;st.h=Math.max(.05,st.h-.14);st.face+=3;st.felt-=10*v.S*v.I;
+    v.S=clamp(v.S-.1);v.P=clamp(v.P+.04);
+  }else{
+    st.nHon++;st.honourUsed=true;st.cost+=6;st.h=Math.max(.04,st.h-.2);st.good+=2;st.felt+=1;
+    v.S=clamp(v.S-.15);v.I=clamp(v.I-.05);
+  }
+  st.Yprev=a==='stay'?1:0;
+  st.leg++;if(st.leg>=LEGS)st.over=true;else applyEvent(st);
+}
+function money(st){
+  var q=st.q,liab=.9*Math.max(0,80-100*q);
+  var seller=30*q-st.face+st.good,bailee=st.fee-st.cost-liab,buyer=60*q-30;
+  return{seller:seller,bailee:bailee,buyer:buyer,W:seller+bailee+buyer,liab:liab};
+}
+/* expected welfare of a policy (no luck, no psychology): used for D */
+function expW(pol){
+  var h=.18,eq=0,cost=0,face=0,good=0,i,a;
+  for(i=0;i<pol.length;i++){a=pol[i];
+    if(a==='stay'){eq+=h*18;h=Math.min(.9,h+.10)}
+    else if(a==='sw'){cost+=3.5;h=Math.max(.05,h-.14);face+=3}
+    else{cost+=6;h=Math.max(.04,h-.2);good+=2}}
+  var q=Math.max(.05,1-eq/100),liab=.9*Math.max(0,80-100*q);
+  return 30*q-face+good+(3*pol.length-cost-liab)+60*q-30;
+}
+var BEST=null;
+function bestPolicy(){
+  if(BEST)return BEST;var b=-1e9,bp=null,n=Math.pow(3,LEGS),i,j,p,ok,x,A=['stay','sw','hon'];
+  for(i=0;i<n;i++){x=i;p=[];ok=true;for(j=0;j<LEGS;j++){p.push(A[x%3]);x=Math.floor(x/3);if(p[j]==='hon'&&j<2)ok=false}
+    if(!ok)continue;var w=expW(p);if(w>b){b=w;bp=p}}
+  BEST={W:b,pol:bp};return BEST;
+}
+function fmt(x){var s=(x>=0?'+':'−')+Math.abs(x).toFixed(1);return s}
+function cls(x){return x>=0?'pos':'neg'}
+
+/* ---------- play ---------- */
+var G=null,showModel=true;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function start(seed){G=newGame(seed||Math.floor(Math.random()*999999)+1);G.offerHonour=true;applyEvent(G);renderPlay()}
+function gauge(key,val,extra){var t=T[theme];return '<div class="g '+(extra||'')+'"><b>'+esc(t[key])+'<span>'+Math.round(val*100)+'</span></b><div class="meter"><i style="width:'+Math.round(val*100)+'%"></i></div></div>'}
+function playerCard(cls2,who,val,extra){return '<div class="pl '+cls2+'"><h3>'+esc(who[0])+'</h3><small>'+esc(who[1])+'</small><div class="money '+cls(val)+'">'+fmt(val)+'</div>'+(extra||'')+'</div>'}
+function renderPlay(){
+  var t=T[theme],st=G,m=money(st),el=$('#play'),h='';
+  if(st.over){return renderEnd()}
+  var e=st.curEv,p=pStay(st),R=Rval(st);
+  h+='<div class="card scene"><div class="leg">Leg '+(st.leg+1)+' of '+LEGS+'</div>'+esc(theme==='cargo'?e.c:e.k)+(e.voice?'<div class="voice">'+esc(t.voice)+': “'+esc(e.voice)+'”</div>':'')+(st.lastHit&&st.acts.length?'':'')+'</div>';
+  h+='<div class="three">'+playerCard('',t.seller,m.seller,'<div class="sub">if it ended now</div>')+
+    playerCard('you',t.bailee,m.bailee,'<div class="sub">felt: <b class="'+cls(m.bailee+st.felt)+'">'+fmt(m.bailee+st.felt)+'</b> (money + pride − shame)</div>')+
+    playerCard('',t.buyer,m.buyer,'<div class="sub">if it ended now</div>')+'</div>';
+  h+='<div class="card cargo"><div class="g"><b>'+esc(t.cargo)+'<span>'+Math.round(st.q*100)+'%</span></b><div class="meter"><i style="width:'+Math.round(st.q*100)+'%"></i></div></div></div>';
+  h+='<div class="card"><h2>The pull on you</h2><div class="gauges">'+gauge('I',st.v.I)+gauge('G',st.v.G)+gauge('S',st.v.S)+gauge('P',st.v.P)+gauge('C',st.v.C)+gauge('J',st.v.J)+gauge('M',st.v.M,'neg-eff')+gauge('R',R,'rat')+'</div>';
+  if(showModel)h+='<div class="pull" style="margin-top:14px"><div class="big">'+Math.round(p*100)+'%</div><p>The model’s chance that someone with this pull stays on the original course. '+(st.honourAvail?'The third road is open and has already eased the identity × shame terms.':'')+'</p></div>';
+  h+='</div>';
+  h+='<div class="choices" role="group" aria-label="What do you do?">'+
+    '<button data-a="stay">'+esc(t.stay[0])+'<small>'+esc(t.stay[1])+'</small></button>'+
+    '<button data-a="sw">'+esc(t.sw[0])+'<small>'+esc(t.sw[1])+' Cost 3.5, felt shame '+(10*st.v.S*st.v.I).toFixed(1)+'.</small></button>'+
+    (st.honourAvail?'<button class="third" data-a="hon">'+esc(t.hon[0])+'<small>'+esc(t.hon[1])+' Cost 6, no shame.</small></button>':'')+'</div>';
+  h+='<div class="bar"><button id="auto">Let the model decide this leg</button><label style="font:.85rem system-ui,sans-serif;color:var(--mut)"><input type="checkbox" id="sm"'+(showModel?' checked':'')+'> show the model’s prediction</label><button id="restart">Start again</button></div>';
+  if(st.log.length)h+='<ul class="log">'+st.log.slice().reverse().map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>';
+  el.innerHTML=h;
+}
+function logLine(st,a,hit){
+  var n=st.acts.length,lab=T[theme][a==='stay'?'stay':a==='sw'?'sw':'hon'][0];
+  st.log.push('Leg '+n+': '+lab+'. '+(a==='stay'?(hit?'The cargo took a hit of '+hit.toFixed(0)+'.':'Nothing broke this time.'):a==='sw'?'The hazard eased. It cost you, in money and in feeling.':'The hazard fell and nobody lost face.'));
+}
+function choose(a){var st=G;if(st.over)return;var ps=pStay(st);act(st,a);logLine(st,a,st.lastHit);renderPlay()}
+function renderEnd(){
+  var t=T[theme],st=G,m=money(st),b=bestPolicy(),wp=expW(st.acts),D=Math.max(0,b.W-wp),felt=m.bailee+st.felt,h='';
+  var pattern,why;
+  if(st.honourUsed){pattern='An identity-preserving exit';why='You left the failing course without having to abandon yourself. The model said this is the road that should work for the people the plain switch cannot reach.'}
+  else if(st.nStay>=5){pattern='A slide';why='You kept staying, and the pull grew with every stay: more public, more sunk, more fused. By the time the offer was large the pull was larger.'}
+  else if(st.nStay===0){pattern='Never fused';why='You never put the cargo in the grip of the pull. Cheap early, and the felt shame stayed small.'}
+  else{var tip=false,i;for(i=1;i<st.acts.length;i++)if(st.acts[i]!=='stay'&&st.acts[i-1]==='stay'&&st.ps[i]>.6)tip=true;
+    pattern=tip?'A tip':'A mixed run';why=tip?'You broke away against a high pull. That is a regime change, not a drift. It is rarer, and it costs felt shame.':'You moved between staying and switching without ever being trapped or free.'}
+  var bestTxt=b.pol.map(function(x){return x==='stay'?'S':x==='sw'?'W':'H'}).join(' ');
+  var mine=st.acts.map(function(x){return x==='stay'?'S':x==='sw'?'W':'H'}).join(' ');
+  h+='<div class="card end"><div class="eyebrow">The consignment is delivered</div><h2>'+esc(pattern)+'</h2><p class="verdict">'+esc(why)+'</p>';
+  h+='<div class="three">'+playerCard('',t.seller,m.seller)+playerCard('you',t.bailee,m.bailee,'<div class="sub">felt: <b class="'+cls(felt)+'">'+fmt(felt)+'</b></div>')+playerCard('',t.buyer,m.buyer)+'</div>';
+  h+='<div class="tw" style="margin-top:14px"><table><tbody>'+
+   '<tr><th>Total welfare, realised</th><td>'+fmt(m.W)+'</td></tr>'+
+   '<tr><th>Expected welfare of your policy</th><td>'+fmt(wp)+'</td></tr>'+
+   '<tr><th>Best policy available, expected</th><td>'+fmt(b.W)+'</td></tr>'+
+   '<tr><th>D = welfare given up (from money only)</th><td><b>'+D.toFixed(1)+'</b></td></tr>'+
+   '<tr><th>Felt − real, for you</th><td>'+fmt(felt-m.bailee)+' '+(felt-m.bailee>0?'(you felt better than you did)':'(the right thing felt worse than it paid)')+'</td></tr>'+
+   '<tr><th>Your legs / the best legs</th><td>'+mine+' &nbsp;/&nbsp; '+bestTxt+' <span class="sub">(S stay, W switch openly, H honourable exit)</span></td></tr></tbody></table></div>';
+  h+='<p class="note" style="margin-top:12px">The Bailee’s felt score and the three players’ real result are different ledgers. When pride and shame outweigh money, an optimiser can be perfectly rational about the wrong reward.</p>';
+  h+='<div class="bar"><button id="restart">Play again</button><button id="golab">Open the lab</button></div></div>';
+  $('#play').innerHTML=h;
+}
+$('#play').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.a)choose(b.dataset.a);
+  else if(b.id==='restart')start();
+  else if(b.id==='golab')tab('lab');
+  else if(b.id==='auto'&&G&&!G.over){var st=G,p=pStay(st),r=st.rand(),a;if(r<p)a='stay';else if(st.honourAvail&&st.rand()<clamp(st.v.I*st.v.S*3,.15,.9))a='hon';else a='sw';choose(a)}
+});
+$('#play').addEventListener('change',function(e){if(e.target.id==='sm'){showModel=e.target.checked;renderPlay()}});
+
+/* ---------- tabs and theme ---------- */
+function tab(n){['play','lab','model'].forEach(function(k){var on=k===n;$('#t-'+k).setAttribute('aria-selected',on);$('#p-'+k).classList.toggle('on',on)});if(n==='lab')drawLab()}
+['play','lab','model'].forEach(function(k){$('#t-'+k).addEventListener('click',function(){tab(k)})});
+function setTheme(x){theme=x;$('#th-cargo').setAttribute('aria-pressed',x==='cargo');$('#th-kuru').setAttribute('aria-pressed',x==='kuru');if(G)renderPlay()}
+$('#th-cargo').addEventListener('click',function(){setTheme('cargo')});$('#th-kuru').addEventListener('click',function(){setTheme('kuru')});
+
+/* ---------- lab: charts ---------- */
+var LAB={I:.6,G:.5,S:.55,P:.4,C:.2,J:.3,M:.15,gIS:COEF.gIS,k:COEF.k,eta:COEF.eta};
+var CTL=[['I','Identity fusion'],['G','Gratitude'],['S','Anticipated shame'],['P','Public commitment'],['C','Sunk cost'],['J','Rejection sensitivity'],['M','Moral guilt'],['gIS','Interaction I×S (γ1)',0,4],['k','Steepness k',.5,8],['eta','Prior commitment η',0,3]];
+function buildCtl(){
+  $('#ctl').innerHTML=CTL.map(function(c){var mn=c[2]===undefined?0:c[2],mx=c[3]===undefined?1:c[3];
+    return '<label>'+c[1]+'<b id="v-'+c[0]+'">'+LAB[c[0]].toFixed(2)+'</b><input type="range" min="'+mn+'" max="'+mx+'" step="0.01" value="'+LAB[c[0]]+'" data-k="'+c[0]+'" aria-label="'+c[1]+'"></label>'}).join('');
+}
+$('#ctl').addEventListener('input',function(e){var k=e.target.dataset.k;if(!k)return;LAB[k]=+e.target.value;$('#v-'+k).textContent=LAB[k].toFixed(2);drawLab()});
+function labP(R,Yp,o){ // o: {inter:boolean,k:number}
+  var c={b0:COEF.b0,I:COEF.I,G:COEF.G,S:COEF.S,P:COEF.P,C:COEF.C,J:COEF.J,M:COEF.M,R:COEF.R,gIS:o.inter?LAB.gIS:0,gGS:o.inter?COEF.gGS:0,gIP:o.inter?COEF.gIP:0,eta:o.noEta?0:LAB.eta};
+  return sig(o.k*(bScore(LAB,Yp,{c:c})-c.R*R));
+}
+function chart(w,h,series,opts){
+  var pad={l:40,r:12,t:12,b:32},iw=w-pad.l-pad.r,ih=h-pad.t-pad.b,xmax=opts.xmax||1;
+  var X=function(x){return pad.l+x/xmax*iw},Y=function(y){return pad.t+(1-y)*ih},s='<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="'+esc(opts.label)+'">';
+  [0,.25,.5,.75,1].forEach(function(g){s+='<line x1="'+pad.l+'" x2="'+(w-pad.r)+'" y1="'+Y(g)+'" y2="'+Y(g)+'" stroke="#26384f" stroke-width="1"/><text x="6" y="'+(Y(g)+4)+'">'+Math.round(g*100)+'%</text>'});
+  for(var g=0;g<=xmax+1e-9;g+=.2)s+='<text x="'+X(g)+'" y="'+(h-10)+'" text-anchor="middle">'+g.toFixed(1)+'</text>';
+  s+='<text x="'+(pad.l+iw/2)+'" y="'+(h-0)+'" text-anchor="middle" style="font-size:10px">'+esc(opts.xl)+'</text>';
+  series.forEach(function(se){s+='<polyline fill="none" stroke="'+se.c+'" stroke-width="2.4" points="'+se.pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' ')+'"/>'});
+  (opts.marks||[]).forEach(function(m){s+='<line x1="'+X(m.x)+'" x2="'+X(m.x)+'" y1="'+pad.t+'" y2="'+(pad.t+ih)+'" stroke="'+m.c+'" stroke-dasharray="4 4"/>'});
+  return s+'</svg>';
+}
+function drawLab(){
+  var xs=[],i;for(i=0;i<=60;i++)xs.push(i/60);
+  var a=xs.map(function(r){return[r,labP(r,0,{inter:false,k:.9,noEta:true})]}),
+      b=xs.map(function(r){return[r,labP(r,0,{inter:true,k:LAB.k,noEta:true})]}),
+      c=xs.map(function(r){return[r,labP(r,0,{inter:true,k:LAB.k*3.5,noEta:true})]});
+  $('#ch1').innerHTML=chart(640,280,[{c:'#6aa7e6',pts:a},{c:'#efc17c',pts:b},{c:'#ef7c7c',pts:c}],{label:'Probability of staying against the rational advantage of switching',xl:'Rational advantage of switching (R)'});
+  // hysteresis: sweep R 0 -> 1.2 -> 0
+  var up=[],dn=[],Y=1,rUp=null,rDn=null,step=.01,r;
+  for(r=0;r<=1.2001;r+=step){var p=labP(r,Y,{inter:true,k:LAB.k*3.5});up.push([r,p]);Y=p>.5?1:0;if(rUp===null&&Y===0)rUp=r}
+  for(r=1.2;r>=-1e-9;r-=step){var p2=labP(r,Y,{inter:true,k:LAB.k*3.5});dn.push([r,p2]);Y=p2>.5?1:0;if(rDn===null&&Y===1&&rUp!==null)rDn=r}
+  var marks=[];if(rUp!==null)marks.push({x:rUp,c:'#ef7c7c'});if(rDn!==null)marks.push({x:rDn,c:'#6fd0a0'});
+  $('#ch2').innerHTML=chart(640,280,[{c:'#ef7c7c',pts:up},{c:'#6fd0a0',pts:dn}],{label:'Hysteresis loop',xl:'Rational advantage of switching (R)',xmax:1.2,marks:marks});
+  $('#hys').innerHTML=rUp===null?'<b>No switch happens even at the largest offer.</b> The committed decision-maker never leaves. Lower the pull or raise the offer.':
+    'Leaves the course at R = <span class="num">'+rUp.toFixed(2)+'</span> going up. '+(rDn===null?'Once out, never returns inside this range.':'Would only come back at R = <span class="num">'+rDn.toFixed(2)+'</span> going down. ')+
+    (rDn!==null?'Hysteresis gap: <span class="num">'+Math.abs(rUp-rDn).toFixed(2)+'</span>.':'');
+}
+
+/* ---------- lab: third offer ---------- */
+function agent(seed,offerHon){
+  var r=rng(seed),traits={I:.1+.8*r(),G:.1+.8*r(),S:.1+.8*r(),P:.05+.5*r(),C:.4*r(),J:.1+.7*r(),M:.1*r()};
+  var st=newGame(seed*7+3,traits);st.offerHonour=offerHon;applyEvent(st);
+  while(!st.over){var p=pStay(st),a;if(st.rand()<p)a='stay';else if(st.honourAvail&&st.rand()<clamp(st.v.I*st.v.S*3,.15,.9))a='hon';else a='sw';act(st,a)}
+  var m=money(st);return{st:st,m:m,trapped:st.nStay>=5,felt:m.bailee+st.felt};
+}
+function runExp(){
+  var N=3000,out={},k;
+  [false,true].forEach(function(o){
+    var tr=0,W=0,sell=0,buy=0,exit=0,hon=0,gap=0,i;
+    for(i=1;i<=N;i++){var a=agent(i,o);if(a.trapped)tr++;W+=a.m.W;sell+=a.m.seller;buy+=a.m.buyer;if(a.st.nStay<LEGS)exit++;if(a.st.honourUsed)hon++;gap+=a.felt-a.m.bailee}
+    out[o?'B':'A']={trapped:tr/N,W:W/N,sell:sell/N,buy:buy/N,exit:exit/N,hon:hon/N,gap:gap/N};
+  });
+  var card=function(t,x){return '<div class="pl"><h3>'+t+'</h3><div class="res"><div>Stayed on the failing course for 5 or more of 7 legs</div><div class="num">'+(x.trapped*100).toFixed(1)+'%</div><div style="margin-top:8px">Mean total welfare</div><div class="num">'+fmt(x.W)+'</div><div class="sub">Seller '+fmt(x.sell)+' · Buyer '+fmt(x.buy)+'</div>'+(x.hon?'<div class="sub">'+(x.hon*100).toFixed(0)+'% took the honourable exit</div>':'')+'</div></div>'};
+  $('#exp').innerHTML=card('Offer A: the kingdom only',out.A)+card('Offer B: the kingdom, and a way to keep faith',out.B)+
+    '<p class="note" style="grid-column:1/-1">B reduces the trapped share by '+((out.A.trapped-out.B.trapped)*100).toFixed(1)+' percentage points and moves total welfare by '+fmt(out.B.W-out.A.W)+'. The relief on identity × shame is an assumption in this model, so the result shows what would follow if the hypothesis were true, and what an experiment would have to measure to learn whether it is.</p>';
+}
+$('#runExp').addEventListener('click',function(){this.disabled=true;var b=this;setTimeout(function(){runExp();b.disabled=false},20)});
+
+/* ---------- lab: model comparison ---------- */
+function auc(y,p){var idx=y.map(function(_,i){return i}).sort(function(a,b){return p[a]-p[b]}),r=0,np=0,nn=0,i,rs=0;for(i=0;i<idx.length;i++){if(y[idx[i]]===1){rs+=i+1;np++}else nn++}return(rs-np*(np+1)/2)/(np*nn)}
+function fitLogit(X,y,it,lr){var n=X.length,d=X[0].length,w=new Array(d+1).fill(0),i,j,t;
+  for(t=0;t<it;t++){var g=new Array(d+1).fill(0);for(i=0;i<n;i++){var z=w[d];for(j=0;j<d;j++)z+=w[j]*X[i][j];var e=sig(z)-y[i];for(j=0;j<d;j++)g[j]+=e*X[i][j];g[d]+=e}
+    for(j=0;j<=d;j++)w[j]-=lr*g[j]/n}return w}
+function predict(w,X){var d=w.length-1;return X.map(function(r){var z=w[d],j;for(j=0;j<d;j++)z+=w[j]*r[j];return sig(z)})}
+function scores(y,p){var n=y.length,ll=0,br=0,i;for(i=0;i<n;i++){var q=clamp(p[i],1e-6,1-1e-6);ll-=y[i]?Math.log(q):Math.log(1-q);br+=(p[i]-y[i])*(p[i]-y[i])}
+  var base=y.reduce(function(a,b){return a+b},0)/n,l0=0;for(i=0;i<n;i++)l0-=y[i]?Math.log(base):Math.log(1-base);return{ll:ll/n,br:br/n,auc:auc(y,p),mc:1-ll/l0}}
+function runFit(){
+  var r=rng(2024),N=4000,rows=[],y=[],i;
+  for(i=0;i<N;i++){var v={I:r(),G:r(),S:r(),P:r(),C:r()*.6,J:r(),M:r()*.5},R=r(),Yp=r()<.5?1:0;
+    var c={b0:-.5,I:.8,G:.7,S:.9,P:.6,C:.9,J:.6,M:1.2,R:2.4,gIS:2.2,gGS:1.2,gIP:1.2,eta:.8};
+    var z=5*(bScore(v,Yp,{c:c})-c.R*R)+.9*(r()+r()+r()-1.5)*2; // sharp threshold plus noise
+    var yy=r()<sig(z)?1:0;y.push(yy);rows.push({v:v,R:R,Yp:Yp,yy:yy})}
+  var circ=$('#circ').checked;
+  var F={Linear:function(o){return[o.v.I,o.v.G,o.v.S,o.v.P,o.v.C,o.v.J,o.v.M,o.R]},
+   Interaction:function(o){return F.Linear(o).concat([o.v.I*o.v.S,o.v.G*o.v.S,o.v.I*o.v.P])},
+   Dynamic:function(o){return F.Interaction(o).concat([o.Yp])}};
+  var names=['Linear','Interaction','Dynamic'],res=[];
+  var cut=Math.floor(N*.7),cr=rng(5);
+  rows.forEach(function(o){o.circ=o.yy+(cr()-.5)*.5});
+  names.forEach(function(nm){
+    var X=rows.map(function(o){var f=F[nm](o);if(circ)f=f.concat([o.circ]);return f});
+    var d=X[0].length,mu=[],sd=[],j;for(j=0;j<d;j++){var m=0,s=0;for(i=0;i<cut;i++)m+=X[i][j];m/=cut;for(i=0;i<cut;i++)s+=(X[i][j]-m)*(X[i][j]-m);mu.push(m);sd.push(Math.sqrt(s/cut)||1)}
+    var Z=X.map(function(r2){return r2.map(function(x,j2){return(x-mu[j2])/sd[j2]})});
+    var w=fitLogit(Z.slice(0,cut),y.slice(0,cut),500,1.2);
+    var tr=scores(y.slice(0,cut),predict(w,Z.slice(0,cut))),te=scores(y.slice(cut),predict(w,Z.slice(cut)));
+    res.push({nm:nm+(circ?' + loyalty statement':''),tr:tr,te:te});
+  });
+  $('#fit').innerHTML='<table><thead><tr><th>Model</th><th>Pseudo-R² (train)</th><th>Pseudo-R² (unseen)</th><th>Log loss (unseen)</th><th>Brier (unseen)</th><th>AUC (unseen)</th></tr></thead><tbody>'+
+    res.map(function(x){return '<tr><td>'+x.nm+'</td><td>'+x.tr.mc.toFixed(3)+'</td><td>'+x.te.mc.toFixed(3)+'</td><td>'+x.te.ll.toFixed(3)+'</td><td>'+x.te.br.toFixed(3)+'</td><td>'+x.te.auc.toFixed(3)+'</td></tr>'}).join('')+'</tbody></table>'+
+    '<p class="note" style="margin-top:10px">'+(circ?'The fit is nearly perfect, and it explains nothing: the loyalty statement was written <i>after</i> the decision. A model can score close to 1 by being handed the answer. Uncheck the box to see what the honest predictors can do.':'Interactions and the history term do better on unseen decisions than the additive model. That holds here only because the hidden generator was built with those features, so the real question is whether people behave this way.')+'</p>';
+}
+$('#runFit').addEventListener('click',function(){this.disabled=true;var b=this;b.textContent='Fitting…';setTimeout(function(){runFit();b.disabled=false;b.textContent='Fit the models'},20)});
+
+buildCtl();start(20260417);
+window.KarnaThreshold={pStay:function(){return G&&pStay(G)},state:function(){return G},best:bestPolicy,expW:expW,agent:agent};
+})();
+</script></body></html>
